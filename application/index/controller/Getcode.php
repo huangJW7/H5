@@ -1,6 +1,8 @@
 <?php
 namespace app\index\controller;
+use http\Params;
 use think\Controller;
+use think\Exception;
 use think\facade\Request;
 class Getcode extends Controller{
     public function geturl(){
@@ -26,6 +28,11 @@ class Getcode extends Controller{
         header("Location:$url");
         exit();
 
+    }
+    public function hello(){
+        $url = Request::instance();
+
+        echo $url->url(true);
     }
 
 
