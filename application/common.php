@@ -17,7 +17,7 @@ define("HASH_SALT", "scgxtd");
 define('APP_ID','wx4d1f2c66828fd817');
 //公众号appSecret
 define('APP_SECRET','ea35365c0ca500ab7cf4151d5bfe3e78');
-define('REDIRECT_URI','http://www.scgxtd.cn/public/index/getcode/geturl');
+define('REDIRECT_URI','http://www.scgxtd.cn/public/index.php');
 //error_reporting(E_ERROR | E_PARSE );
 function msg($msgcode = 0, $msg = "", $data = null)
 {
