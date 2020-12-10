@@ -46,7 +46,7 @@ class Getcode extends Controller{
         $token = file_get_contents($url);
         $data = json_decode($token);
 
-        echo $data;
+        var_dump($data);
 
     }
 
