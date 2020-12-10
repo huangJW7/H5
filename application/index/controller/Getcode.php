@@ -45,11 +45,7 @@ class Getcode extends Controller{
         $token ="";
         $token = file_get_contents($url);
         $data = json_decode($token);
-        $data['access_token'];
-        $data['expires_in'];
-        $data['refresh_token'];
-        $data['openid'];
-        $data['scope'];
+
         echo $data;
 
     }
