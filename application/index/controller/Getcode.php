@@ -21,7 +21,7 @@ class Getcode extends Controller{
         $url=$url."&response_type=code";
         $url=$url."&scope=snsapi_base";
         $url=$url."&state=STATE#wechat_redirect";
-        echo $url;
+
 
         header("Location:$url");
 
