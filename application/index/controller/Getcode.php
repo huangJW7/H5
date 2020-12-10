@@ -6,16 +6,14 @@ use think\Exception;
 use think\facade\Request;
 class Getcode extends Controller{
     public function geturl(){
-/*        if( empty(Request::param('code')) )
-            return msg(-1,"code empty");
-        if( empty(Request::param('password')) )
-            return msg(-1,"password empty");
-        if( empty(Request::param('groups')) )
-            return msg(-1,"groups empty");
-        if(strlen(Request::param('password')) < 6)
-            return msg(-1,"password too short");*/
-//https://open.weixin.qq.com/connect/oauth2/authorize?appid=APPID&redirect_uri=REDIRECT_URI&
-//response_type=code&scope=SCOPE&state=STATE#wechat_redirect
+    /*
+     * 该接口可以得到用户访问的链接
+     * 并直接跳入用户的入口界面
+     */
+
+
+    //https://open.weixin.qq.com/connect/oauth2/authorize?appid=APPID&redirect_uri=REDIRECT_URI&
+    //response_type=code&scope=SCOPE&state=STATE#wechat_redirect
         $url ="";
         $url="https://open.weixin.qq.com/connect/oauth2/authorize?";
         $url=$url."appid=".APP_ID;
@@ -24,14 +22,18 @@ class Getcode extends Controller{
         $url=$url."&scope=snsapi_base";
         $url=$url."&state=STATE#wechat_redirect";
 
-
+        //跳转到用户入口界面
         header("Location:$url");
         exit();
 
     }
-    public function hello(){
-        //https://api.weixin.qq.com/sns/oauth2/access_token?appid=APPID&secret=SECRET&code=CODE
-        //&grant_type=authorization_code
+    public function token(){
+
+
+        /*使用code得到access_token
+        *并存储到数据库(未实现)
+        *https://api.weixin.qq.com/sns/oauth2/access_token?appid=APPID&secret=SECRET&code=CODE
+        &grant_type=authorization_code*/
         $code = Request::param('code');
         $state = Request::param('state');
         $url ="";
@@ -42,8 +44,13 @@ class Getcode extends Controller{
         $url= $url."&grant_type=authorization_code";
         $token ="";
         $token = file_get_contents($url);
-
-        echo $token;
+        $data = json_decode($token);
+        $data['access_token'];
+        $data['expires_in'];
+        $data['refresh_token'];
+        $data['openid'];
+        $data['scope'];
+        echo $data;
 
     }
 
