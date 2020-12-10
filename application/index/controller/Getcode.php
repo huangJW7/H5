@@ -24,6 +24,7 @@ class Getcode extends Controller{
 
 
         header("Location:$url");
+        exit();
 
     }
 
