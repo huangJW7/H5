@@ -30,9 +30,21 @@ class Getcode extends Controller{
 
     }
     public function hello(){
-        $url = Request::instance();
+        //https://api.weixin.qq.com/sns/oauth2/access_token?appid=APPID&secret=SECRET&code=CODE
+        //&grant_type=authorization_code
+        $code = Request::param('code');
+        $state = Request::param('state');
+        $url ="";
+        $url= $url."https://api.weixin.qq.com/sns/oauth2/access_token?";
+        $url= $url."appid=".APP_ID;
+        $url= $url."&secret=".APP_SECRET;
+        $url= $url."&code=".$code;
+        $url= $url."&grant_type=authorization_code";
+        $token ="";
+        $token = file_get_contents($url);
 
-        echo $url->url(true);
+        echo $token;
+
     }
 
 
