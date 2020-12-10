@@ -44,9 +44,10 @@ class Getcode extends Controller{
         $url= $url."&grant_type=authorization_code";
         $token ="";
         $token = file_get_contents($url);
+
         $data = json_decode($token);
 
-        var_dump($data);
+        print_r($data);
 
     }
 
