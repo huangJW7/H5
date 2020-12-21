@@ -39,8 +39,9 @@ class History extends Controller{
             echo 'empty or no found';
         //echo $query;
         //print_r($query);
-
-        return json($query);
+        if(!empty($query))
+            print_r($query);
+            return json($query);
 
     }
 
