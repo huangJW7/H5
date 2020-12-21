@@ -33,6 +33,18 @@ class History extends Controller{
         $school =Request::param('school');
 
 
-        $datas = ShowerMsg::where();
+        $query = ShowerMsg::where('pass',1);
+        if(!empty($maxage) and !empty($minage))
+            $query->where('age','between',[$minage,$maxage]);
+
+        $query->fetchSql(true)->find();
+
+        if(empty($query))
+            echo 'empty or no found';
+
+        print_r($query);
+
     }
+
+
 }

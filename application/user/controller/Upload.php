@@ -27,7 +27,7 @@ class Upload extends Controller{
         $data->height =Request::param('height');
         $data->introduction=Request::param('about');
         $data->like   =0;
-        $data->wx     =Request::param('qq');//联系方式
+        $data->connect =Request::param('connect');//联系方式
         //上传图片
         $data->save();
         if($data===false)
