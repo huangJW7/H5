@@ -25,9 +25,14 @@ class ShowerMsg extends Model
         if($option =='history'){
             $query->field('name,age,location,school,height,star,gender,introduction,goal,like,history');
         }
-        $query->field('name,age,location,school,height,star,gender,introduction,goal,like');
+        else{
+            $query->field('name,age,location,school,height,star,gender,introduction,goal,like');
+        }
+
         return $query;
     }
+
+
 
 }
 ?>
