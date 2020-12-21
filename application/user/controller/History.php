@@ -3,7 +3,8 @@ namespace app\user\controller;
 
 use app\user\model\ShowerMsg;
 use think\Controller;
-use think\Facade;
+use think\Facade\Request;
+
 /*
  * 用于展示历史上墙信息
  * version 1.0
@@ -21,5 +22,17 @@ class History extends Controller{
 
 
         return msg(0,'ok',$return_data);
+    }
+    public function search(){
+        $maxage =Request::param('maxage');
+        $minage =Request::param('minage');
+        $maxheight = Request::param('maxheight');
+        $minheight = Request::param('minheight');
+        $place = Request::param('place');
+        $episode =Request::param('episode');
+        $school =Request::param('school');
+
+
+        $datas = ShowerMsg::where();
     }
 }

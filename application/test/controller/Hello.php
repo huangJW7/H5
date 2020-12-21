@@ -17,8 +17,9 @@ class Hello extends Controller{
 
     }
     public function showtest(){
-        $data = Config::limit(1)->find();
-        print_r($data);
+        $default;
+        $data = Config::where('default',$default)->where('tomorrow',2)->fetchSql(true)->find();
+
 
     }
 }

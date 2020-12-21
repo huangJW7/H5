@@ -13,7 +13,7 @@ class ShowerMsg extends Model
      */
     public static function getPrivateData($query){
 
-        $query->field('email,QQ');
+        $query->field('connect');
         return $query;
 
     }
@@ -23,10 +23,10 @@ class ShowerMsg extends Model
      */
     public static function getOpenData($query,$option=""){
         if($option =='history'){
-            $query->field('name,age,location,school,height,star,gender,introduction,goal,like,history');
+            $query->field('ID,name,age,location,school,height,star,gender,introduction,goal,like,history');
         }
         else{
-            $query->field('name,age,location,school,height,star,gender,introduction,goal,like');
+            $query->field('ID,name,age,location,school,height,star,gender,introduction,goal,like');
         }
 
         return $query;

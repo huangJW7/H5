@@ -14,7 +14,9 @@ class Message extends Controller{
         return msg();
     }
 
-
+    /*
+     * 返回今日展示信息
+     */
     public function shower(){
         $data = ShowerMsg::where('ID','wxopenid_123')->find();
          if(empty($data)){
