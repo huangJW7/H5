@@ -35,9 +35,10 @@ class History extends Controller{
 
         $query = ShowerMsg::where('pass',1);
         if(!empty($maxage) and !empty($minage))
-            $query->where('age','between',[$minage,$maxage]);
+            $query->where('age','between',[180,190]);
 
-        $query->fetchSql(true)->find();
+
+        $query->fetchSql(false)->find();
 
         if(empty($query))
             echo 'empty or no found';
