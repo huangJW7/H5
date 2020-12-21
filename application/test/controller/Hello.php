@@ -16,4 +16,9 @@ class Hello extends Controller{
             echo "add ok";
 
     }
+    public function showtest(){
+        $data = Config::limit(1)->find();
+        print_r($data);
+
+    }
 }
