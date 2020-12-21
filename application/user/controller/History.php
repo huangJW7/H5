@@ -1,6 +1,6 @@
 <?php
 namespace app\user\controller;
-
+use think\Db;
 use app\user\model\ShowerMsg;
 use think\Controller;
 use think\facade\Request;
@@ -34,16 +34,17 @@ class History extends Controller{
 
 
         $query = ShowerMsg::where('pass',0);
-        if(!empty($maxage) and !empty($minage))
-            $query->where('age','between',[170,192]);
+        if(empty($maxage) and empty($minage))
+            $query->whereBetween('age',[10,200]);
 
 
-        $query->fetchSql(false)->select();
+        $query->select();
 
         if(empty($query))
             echo 'empty or no found';
         //echo $query;
         //print_r($query);
+
         return json($query);
 
     }
