@@ -37,6 +37,8 @@ class History extends Controller{
 
         if(!empty($maxage) and !empty($minage))
             $query->whereBetween('age',[$minage,$maxage]);
+            if(empty($query))
+                echo 'age wrong';
         if(!empty($maxheight) and !empty($minheight))
             $query->whereBetween('height',[$minheight,$maxheight]);
         if(!empty($place))
@@ -47,6 +49,8 @@ class History extends Controller{
             $query->where('school',$school);
 
         $data=ShowerMsg::getOpenData($query)->select();
+        if(empty($data))
+            echo 'get open data fail';
         return msg(0,'ok',$data);
         //echo $query;
         //print_r($query);
