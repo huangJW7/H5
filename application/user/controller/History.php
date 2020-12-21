@@ -37,10 +37,10 @@ class History extends Controller{
 
         if(!empty($maxage) and !empty($minage))
 
-            $query->whereBetween('age',[$minage,$maxage]);
+            $query->where('age','between',[$minage,$maxage]);
             //echo $query->getLastSql();
         if(!empty($maxheight) and !empty($minheight))
-            $query->whereBetween('height',[$minheight,$maxheight]);
+            $query->where('height','between',[$minheight,$maxheight]);
             //echo $query->getLastSql();
         if(!empty($place))
             $query->where('location',$place);
