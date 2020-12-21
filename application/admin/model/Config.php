@@ -1,6 +1,6 @@
 <?php
 namespace app\admin\model;
-use think\model;
+use think\Model;
 
 class Config extends Model{
 
