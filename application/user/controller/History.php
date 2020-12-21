@@ -38,7 +38,7 @@ class History extends Controller{
             $query->where('age','between',[180,190]);
 
 
-        $query->fetchSql(false)->select();
+        $query->fetchSql(true)->select();
 
         if(empty($query))
             echo 'empty or no found';
