@@ -1,6 +1,6 @@
 <?php
 namespace app\test\controller;
-use app\admin\model\Config;
+use app\test\model\Config;
 use think\Controller;
 
 class Hello extends Controller{
