@@ -42,7 +42,7 @@ class History extends Controller{
 
         if(empty($query))
             echo 'empty or no found';
-        echo $query;
+        //echo $query;
         //print_r($query);
         //echo json_encode($query);
 
