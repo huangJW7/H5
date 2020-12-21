@@ -3,7 +3,7 @@ namespace app\user\controller;
 
 use app\user\model\ShowerMsg;
 use think\Controller;
-use think\Facade\Request;
+use think\facade\Request;
 
 /*
  * 用于展示历史上墙信息
