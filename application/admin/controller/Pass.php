@@ -45,7 +45,7 @@ class Pass extends Controller{
     public function check_image(){
         //返回待审核的图片列表
         $type = Request::param('type');
-        if($type!= 1 or $type!=0){
+        if($type!= 1 || $type!=0){
             return msg (-1,'wrong type');
         }
 
