@@ -44,6 +44,7 @@ class Message extends Controller{
         if(empty($data))
             return msg(-1,'no such actor');
 
+
         $data = new Likes();
         $data ->ID = Request::param('openid');
         $data ->actorID = $actorUID;

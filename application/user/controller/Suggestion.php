@@ -9,13 +9,13 @@ use think\facade\Request;
 class Suggestion extends Controller{
     public function index(){
         $option =new Option();
-        if(empty(Request::param('quetion')))
+        if(empty(Request::param('question')))
             return msg(-1,'no question content');
 
         if(empty(Request::param('content')))
             return msg(-1,'no contact way');
 
-        $option->content = Request::param('quetion');
+        $option->content = Request::param('question');
         $option->contact = Request::param('content');
         $option->save();
         return msg(0,'ok');
