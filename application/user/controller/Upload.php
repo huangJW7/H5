@@ -53,7 +53,7 @@ class Upload extends Controller{
             $data ->type = Request::param('type');
             $data->save();
             if($data !== false){
-                $url ='www.scgxtd/public/'.$info->getSaveName();
+                $url ='www.scgxtd.cn/public/'.$info->getSaveName();
                 return msg (0,'ok',$url);
             }else{
                 print_r($data);
