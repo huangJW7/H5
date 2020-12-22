@@ -18,10 +18,8 @@ class Message extends Controller{
      * 返回今日展示信息
      */
     public function shower(){
-        $data = ShowerMsg::where('ID','wxopenid_123')->find();
-         if(empty($data)){
-             return msg(-5);
-         }
+        $query = ShowerMsg::where('pass',1);
+        $data =ShowerMsg::getOpenData($query);
          if ($data->pass == 1)
          {
 

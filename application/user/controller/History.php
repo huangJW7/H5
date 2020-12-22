@@ -32,7 +32,7 @@ class History extends Controller{
         $episode =Request::param('episode');
         $school =Request::param('school');
 
-
+        //
         $query = ShowerMsg::where('pass',0);
 
         if(!empty($maxage) and !empty($minage))
@@ -53,13 +53,11 @@ class History extends Controller{
             //echo $query->getLastSql();
 
         $data=ShowerMsg::getOpenData($query)->select();
-        echo $query->getLastSql();
+        //echo $query->getLastSql();
         if(empty($data))
             echo 'get open data fail';
         return msg(0,'ok',$data);
-        //echo $query;
-        //print_r($query);
-        //var_dump($query);
+
 
     }
 
