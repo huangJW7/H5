@@ -44,7 +44,7 @@ class Upload extends Controller{
             return msg(-1,'no such actor');
 
         $file = request()->file('image');
-        $info = $file->validate(['size'=>20*1024*1024,'ext'=>'jpg,png'])->rule('uniqid')->move('public/picture');
+        $info = $file->validate(['size'=>20*1024*1024,'ext'=>'jpg,png'])->rule('uniqid')->move('picture');
         if($info){
             // 成功上传后 获取上传信息
             $data = new Picture();
