@@ -50,7 +50,7 @@ class Pass extends Controller{
             $count = 0;
             $data=null;
             foreach ($IDs as $ID) {
-                $data[$count]['ID'] = $ID;
+                $data[$count]['ID'] = $ID['ID'];
                 $data[$count]['image'] = Picture::where('ID', $ID)->where('type', '普通')->select();
                 $count += 1;
             }
