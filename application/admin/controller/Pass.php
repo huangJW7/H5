@@ -48,12 +48,11 @@ class Pass extends Controller{
 
             $IDs = ShowerMsg::field('ID')->where('pass', 0)->where('type', $type)->select();
             $count = 0;
-            $data;
+            $data=null;
             foreach ($IDs as $ID) {
                 $data[$count]['ID'] = $ID;
                 $data[$count]['image'] = Picture::where('ID', $ID)->where('type', '普通')->select();
                 $count += 1;
-
             }
             return msg(0, 'ok', $data);
         }
