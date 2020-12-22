@@ -50,7 +50,7 @@ class History extends Controller{
             //echo $query->getLastSql();
         if(!empty($school))
             $query->where('school',$school);
-            echo $query->getLastSql();
+            //echo $query->getLastSql();
 
         $data=ShowerMsg::getOpenData($query)->select();
         echo $query->getLastSql();
