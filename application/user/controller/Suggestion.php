@@ -12,11 +12,11 @@ class Suggestion extends Controller{
         if(empty(Request::param('question')))
             return msg(-1,'no question content');
 
-        if(empty(Request::param('content')))
+        if(empty(Request::param('connect')))
             return msg(-1,'no contact way');
 
         $option->content = Request::param('question');
-        $option->contact = Request::param('content');
+        $option->contact = Request::param('connect');
         $option->save();
         return msg(0,'ok');
 
