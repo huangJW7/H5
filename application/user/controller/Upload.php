@@ -52,9 +52,10 @@ class Upload extends Controller{
             $data ->address = $info->getSaveName();
             $data ->type = Request::param('type');
             $data->save();
-            if($data ===true){
+            if($data === true){
                 return msg (0,'ok');
             }else{
+                print_r($data);
                 return msg (-1,'save picture data fail');
             }
             // 输出 jpg
