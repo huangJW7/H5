@@ -45,7 +45,8 @@ class Getcode extends Controller{
         $token = file_get_contents($url);
 
         $data = json_decode($token,true);
-        return $data[openid];
+        $data[openid];
+        echo $data[openid];
 
 
     }
