@@ -53,7 +53,8 @@ class Upload extends Controller{
             $data ->type = Request::param('type');
             $data->save();
             if($data !== false){
-                return msg (0,'ok');
+                $url ='www.scgxtd/public/'.$info->getSaveName();
+                return msg (0,'ok',$url);
             }else{
                 print_r($data);
                 return msg (-1,'save picture data fail');
