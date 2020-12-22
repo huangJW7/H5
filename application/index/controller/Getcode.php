@@ -47,7 +47,7 @@ class Getcode extends Controller{
         $datas = json_decode($token,true);
         foreach ($datas as $key => $value){
             if ($key == 'openid'){
-                return $value;
+                return msg(0,'ok',$value);
             }
         }
 
