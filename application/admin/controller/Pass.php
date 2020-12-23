@@ -47,12 +47,17 @@ class Pass extends Controller{
         if($type <=1) {
 
             $IDs = ShowerMsg::field('ID')->where('pass', 0)->where('type', $type)->select();
-            $count = 0;
+            $count1 = 0;
+            $count2 = 0;
             $data=null;
             foreach ($IDs as $ID) {
-                $data[$count]['ID'] = $ID['ID'];
-                $data[$count]['image'] = Picture::field('address')->where('ID', $ID['ID'])->select();
-                $count += 1;
+                $data[$count1]['ID'] = $ID['ID'];
+                $data[$count1]['image'] = Picture::field('address')->where('ID', $ID['ID'])->select();
+                foreach ($data[$count1]['image'] as $key => $vaule){
+                    $data[$count1]['image'][count2] = PREFIX.$vaule;
+                    $count2+=1;
+                }
+                $count1 += 1;
             }
             return msg(0, 'ok', $data);
         }
