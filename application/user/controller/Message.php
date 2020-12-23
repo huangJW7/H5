@@ -25,8 +25,8 @@ class Message extends Controller{
 
         $config = Config::limit(1)->find();
         $isset = $config->isset;
-
         $history = $config->history;
+        //查找是否设置了今日展示
         $query =ShowerMsg::where('history',$history)->find();
         //没有设置今日展示，设置
         //$datas 是需要更改history值的人
@@ -42,7 +42,6 @@ class Message extends Controller{
                 $datas = ShowerMsg::field('ID,history')->where('pass',1)->limit($tomorrow)->select();
             }
             //取要更改history的ID
-
             foreach ($datas as $key =>$value){
                 if($key =='ID')
                     $user = ShowerMsg::where('ID',$value)->find();
@@ -50,8 +49,21 @@ class Message extends Controller{
                     $user ->save();
                     if($user == false){
                         return msg(-1,'set fail');
-
                     }
+            }
+            //设置了今日展示
+            if(!empty($query)){
+                if($isset==0){
+                    $query1 = ShowerMsg::where('history',$history)->where('pass',1);
+                    $datas = ShowerMsg::getOpenData($query1)->select();
+                    return msg(1,'ok',$datas);
+                }
+                if($isset ==1){
+                    $query1 = ShowerMsg::where('history',$history)->where('pass',1);
+                    $datas = ShowerMsg::getOpenData($query1)->select();
+                    return msg(1,'ok',$datas);
+                }
+
             }
 
 
