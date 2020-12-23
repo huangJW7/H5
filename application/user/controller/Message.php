@@ -18,7 +18,8 @@ class Message extends Controller{
     /*
      * 返回今日展示信息
      */
-    public function shower(){
+    public function shower()
+    {
         //获取openid
 
         $ID = Request::param('id');
@@ -29,53 +30,51 @@ class Message extends Controller{
         $default = $config->default;
         $tomorrow = $config->tomorrow;
         //查找是否设置了今日展示
-        $query =ShowerMsg::where('history',$history)->find();
+        $query = ShowerMsg::where('history', $history)->find();
         //查询通过审核且未展示的人数
-        $number = Db::table('shower_msg')->where('pass',1)->where('history',null)->count();
+        $number = Db::table('shower_msg')->where('pass', 1)->where('history', null)->count();
 
         //没有设置今日展示，设置
 
         //$datas 是需要更改history值的人
-        if(empty($query)){
+        if (empty($query)) {
             //默认设置或明日设置
-            if($isset == 0){
+            if ($isset == 0) {
                 //从default获取人数
-                if($number>=$default){
-                    $datas = ShowerMsg::where('pass', 1)->where('history',null)->limit($default)->column('ID');
+                if ($number >= $default) {
+                    $datas = ShowerMsg::where('pass', 1)->where('history', null)->limit($default)->column('ID');
                     print_r($datas);
-                }else{
-                    return msg(-1,'not enough persons');
+                } else {
+                    return msg(-1, 'not enough persons');
                 }
             }
 
-            if($isset == 1) {
+            if ($isset == 1) {
 
                 if ($number >= $tomorrow) {
-                    $datas = ShowerMsg::where('pass', 1)->where('history',null)->limit($tomorrow)->column('ID');
+                    $datas = ShowerMsg::where('pass', 1)->where('history', null)->limit($tomorrow)->column('ID');
                     print_r($datas);
-                }else{
-                    return msg(-1,'not enough persons');
+                } else {
+                    return msg(-1, 'not enough persons');
                 }
             }
-                //取要更改history的ID
-            foreach ($datas as $data) {
+            //取要更改history的ID
+            foreach ($datas as $key => $value) {
 
-                foreach ($data as $key => $value) {
-                    if ($key == 'ID') {
 
-                        $user = ShowerMsg::where('ID', $value)->find();
-                        if(empty($user))
-                            return msg(-1,'no found');
-                        $user->history = $history;
-                        print_r($user);
-                        $user->save();
-                        if ($user == false) {
-                            return msg(-1, 'set fail');
-                        }
-                    }
+                $user = ShowerMsg::where('ID', $value)->find();
+                if (empty($user))
+                    return msg(-1, 'no found');
+                $user->history = $history;
+                print_r($user);
+                $user->save();
+                if ($user == false) {
+                    return msg(-1, 'set fail');
                 }
             }
         }
+
+
         //再次查询
         $again =ShowerMsg::where('history',$history)->find();
         //设置了今日展示
