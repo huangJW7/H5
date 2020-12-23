@@ -21,10 +21,9 @@ class Command extends Controller{
             return msg (-1,'please select default or tomorrow');
 
         if(!empty($default)) {
-            $data = Config::limit(1)->find();
+            $data = Config::where('ID',1)->find();
             $data->default = $default;
             $data->isset = 0;
-            print_r($data);
             $data->save();
             if ($data == false) {
                 return msg(-1, 'set default fail');
