@@ -46,6 +46,8 @@ class Message extends Controller{
 
                     $datas =ShowerMsg::field('ID,history')->where('pass',1)->limit($default)->select();
                     print_r($datas);
+                }else{
+                    return msg(-1,'not enough persons');
                 }
             }
 
@@ -53,7 +55,8 @@ class Message extends Controller{
                 echo 'isset = 1';
                 if ($number >= $tomorrow) {
                     $datas = ShowerMsg::field('ID,history')->where('pass', 1)->limit($tomorrow)->select();
-
+                }else{
+                    return msg(-1,'not enough persons');
                 }
             }
                 //取要更改history的ID
