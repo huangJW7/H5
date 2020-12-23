@@ -64,9 +64,10 @@ class Message extends Controller{
 
                 foreach ($data as $key => $value) {
                     if ($key == 'ID') {
-                        echo $key;
+
                         $user = ShowerMsg::where('ID', $value)->find();
                         $user->history = $history;
+                        print_r($user);
                         $user->save();
                         if ($user == false) {
                             return msg(-1, 'set fail');
