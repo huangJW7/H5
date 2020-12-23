@@ -45,7 +45,7 @@ class Message extends Controller{
                 if($number>=$default){
 
                     $datas =ShowerMsg::field('ID,history')->where('pass',1)->limit($default)->select();
-                    print_r($datas);
+
                 }else{
                     return msg(-1,'not enough persons');
                 }
@@ -61,6 +61,7 @@ class Message extends Controller{
             }
                 //取要更改history的ID
             foreach ($datas as $data) {
+                print_r($data);
                 foreach ($data as $key => $value) {
                     if ($key == 'ID') {
                         echo $key;
@@ -82,6 +83,7 @@ class Message extends Controller{
             if($isset==0){
                 $query1 = ShowerMsg::where('history',$history)->where('pass',1);
                 $datas = ShowerMsg::getOpenData($query1)->select();
+
                 return msg(1,'ok',$datas);
             }
             if($isset ==1){
