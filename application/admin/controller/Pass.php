@@ -36,14 +36,26 @@ class Pass extends Controller{
         $type = Request::param('type');
         if(empty($type))
             return msg(-1,'empty type');
-        if($type ==1 or $type ==0 ) {
-
-            $query1 = ShowerMsg::where('pass', 0)->where('type', $type);
+        if($type ==1 ){
+            $query1 = ShowerMsg::where('pass', 0)->where('type', 1);
             $query2 = ShowerMsg::getOpenData($query1);
             $query3 = ShowerMsg::getPrivateData($query2);
             $datas = $query3->select();
             return msg(0, 'ok', $datas);
         }
+        if($type==0) {
+            $query1 = ShowerMsg::where('pass', 0)->where('type', 0);
+            $query2 = ShowerMsg::getOpenData($query1);
+            $query3 = ShowerMsg::getPrivateData($query2);
+            $datas = $query3->select();
+            return msg(0, 'ok', $datas);
+        }else{
+            return msg(-1,'wrong type');
+        }
+
+
+
+
     }
     public function check_image(){
         //返回待审核的图片列表
