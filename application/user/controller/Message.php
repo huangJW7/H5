@@ -43,13 +43,16 @@ class Message extends Controller{
             if($isset == 1){
                 echo 'isset = 1';
                 $datas = ShowerMsg::field('ID,history')->where('pass',1)->limit($tomorrow)->select();
+                echo 'limit 4';
             }
             //取要更改history的ID
             foreach ($datas as $data){
                 foreach ($data as $key => $value)
                 {
                     if ($key == 'ID')
+                        echo $key;
                         $user = ShowerMsg::where('ID', $value)->find();
+                        echo 'after key';
                     $user->history = $history;
                     $user->save();
                     if ($user == false) {
