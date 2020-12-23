@@ -41,9 +41,11 @@ class Message extends Controller{
                 $datas = ShowerMsg::field('ID,history')->where('pass',1)->limit($tomorrow)->select();
             }
 
-            foreach ($datas as $data){
-                $list['ID'] = $data['ID'];
-                $list['history'] = $history;
+            foreach ($datas as $key =>$value){
+                if($key =='ID')
+                    $list['ID'] =$value;
+                if($key == 'history')
+                    $list['history'] = $history;
             }
             $user = new ShowerMsg();
             $user->saveAll($list);
