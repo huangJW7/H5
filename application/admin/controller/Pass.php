@@ -34,7 +34,7 @@ class Pass extends Controller{
 
 
         $type = Request::param('type');
-        if(isset($type))
+        if(!isset($type))
             return msg(-1,'empty type');
         if($type ==1 ){
             $query1 = ShowerMsg::where('pass', 0)->where('type', 1);
