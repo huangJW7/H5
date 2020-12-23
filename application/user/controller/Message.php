@@ -35,7 +35,7 @@ class Message extends Controller{
         //查找是否设置了今日展示
         $query = ShowerMsg::where('history', $history)->find();
         //查询通过审核且未展示的人数
-        $number = Db::table('shower_msg')->where('pass', 1)->where('history', null)->count();
+        $number = Db::table('shower_msg')->where('pass', 1)->where('history', null)->where('type',0)->count();
 
         //没有设置今日展示，设置
 
@@ -45,7 +45,7 @@ class Message extends Controller{
             if ($isset == 0) {
                 //从default获取人数
                 if ($number >= $default) {
-                    $datas = ShowerMsg::where('pass', 1)->where('history', null)->limit($default)->column('ID');
+                    $datas = ShowerMsg::where('pass', 1)->where('history', null)->where('type',0)->limit($default)->column('ID');
 
                 } else {
                     return msg(-1, 'not enough persons');
@@ -55,7 +55,7 @@ class Message extends Controller{
             if ($isset == 1) {
 
                 if ($number >= $tomorrow) {
-                    $datas = ShowerMsg::where('pass', 1)->where('history', null)->limit($tomorrow)->column('ID');
+                    $datas = ShowerMsg::where('pass', 1)->where('history', null)->where('type',0)->limit($tomorrow)->column('ID');
 
                 } else {
                     return msg(-1, 'not enough persons');
@@ -85,13 +85,13 @@ class Message extends Controller{
         if(!empty($again)){
 
             if($isset==0){
-                $query1 = ShowerMsg::where('history',$history+$flag)->where('pass',1);
+                $query1 = ShowerMsg::where('history',$history+$flag)->where('pass',1)->where('type',0);
                 //待添加逻辑，付费信息
                 $datas = ShowerMsg::getOpenData($query1)->select();
                 return msg(1,'ok',$datas);
             }
             if($isset ==1){
-                $query1 = ShowerMsg::where('history',$history+$flag)->where('pass',1);
+                $query1 = ShowerMsg::where('history',$history+$flag)->where('pass',1)->where('type',0);
                 //待添加逻辑，付费信息
                 $datas = ShowerMsg::getOpenData($query1)->select();
                 return msg(1,'ok',$datas);
@@ -99,7 +99,24 @@ class Message extends Controller{
         }
     }
     public function picture(){
-
+        $config = Config::limit(1)->find();
+        $history = $config->history;
+        $IDs = ShowerMsg::where('pass', 1)->where('history',$history)->where('type',0)->column('ID');
+        $count1 = 0;
+        $data=null;
+        foreach ($IDs as $ID) {
+            $count2 = 0;
+            $data[$count1]['ID'] = $ID['ID'];
+            $data[$count1]['image'] = Picture::field('address')->where('ID', $ID['ID'])->select();
+            foreach ($data[$count1]['image'] as $key => $vaule){
+                //vaule ="{\"address\":\"20201222\\/07316443315b68108d9f7d1299f88777.png\"}
+                $vaule = json_decode($vaule,true);
+                $data[$count1]['image'][$key] = PREFIX.$vaule['address'];
+                $count2+=1;
+            }
+            $count1 += 1;
+        }
+        return msg(0, 'ok', $data);
     }
 
 
