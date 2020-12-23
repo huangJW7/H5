@@ -44,8 +44,8 @@ class Message extends Controller{
 
                 if($number>=$default){
 
-                    $datas =ShowerMsg::field('ID,history')->where('pass',1)->limit($default)->select();
-
+                    $datas = ShowerMsg::where('pass', 1)->limit($tomorrow)->column('ID');
+                    print_r($datas);
                 }else{
                     return msg(-1,'not enough persons');
                 }
