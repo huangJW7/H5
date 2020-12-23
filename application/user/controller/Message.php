@@ -33,6 +33,7 @@ class Message extends Controller{
         //没有设置今日展示，设置
         //$datas 是需要更改history值的人
         if(empty($query)){
+            echo 'empty query';
             //默认设置或明日设置
             if($isset == 0){
                 //从default获取人数
@@ -57,6 +58,7 @@ class Message extends Controller{
 
             //设置了今日展示
             if(!empty($query)){
+                echo 'not empty query';
                 if($isset==0){
                     $query1 = ShowerMsg::where('history',$history)->where('pass',1);
                     $datas = ShowerMsg::getOpenData($query1)->select();
