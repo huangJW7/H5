@@ -1,9 +1,6 @@
 <?php
 namespace app\admin\controller;
-
 use think\Controller;
-use think\console\Input;
-use think\console\Output;
 use app\admin\model\Config;
 use think\facade\Request;
 
@@ -27,7 +24,8 @@ class Command extends Controller{
             $data = Config::limit(1)->find();
             $data->default = $default;
             $data->isset = 0;
-            $data->update();
+            print_r($data);
+            $data->save();
             if ($data == false) {
                 return msg(-1, 'set default fail');
             }
@@ -36,7 +34,7 @@ class Command extends Controller{
             $data = Config::limit(1)->find();
             $data->tomorrow = $tomorrow;
             $data->isset = 1;
-            $data->update();
+            $data->save();
             if ($data == false) {
                 return msg(-1, 'set tomorrow fail');
             }
