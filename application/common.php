@@ -19,6 +19,8 @@ define('APP_ID','wx4d1f2c66828fd817');
 define('APP_SECRET','ea35365c0ca500ab7cf4151d5bfe3e78');
 //用户访问链接后的入口界面
 define('REDIRECT_URI','http://www.scgxtd.cn/public/index/getcode/token');
+//网址前缀
+define('PREFIX','www.scgxtd.cn/public/public/picture/');
 //error_reporting(E_ERROR | E_PARSE );
 function msg($msgcode = 0, $msg = "", $data = null)
 {
