@@ -42,15 +42,19 @@ class Message extends Controller{
                 $datas = ShowerMsg::field('ID,history')->where('pass',1)->limit($tomorrow)->select();
             }
             //取要更改history的ID
-            foreach ($datas as $key =>$value){
-                if($key =='ID')
-                    $user = ShowerMsg::where('ID',$value)->find();
-                    $user ->history = $history;
-                    $user ->save();
-                    if($user == false){
-                        return msg(-1,'set fail');
+            foreach ($datas as $data){
+                foreach ($data as $key => $value)
+                {
+                    if ($key == 'ID')
+                        $user = ShowerMsg::where('ID', $value)->find();
+                    $user->history = $history;
+                    $user->save();
+                    if ($user == false) {
+                        return msg(-1, 'set fail');
                     }
+                }
             }
+
             //设置了今日展示
             if(!empty($query)){
                 if($isset==0){
