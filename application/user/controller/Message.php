@@ -26,6 +26,8 @@ class Message extends Controller{
         $config = Config::limit(1)->find();
         $isset = $config->isset;
         $history = $config->history;
+        $default = $config->default;
+        $tomorrow = $config->tomorrow;
         //查找是否设置了今日展示
         $query =ShowerMsg::where('history',$history)->find();
         //没有设置今日展示，设置
@@ -34,11 +36,9 @@ class Message extends Controller{
             //默认设置或明日设置
             if($isset == 0){
                 //从default获取人数
-                $default = $config->default;
                 $datas = ShowerMsg::where('pass',1)->limit($default)->select();
             }
             if($isset == 1){
-                $tomorrow = $config->tomorrow;
                 $datas = ShowerMsg::field('ID,history')->where('pass',1)->limit($tomorrow)->select();
             }
             //取要更改history的ID
@@ -67,18 +67,9 @@ class Message extends Controller{
                     $datas = ShowerMsg::getOpenData($query1)->select();
                     return msg(1,'ok',$datas);
                 }
-
             }
-
-
-
-
         }
 
-
-
-
-        return msg(0,"ok,DEFAULT=$default,to = $tomorrow",$data);
     }
     /*
      * 普通点赞操作
