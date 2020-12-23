@@ -37,9 +37,11 @@ class Message extends Controller{
             //默认设置或明日设置
             if($isset == 0){
                 //从default获取人数
+                echo 'isset = 0';
                 $datas = ShowerMsg::where('pass',1)->limit($default)->select();
             }
             if($isset == 1){
+                echo 'isset = 1';
                 $datas = ShowerMsg::field('ID,history')->where('pass',1)->limit($tomorrow)->select();
             }
             //取要更改history的ID
