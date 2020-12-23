@@ -61,7 +61,7 @@ class Message extends Controller{
             }
                 //取要更改history的ID
             foreach ($datas as $data) {
-                print_r($data);
+
                 foreach ($data as $key => $value) {
                     if ($key == 'ID') {
                         echo $key;
