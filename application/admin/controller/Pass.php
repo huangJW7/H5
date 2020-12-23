@@ -54,7 +54,7 @@ class Pass extends Controller{
                 $count2 = 0;
                 $data[$count1]['ID'] = $ID['ID'];
                 $data[$count1]['image'] = Picture::field('address')->where('ID', $ID['ID'])->select();
-                foreach ($data[$count1]['image'] as $key => $vaule){
+                foreach ($data[$count1]['image'] as $key[$keygen] => $vaule){
                     $data[$count1]['image'][$count2] = PREFIX.$vaule;
                     $count2+=1;
                 }
