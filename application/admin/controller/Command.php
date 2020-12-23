@@ -26,6 +26,7 @@ class Command extends Controller{
         if(!empty($default)) {
             $data = Config::limit(1)->find();
             $data->default = $default;
+            $data->isset = 0;
             $data->save();
             if ($data == false) {
                 return msg(-1, 'set default fail');
