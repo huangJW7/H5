@@ -66,6 +66,8 @@ class Message extends Controller{
                     if ($key == 'ID') {
 
                         $user = ShowerMsg::where('ID', $value)->find();
+                        if(empty($user))
+                            return msg(-1,'no found');
                         $user->history = $history;
                         print_r($user);
                         $user->save();
