@@ -37,13 +37,11 @@ class Message extends Controller{
 
         //$datas 是需要更改history值的人
         if(empty($query)){
-
             //默认设置或明日设置
             if($isset == 0){
                 //从default获取人数
-
                 if($number>=$default){
-                    $datas = ShowerMsg::where('pass', 1)->where('history',null)->limit($tomorrow)->column('ID');
+                    $datas = ShowerMsg::where('pass', 1)->where('history',null)->limit($default)->column('ID');
                     print_r($datas);
                 }else{
                     return msg(-1,'not enough persons');
@@ -53,7 +51,7 @@ class Message extends Controller{
             if($isset == 1) {
 
                 if ($number >= $tomorrow) {
-                    $datas = ShowerMsg::where('pass', 1)->limit($tomorrow)->column('ID');
+                    $datas = ShowerMsg::where('pass', 1)->where('history',null)->limit($tomorrow)->column('ID');
                     print_r($datas);
                 }else{
                     return msg(-1,'not enough persons');
