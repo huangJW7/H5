@@ -102,17 +102,23 @@ class Message extends Controller{
         $config = Config::limit(1)->find();
         $history = $config->history;
         $IDs = ShowerMsg::field('ID')->where('history',$history)->where('pass', 0)->where('type',0)->select();
-
+        print_r($IDs);
+        echo "<br/>";
         $count1 = 0;
         $data=null;
         foreach ($IDs as $ID) {
             $count2 = 0;
             $data[$count1]['ID'] = $ID['ID'];
             $data[$count1]['image'] = Picture::field('address')->where('ID', $ID['ID'])->select();
+            print_r($data[$count1]['image']);
+            echo "<br/>";
+
             foreach ($data[$count1]['image'] as $key => $vaule){
                 //vaule ="{\"address\":\"20201222\\/07316443315b68108d9f7d1299f88777.png\"}
                 $vaule = json_decode($vaule,true);
                 $data[$count1]['image'][$key] = PREFIX.$vaule['address'];
+                print_r($data[$count1]['image'][$key]);
+                echo "<br/>";
                 $count2+=1;
             }
             $count1 += 1;
