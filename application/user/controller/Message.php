@@ -38,13 +38,16 @@ class Message extends Controller{
             }
             if($isset == 1){
                 $tomorrow = $config->tomorrow;
-                $datas = ShowerMsg::where('pass',1)->limit($tomorrow)->select();
+                $datas = ShowerMsg::field('ID,history')->where('pass',1)->limit($tomorrow)->select();
             }
 
             foreach ($datas as $data){
-                $data ->history = $history;
+                $list['ID'] = $data['ID'];
+                $list['history'] = $history;
             }
-            $datas->save();
+            $user = new ShowerMsg();
+            $user->saveAll($list);
+
 
 
         }
