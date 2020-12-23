@@ -6,7 +6,7 @@ use app\user\model\Likes;
 use app\user\model\ShowerMsg;
 use think\Controller;
 use think\facade\Request;
-
+use think\Db;
 
 
 class Message extends Controller{
@@ -30,7 +30,10 @@ class Message extends Controller{
         $tomorrow = $config->tomorrow;
         //查找是否设置了今日展示
         $query =ShowerMsg::where('history',$history)->find();
+        //查询通过审核且未展示的人数
+        $number = Db::table('shower_msg')->where('pass',1)->where('history',null)->count();
         //没有设置今日展示，设置
+
         //$datas 是需要更改history值的人
         if(empty($query)){
             echo 'empty query';
@@ -38,46 +41,52 @@ class Message extends Controller{
             if($isset == 0){
                 //从default获取人数
                 echo 'isset = 0';
-                $datas = ShowerMsg::where('pass',1)->limit($default)->select();
+                if($number>=$default){
+                    $datas =ShowerMsg::field('ID,history')->where('pass',1)->limit($default)->select();
+                }
             }
-            if($isset == 1){
+
+            if($isset == 1) {
                 echo 'isset = 1';
-                $datas = ShowerMsg::field('ID,history')->where('pass',1)->limit($tomorrow)->select();
-                echo 'limit 4';
+                if ($number >= $tomorrow) {
+                    $datas = ShowerMsg::field('ID,history')->where('pass', 1)->limit($tomorrow)->select();
+
+                }
             }
-            //取要更改history的ID
-            foreach ($datas as $data){
-                foreach ($data as $key => $value)
-                {
-                    if ($key == 'ID')
+                //取要更改history的ID
+            foreach ($datas as $data) {
+                foreach ($data as $key => $value) {
+                    if ($key == 'ID') {
                         echo $key;
                         $user = ShowerMsg::where('ID', $value)->find();
-                        echo 'after key';
-                    $user->history = $history;
-                    $user->save();
-                    if ($user == false) {
-                        return msg(-1, 'set fail');
+                        $user->history = $history;
+                        $user->save();
+                        if ($user == false) {
+                            return msg(-1, 'set fail');
+                        }
                     }
                 }
             }
-
-            //设置了今日展示
-            if(!empty($query)){
-                echo 'not empty query';
-                if($isset==0){
-                    $query1 = ShowerMsg::where('history',$history)->where('pass',1);
-                    $datas = ShowerMsg::getOpenData($query1)->select();
-                    return msg(1,'ok',$datas);
-                }
-                if($isset ==1){
-                    $query1 = ShowerMsg::where('history',$history)->where('pass',1);
-                    $datas = ShowerMsg::getOpenData($query1)->select();
-                    return msg(1,'ok',$datas);
-                }
+        }
+        //再次查询
+        $again =ShowerMsg::where('history',$history)->find();
+        //设置了今日展示
+        if(!empty($again)){
+            echo 'not empty query';
+            if($isset==0){
+                $query1 = ShowerMsg::where('history',$history)->where('pass',1);
+                $datas = ShowerMsg::getOpenData($query1)->select();
+                return msg(1,'ok',$datas);
+            }
+            if($isset ==1){
+                $query1 = ShowerMsg::where('history',$history)->where('pass',1);
+                $datas = ShowerMsg::getOpenData($query1)->select();
+                return msg(1,'ok',$datas);
             }
         }
-
     }
+
+
     /*
      * 普通点赞操作
      * 先查询是否在表内，再判断操作是否合理
