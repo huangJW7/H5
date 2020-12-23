@@ -108,7 +108,7 @@ class Message extends Controller{
             $count2 = 0;
             $data[$count1]['ID'] = $ID['ID'];
             $data[$count1]['image'] = Picture::field('address')->where('ID', $ID['ID'])->select();
-            print_r($data[$count1]['image']);
+
 
 
             foreach ($data[$count1]['image'] as $key => $vaule){
