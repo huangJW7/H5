@@ -67,15 +67,15 @@ class Message extends Controller{
                 if (empty($user))
                     return msg(-1, 'no found');
                 $user->history = $history+1;
-                print_r($user);
+
                 $user->save();
                 if ($user == false) {
                     return msg(-1, 'set fail');
                 }
             }
-            $config->history =$history+1;
             $flag =1;
-            $config->update();
+            $config->save(['history'  => $history+1], ['ID' => 1]);
+
         }
 
 
