@@ -1,36 +1,54 @@
 <?php
 namespace app\admin\controller;
 
-use think\Console\Command as Com;
+use think\Controller;
 use think\console\Input;
 use think\console\Output;
 use app\admin\model\Config;
-class Command extends Com{
+use think\facade\Request;
+
+class Command extends Controller{
+
+    public function index(){
+        //Config 的isset 通过mysql的事件每日变为0
 
 
-    protected function configure(){
-        $this->setName('SetConfig')->setDescription("计划任务 SetConfig");
+        //登录逻辑
+
+        $default =Request::param('default');
+        $tomorrow = Request::param('tomorrow');
+        if(empty($default) && empty($tomorrow))
+            return msg(-1,'cant select both');
+
+        if(!empty($default) && !empty($tomorrow))
+            return msg (-1,'please select default or tomorrow');
+
+        if(!empty($default)) {
+            $data = Config::limit(1)->find();
+            $data->default = $default;
+            $data->save();
+            if ($data == false) {
+                return msg(-1, 'set default fail');
+            }
+        }
+        if(!empty($tomorrow)) {
+            $data = Config::limit(1)->find();
+            $data->tomorrow = $tomorrow;
+            $data->isset = 1;
+            $data->save();
+            if ($data == false) {
+                return msg(-1, 'set tomorrow fail');
+            }
+        }
+        return msg (0,'ok');
+
     }
 
-    //调用SendMessage 这个类时,会自动运行execute方法
-    protected function execute(Input $input, Output $output){
-        //$output->writeln('Date Crontab job start...');
-        /*** 这里写计划任务列表集 START ***/
-
-        $this->task();//发短信
-
-        /*** 这里写计划任务列表集 END ***/
-        //$output->writeln('Date Crontab job end...');
-    }
-
-    //更新Config表，
-    public function task()
-    {
-        $query =Config::limit(1)->find();
-        $isset = $query->isset;
 
 
-    }
+
+
+
 
 
 }

@@ -1,6 +1,7 @@
 <?php
 namespace app\user\controller;
 
+use app\admin\model\Config;
 use app\user\model\Likes;
 use app\user\model\ShowerMsg;
 use think\Controller;
@@ -18,7 +19,37 @@ class Message extends Controller{
      * 返回今日展示信息
      */
     public function shower(){
-        $query = ShowerMsg::where('pass',1);
+        //获取openid
+
+        $ID = Request::param('id');
+
+        $config = Config::limit(1)->find();
+        $isset = $config->isset;
+
+        $history = $config->history;
+        $query =ShowerMsg::where('history',$history)->find();
+        //没有设置今日展示，设置
+        if(empty($query)){
+            //默认设置或明日设置
+            if($isset == 0){
+                //从default获取人数
+                $default = $config->default;
+                $datas = ShowerMsg::where('pass',1)->limit($default)->select();
+            }
+            if($isset == 1){
+                $tomorrow = $config->tomorrow;
+                $datas = ShowerMsg::where('pass',1)->limit($tomorrow)->select();
+            }
+
+            foreach ($datas as $data){
+                $data ->history = $history;
+            }
+            $datas->save();
+
+
+        }
+
+
         $data =ShowerMsg::getOpenData($query);
          if ($data->pass == 1)
          {

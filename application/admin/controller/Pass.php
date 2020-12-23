@@ -32,7 +32,7 @@ class Pass extends Controller{
 
         //待添加登录逻辑
         $type = Request::param('type');
-        if($type <=1 ) {
+        if($type ==1 or $type ==0 ) {
 
             $query1 = ShowerMsg::where('pass', 0)->where('type', $type);
             $query2 = ShowerMsg::getOpenData($query1);
