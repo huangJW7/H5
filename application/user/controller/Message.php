@@ -43,8 +43,7 @@ class Message extends Controller{
                 //从default获取人数
 
                 if($number>=$default){
-
-                    $datas = ShowerMsg::where('pass', 1)->limit($tomorrow)->column('ID');
+                    $datas = ShowerMsg::where('pass', 1)->where('history',null)->limit($tomorrow)->column('ID');
                     print_r($datas);
                 }else{
                     return msg(-1,'not enough persons');
