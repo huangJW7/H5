@@ -57,6 +57,8 @@ class Pass extends Controller{
                 foreach ($data[$count1]['image'] as $key => $vaule){
                     //vaule ="{\"address\":\"20201222\\/07316443315b68108d9f7d1299f88777.png\"}
                     foreach ($vaule as $k => $v){
+                        echo $k;
+                        echo $v;
                         $vaule =$v;
                     }
                     $data[$count1]['image'][$count2] = PREFIX.$vaule;
