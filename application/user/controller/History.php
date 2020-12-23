@@ -35,20 +35,20 @@ class History extends Controller{
         //
         $query = ShowerMsg::where('pass',0);
 
-        if(!empty($maxage) and !empty($minage))
+        if(isset($maxage) and isset($minage))
 
             $query->where('age','between',[$minage,$maxage]);
             //echo $query->getLastSql();
-        if(!empty($maxheight) and !empty($minheight))
+        if(isset($maxheight) and isset($minheight))
             $query->where('height','between',[$minheight,$maxheight]);
             //echo $query->getLastSql();
-        if(!empty($place))
+        if(isset($place))
             $query->where('location',$place);
             //echo $query->getLastSql();
-        if(!empty($episode))
+        if(isset($episode))
             $query->where('history',$episode);
             //echo $query->getLastSql();
-        if(!empty($school))
+        if(isset($school))
             $query->where('school',$school);
             //echo $query->getLastSql();
 

@@ -35,7 +35,8 @@ class Upload extends Controller{
     public function picture(){
         if(empty(Request::param('id')))
             return msg(-1,'empty id');
-        if(empty(Request::param('type')))
+        $type = Request::param('type');
+        if(!isset($type))
             return msg(-1,'empty type');
 
         $ID =Request::param('id');

@@ -14,13 +14,13 @@ class Command extends Controller{
 
         $default =Request::param('default');
         $tomorrow = Request::param('tomorrow');
-        if(empty($default) && empty($tomorrow))
+        if(!isset($default) && !isset($tomorrow))
             return msg(-1,'cant select both');
 
-        if(!empty($default) && !empty($tomorrow))
+        if(isset($default) && isset($tomorrow))
             return msg (-1,'please select default or tomorrow');
 
-        if(!empty($default)) {
+        if(isset($default)) {
             $data = Config::where('ID',1)->find();
             $data->default = $default;
             $data->isset = 0;
@@ -29,7 +29,7 @@ class Command extends Controller{
                 return msg(-1, 'set default fail');
             }
         }
-        if(!empty($tomorrow)) {
+        if(isset($tomorrow)) {
             $data = Config::limit(1)->find();
             $data->tomorrow = $tomorrow;
             $data->isset = 1;
