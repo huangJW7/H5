@@ -101,7 +101,8 @@ class Message extends Controller{
     public function picture(){
         $config = Config::limit(1)->find();
         $history = $config->history;
-        $IDs = ShowerMsg::where('pass', 1)->where('history',$history)->where('type',0)->column('ID');
+        $IDs = ShowerMsg::field('ID')->where('history',$history)->where('pass', 0)->where('type',0)->select();
+
         $count1 = 0;
         $data=null;
         foreach ($IDs as $ID) {
