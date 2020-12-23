@@ -50,13 +50,9 @@ class Message extends Controller{
         }
 
 
-        $data =ShowerMsg::getOpenData($query);
-         if ($data->pass == 1)
-         {
 
-         }
 
-        return msg(0,'ok',$data);
+        return msg(0,"ok,DEFAULT=$default,to = $tomorrow",$data);
     }
     /*
      * 普通点赞操作
