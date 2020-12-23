@@ -75,7 +75,7 @@ class Message extends Controller{
             }
             $config->history =$history+1;
             $flag =1;
-            $config->save();
+            $config->update();
         }
 
 
