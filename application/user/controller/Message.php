@@ -48,7 +48,7 @@ class Message extends Controller{
                     $list['history'] = $history;
             }
             $user = new ShowerMsg();
-            $user->saveAll($list);
+            $user->saveAll($list,true);
 
 
 
