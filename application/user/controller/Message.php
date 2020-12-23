@@ -23,12 +23,13 @@ class Message extends Controller{
         //获取openid
 
         $ID = Request::param('id');
-
+        $flag =0;
         $config = Config::limit(1)->find();
         $isset = $config->isset;
         $history = $config->history;
         $default = $config->default;
         $tomorrow = $config->tomorrow;
+
         //查找是否设置了今日展示
         $query = ShowerMsg::where('history', $history)->find();
         //查询通过审核且未展示的人数
@@ -43,7 +44,7 @@ class Message extends Controller{
                 //从default获取人数
                 if ($number >= $default) {
                     $datas = ShowerMsg::where('pass', 1)->where('history', null)->limit($default)->column('ID');
-                    print_r($datas);
+
                 } else {
                     return msg(-1, 'not enough persons');
                 }
@@ -53,41 +54,42 @@ class Message extends Controller{
 
                 if ($number >= $tomorrow) {
                     $datas = ShowerMsg::where('pass', 1)->where('history', null)->limit($tomorrow)->column('ID');
-                    print_r($datas);
+
                 } else {
                     return msg(-1, 'not enough persons');
                 }
             }
             //取要更改history的ID
             foreach ($datas as $key => $value) {
-
-
                 $user = ShowerMsg::where('ID', $value)->find();
                 if (empty($user))
                     return msg(-1, 'no found');
-                $user->history = $history;
+                $user->history = $history+1;
                 print_r($user);
                 $user->save();
                 if ($user == false) {
                     return msg(-1, 'set fail');
                 }
             }
+            $config->history =$history+1;
+            $flag =1;
+            $config->save();
         }
 
 
         //再次查询
-        $again =ShowerMsg::where('history',$history)->find();
+        $again =ShowerMsg::where('history',$history+$flag)->find();
         //设置了今日展示
         if(!empty($again)){
 
             if($isset==0){
-                $query1 = ShowerMsg::where('history',$history)->where('pass',1);
+                $query1 = ShowerMsg::where('history',$history+$flag)->where('pass',1);
                 $datas = ShowerMsg::getOpenData($query1)->select();
 
                 return msg(1,'ok',$datas);
             }
             if($isset ==1){
-                $query1 = ShowerMsg::where('history',$history)->where('pass',1);
+                $query1 = ShowerMsg::where('history',$history+$flag)->where('pass',1);
                 $datas = ShowerMsg::getOpenData($query1)->select();
                 return msg(1,'ok',$datas);
             }
