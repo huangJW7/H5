@@ -32,6 +32,7 @@ class Message extends Controller{
         $query =ShowerMsg::where('history',$history)->find();
         //查询通过审核且未展示的人数
         $number = Db::table('shower_msg')->where('pass',1)->where('history',null)->count();
+        echo $number;
         //没有设置今日展示，设置
 
         //$datas 是需要更改history值的人
@@ -42,7 +43,9 @@ class Message extends Controller{
                 //从default获取人数
                 echo 'isset = 0';
                 if($number>=$default){
+
                     $datas =ShowerMsg::field('ID,history')->where('pass',1)->limit($default)->select();
+                    print_r($datas);
                 }
             }
 
