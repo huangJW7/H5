@@ -31,7 +31,11 @@ class Pass extends Controller{
         //返回待审核的列表
 
         //待添加登录逻辑
+
+
         $type = Request::param('type');
+        if(empty($type))
+            return msg(-1,'empty type');
         if($type ==1 or $type ==0 ) {
 
             $query1 = ShowerMsg::where('pass', 0)->where('type', $type);

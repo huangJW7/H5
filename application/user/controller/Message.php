@@ -3,6 +3,7 @@ namespace app\user\controller;
 
 use app\admin\model\Config;
 use app\user\model\Likes;
+use app\user\model\Picture;
 use app\user\model\ShowerMsg;
 use think\Controller;
 use think\facade\Request;
@@ -23,6 +24,7 @@ class Message extends Controller{
         //获取openid
 
         $ID = Request::param('id');
+
         $flag =0;
         $config = Config::limit(1)->find();
         $isset = $config->isset;
@@ -84,17 +86,23 @@ class Message extends Controller{
 
             if($isset==0){
                 $query1 = ShowerMsg::where('history',$history+$flag)->where('pass',1);
+                //待添加逻辑，付费信息
                 $datas = ShowerMsg::getOpenData($query1)->select();
-
                 return msg(1,'ok',$datas);
             }
             if($isset ==1){
                 $query1 = ShowerMsg::where('history',$history+$flag)->where('pass',1);
+                //待添加逻辑，付费信息
                 $datas = ShowerMsg::getOpenData($query1)->select();
                 return msg(1,'ok',$datas);
             }
         }
     }
+    public function picture(){
+
+    }
+
+
 
 
     /*
