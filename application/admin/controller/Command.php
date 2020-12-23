@@ -27,7 +27,7 @@ class Command extends Controller{
             $data = Config::limit(1)->find();
             $data->default = $default;
             $data->isset = 0;
-            $data->save();
+            $data->update();
             if ($data == false) {
                 return msg(-1, 'set default fail');
             }
@@ -36,7 +36,7 @@ class Command extends Controller{
             $data = Config::limit(1)->find();
             $data->tomorrow = $tomorrow;
             $data->isset = 1;
-            $data->save();
+            $data->update();
             if ($data == false) {
                 return msg(-1, 'set tomorrow fail');
             }
