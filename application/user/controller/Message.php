@@ -66,32 +66,31 @@ class Message extends Controller{
                 $user = ShowerMsg::where('ID', $value)->find();
                 if (empty($user))
                     return msg(-1, 'no found');
-                $user->history = $history+1;
-
+                $user->history = $history;
                 $user->save();
                 if ($user == false) {
                     return msg(-1, 'set fail');
                 }
             }
             $flag =1;
-            $config->save(['history'  => $history+1], ['ID' => 1]);
+
 
         }
 
 
         //再次查询
-        $again =ShowerMsg::where('history',$history+$flag)->find();
+        $again =ShowerMsg::where('history',$history)->find();
         //设置了今日展示
         if(!empty($again)){
 
             if($isset==0){
-                $query1 = ShowerMsg::where('history',$history+$flag)->where('pass',1)->where('type',0);
+                $query1 = ShowerMsg::where('history',$history)->where('pass',1)->where('type',0);
                 //待添加逻辑，付费信息
                 $datas = ShowerMsg::getOpenData($query1)->select();
                 return msg(1,'ok',$datas);
             }
             if($isset ==1){
-                $query1 = ShowerMsg::where('history',$history+$flag)->where('pass',1)->where('type',0);
+                $query1 = ShowerMsg::where('history',$history)->where('pass',1)->where('type',0);
                 //待添加逻辑，付费信息
                 $datas = ShowerMsg::getOpenData($query1)->select();
                 return msg(1,'ok',$datas);
@@ -108,9 +107,6 @@ class Message extends Controller{
             $count2 = 0;
             $data[$count1]['ID'] = $ID['ID'];
             $data[$count1]['image'] = Picture::field('address')->where('ID', $ID['ID'])->select();
-
-
-
             foreach ($data[$count1]['image'] as $key => $vaule){
                 //vaule ="{\"address\":\"20201222\\/07316443315b68108d9f7d1299f88777.png\"}
                 $vaule = json_decode($vaule,true);
