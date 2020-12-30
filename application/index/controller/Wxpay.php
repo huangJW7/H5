@@ -37,7 +37,7 @@ class Wxpay extends Controller{
             'mch_id'=>MCH_ID,
             'nonce_str'=>md5(time().'random'),
             'body'=>'成都高校脱单科技有限公司-用户信息',
-            'out_trade_no'=>'123',//内部订单号
+            'out_trade_no'=>'1234',//内部订单号
             'total_fee'=>1,
             'spbill_create_ip'=>$_SERVER['REMOTE_ADDR'],
             'notify_url'=>NOTIFY_URL,//返回信息的url
@@ -48,7 +48,9 @@ class Wxpay extends Controller{
 
         $xml =$this->xml_encode($arr);
 
-        $return_datas =$this->PostXml(POST_URL,$xml);
+        $res_data =$this->PostXml(POST_URL,$xml);
+        $data =$this->XmlToArr($res_data);
+        print_r($data);
     }
 
     /*
