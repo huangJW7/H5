@@ -17,10 +17,18 @@ define("HASH_SALT", "scgxtd");
 define('APP_ID','wx4d1f2c66828fd817');
 //公众号appSecret
 define('APP_SECRET','ea35365c0ca500ab7cf4151d5bfe3e78');
-//用户访问链接后的入口界面
+//商户号mch_id
+define('MCH_ID','1604807688');
+//获取openid的回调地址
 define('REDIRECT_URI','http://www.scgxtd.cn/public/index/getcode/token');
 //网址前缀
 define('PREFIX','www.scgxtd.cn/public/public/picture/');
+//用于申请预订单的url
+define('POST_URL','https://api.mch.weixin.qq.com/pay/unifiedorder');
+// 返回预订单信息的回调地址
+define('NOTIFY_URL','http//www.scgxtd.cn/public/index/getcode/notify');
+//
+define('API_SECRET','8888888866666688888888scgxtdscgx');
 //error_reporting(E_ERROR | E_PARSE );
 function msg($msgcode = 0, $msg = "", $data = null)
 {

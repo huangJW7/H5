@@ -14,11 +14,10 @@ class Getcode extends Controller{
         $url ="";
         $url="https://open.weixin.qq.com/connect/oauth2/authorize?";
         $url=$url."appid=".APP_ID;
-        $url=$url."&redirect_uri=".urlencode(REDIRECT_URI);//REDIRECT_URI是用户入口界面
+        $url=$url."&redirect_uri=".urlencode(REDIRECT_URI);//REDIRECT_URI是返回信息的地址
         $url=$url."&response_type=code";
         $url=$url."&scope=snsapi_base";
         $url=$url."&state=STATE#wechat_redirect";
-
         //跳转到链接
         //https://open.weixin.qq.com/connect/oauth2/authorize?appid=APPID&redirect_uri=REDIRECT_URI&
         //response_type=code&scope=SCOPE&state=STATE#wechat_redirect
@@ -50,8 +49,14 @@ class Getcode extends Controller{
                 return msg(0,'ok',$value);
             }
         }
+    }
+    /*
+     * 用于接收预订单的地址
+     */
+    public function notify(){
 
-
+        $return_msg =Request::param('return_msg');
+        $return_code =Request::param('return_code');
 
 
     }
