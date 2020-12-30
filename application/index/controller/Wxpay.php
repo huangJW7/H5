@@ -1,4 +1,5 @@
 <?php
+
 namespace app\index\controller;
 
 use Cassandra\Time;
@@ -97,6 +98,7 @@ class Wxpay extends Controller{
         $param[CURLOPT_POSTFIELDS] =$postfields;
         $param[CURLOPT_SSL_VERIFYHOST]=false;
         $param[CURLOPT_SSL_VERIFYPEER]=false;
+
 
 
         curl_setopt_array($ch,$param);
