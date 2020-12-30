@@ -1,23 +1,30 @@
 <?php
 namespace app\index\controller;
 
+use Cassandra\Time;
 use think\Controller;
 use think\facade\Request;
 
 class Wxpay extends Controller{
+/*
+ * 前端先调用build，并发送购买者openid，被查看者的openid
+ * 后端先检查openid合理性，并在payment表创建预订单（ispay=0）
+ * 前端继续调用getJsParam申请JSAPI，引导用户完成支付
+ * 完成支付后，异步通知后端并完成订单（ispay=1）
+ * 改进：可以前端只调用getJSParam，并发送购买者openid，被查看者的openid，便可完成订单
+ */
 
-    public function build(){
-        $openid = Request::param('openid');
-        if(empty($openid))
-            return msg (-1,'empty openid');
-
+    /*
+     * 构建订单
+     */
+    public function build($openid,$actorID){
         $arr =[
             'appid' =>APP_ID,
             'mch_id'=>MCH_ID,
             'nonce_str'=>md5(time().'random'),
             'body'=>'成都高校脱单科技有限公司-用户信息',
-            'out_trade_no'=>'1234',//内部订单号
-            'total_fee'=>1,
+            'out_trade_no'=>'1234',//内部订单号,待修改
+            'total_fee'=>1,//可以设为常量，添加到common.php
             'spbill_create_ip'=>$_SERVER['REMOTE_ADDR'],
             'notify_url'=>NOTIFY_URL,//返回信息的url
             'trade_type'=>'JSAPI',
@@ -26,10 +33,10 @@ class Wxpay extends Controller{
         $arr = $this->setSign($arr);
 
         $xml =$this->xml_encode($arr);
-        echo $xml;
+
         $res_data =$this->PostXml(POST_URL,$xml);
         $data =$this->XmlToArr($res_data);
-        print_r($data);
+        return $this->getPrepayId($data);
     }
 
     /*
@@ -41,7 +48,6 @@ class Wxpay extends Controller{
         //按ASCII排列键
         ksort($arr);
         $str =urldecode(http_build_query($arr)).'&key='.API_SECRET;
-
         return strtoupper(md5($str));
     }
 
@@ -98,6 +104,68 @@ class Wxpay extends Controller{
         curl_close($ch);
         return $content;
     }
+    public function getPrepayId($arr){
+        return $arr['prepay_id'];
+
+    }
+    public function getJsParam(){
+        $openid = Request::param('openid');
+        $actorID = Request::param('actorid');
+        if (empty($openid))
+            return msg(-1,'empty openid');
+        if(empty($actorID))
+            return msg(-1,'empty actorid');
+        $prepayID = $this->build($openid,$actorID);
+
+        $param =[
+            'appId'=>APP_ID,
+            'timeStamp'=>time(),
+            'nonceStr'=>md5(time()),
+            'package'=>'prepay_id='.$prepayID,
+            'signType'=>'MD5'
+        ];
+        $param['paySign']=$this->getSign($param);
+        return json_encode($param);
+    }
+    /*
+     * 用于验证签名
+     */
+    public function checkSign($arr){
+        $sign = $this->getSign($arr);
+        if($sign == $arr['sign']){
+            return true;
+        }else{
+            return false;
+        }
+    }
+    /*
+  * 用于接收预订单的地址
+  */
+    public function notify(){
+
+        $xmlDATA = file_get_contents('php://input');
+        $arr =$this->XmlToArr($xmlDATA);
+        if($this->checkSign($arr)){
+            if($arr['return_code']=='SUCCESS' && $arr['result_code']=='SUCCESS'){
+                if($arr['total_fee']==FEE){
+                    return msg(0,'ok');
+                    //成功支付，并修改payment的ispay =1
+                    $arr['out_trade_no'];//内部订单号
+                    $arr['transaction_id'];//微信支付订单号
+                }else{
+                    return msg(-1,'amount wrong');
+                }
+            }else{
+                return msg(-1,'business wrong');
+            }
+        }else{
+            return msg(-1,'sign wrong');
+        }
+
+
+
+    }
+
 
 
 

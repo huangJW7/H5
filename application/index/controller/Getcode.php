@@ -50,16 +50,7 @@ class Getcode extends Controller{
             }
         }
     }
-    /*
-     * 用于接收预订单的地址
-     */
-    public function notify(){
 
-        $return_msg =Request::param('return_msg');
-        $return_code =Request::param('return_code');
-
-
-    }
 
 
 }
