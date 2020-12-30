@@ -37,6 +37,7 @@ class Wxpay extends Controller{
 
         $res_data =$this->PostXml(POST_URL,$xml);
         $data =$this->XmlToArr($res_data);
+
         return $this->getPrepayId($data);
     }
 
