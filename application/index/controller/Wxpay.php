@@ -5,27 +5,6 @@ use think\Controller;
 use think\facade\Request;
 
 class Wxpay extends Controller{
-    /*
-     * 接收openid与订单信息，构造请求，向微信服务器发送预订单
-     */
-    public function PostXml($url,$postfields){
-
-        $ch =curl_init();
-        $param[CURLOPT_URL] =$url;
-        $param[CURLOPT_HEADER]=false;
-        $param[CURLOPT_RETURNTRANSFER]=true;
-        $param[CURLOPT_FOLLOWLOCATION]=true;
-        $param[CURLOPT_POST]=true;
-        $param[CURLOPT_POSTFIELDS] =$postfields;
-        $param[CURLOPT_SSL_VERIFYHOST]=false;
-        $param[CURLOPT_SSL_VERIFYPEER]=false;
-
-
-        curl_setopt_array($ch,$param);
-        $content =curl_exec($ch);
-        curl_close($ch);
-        return $content;
-    }
 
     public function build(){
         $openid = Request::param('openid');
@@ -47,7 +26,7 @@ class Wxpay extends Controller{
         $arr = $this->setSign($arr);
 
         $xml =$this->xml_encode($arr);
-
+        echo $xml;
         $res_data =$this->PostXml(POST_URL,$xml);
         $data =$this->XmlToArr($res_data);
         print_r($data);
@@ -76,7 +55,7 @@ class Wxpay extends Controller{
      * 传入数据数组，返回XML格式的待上传文件
      */
     function xml_encode($arr) {
-        if(is_array($arr) || count($arr)==0)
+        if(!is_array($arr) || count($arr)==0)
             return '';
 
         $xml ="<xml>";
@@ -98,6 +77,28 @@ class Wxpay extends Controller{
         $arr =json_decode(json_encode(simplexml_load_string($xml,'SimpleXMLElement',LIBXML_NOCDATA)),true);
         return $arr;
     }
+    /*
+ * 接收openid与订单信息，构造请求，向微信服务器发送预订单
+ */
+    public function PostXml($url,$postfields){
+
+        $ch =curl_init();
+        $param[CURLOPT_URL] =$url;
+        $param[CURLOPT_HEADER]=false;
+        $param[CURLOPT_RETURNTRANSFER]=true;
+        $param[CURLOPT_FOLLOWLOCATION]=true;
+        $param[CURLOPT_POST]=true;
+        $param[CURLOPT_POSTFIELDS] =$postfields;
+        $param[CURLOPT_SSL_VERIFYHOST]=false;
+        $param[CURLOPT_SSL_VERIFYPEER]=false;
+
+
+        curl_setopt_array($ch,$param);
+        $content =curl_exec($ch);
+        curl_close($ch);
+        return $content;
+    }
+
 
 
 }
