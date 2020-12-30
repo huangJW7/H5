@@ -24,7 +24,7 @@ class Wxpay extends Controller{
             'mch_id'=>MCH_ID,
             'nonce_str'=>md5(time().'random'),
             'body'=>'成都高校脱单科技有限公司-用户信息',
-            'out_trade_no'=>'1234',//内部订单号,待修改
+            'out_trade_no'=>time(),//内部订单号,待修改
             'total_fee'=>1,//可以设为常量，添加到common.php
             'spbill_create_ip'=>$_SERVER['REMOTE_ADDR'],
             'notify_url'=>NOTIFY_URL,//返回信息的url
@@ -107,6 +107,8 @@ class Wxpay extends Controller{
         return $content;
     }
     public function getPrepayId($arr){
+
+
         return $arr['prepay_id'];
 
     }
@@ -118,6 +120,9 @@ class Wxpay extends Controller{
         if(empty($actorID))
             return msg(-1,'empty actorid');
         $prepayID = $this->build($openid,$actorID);
+
+        if(empty($prepayID))
+            return msg(-1,'wrong');
 
         $param =[
             'appId'=>APP_ID,
