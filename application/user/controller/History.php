@@ -53,13 +53,13 @@ class History extends Controller{
             //echo $query->getLastSql();
 
         //$datas=ShowerMsg::getOpenData($query)->select();
-        $IDs = $query->field('ID')->select();
+        $IDs = $query->column('ID');
         print_r($IDs);
-        //foreach ($datas as)
+        //foreach ($IDs as )
         //echo $query->getLastSql();
         if(empty($data))
             echo 'get open data fail';
-        return msg(0,'ok',$data);
+        return msg(0,'ok');
 
 
     }
