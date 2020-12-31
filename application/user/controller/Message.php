@@ -25,15 +25,18 @@ class Message extends Controller{
         //获取openid
 
         $openid = Request::param('openid');
-
+        if(empty($openid)){
+            return  msg(-1,'empty openid');
+        }
 
         $config = Config::limit(1)->find();
-        $isset = $config->isset;
+        $isset = $config->isset;//0为从default获取人数，1为从tomorrow获取人数
         $history = $config->history;
         $default = $config->default;
         $tomorrow = $config->tomorrow;
 
         //查找是否设置了今日展示
+        $ispost = $config->ispost;
         $query = ShowerMsg::where('history', $history)->find();
         //查询通过审核且未展示的人数
         $number = Db::table('shower_msg')->where('pass', 1)->where('history', null)->where('type',0)->count();
@@ -43,7 +46,7 @@ class Message extends Controller{
         //$datas是需要更改history值的人
         //判断是否设置过今日的展示信息
         //未设置情况如下
-        if (empty($query)) {
+        if ($ispost==0) {
             //默认设置或明日设置
             if ($isset == 0) {
                 //从default获取人数
@@ -56,7 +59,7 @@ class Message extends Controller{
             }
 
             if ($isset == 1) {
-
+                //从tomorrow获取人数
                 if ($number >= $tomorrow) {
                     $datas = ShowerMsg::where('pass', 1)->where('history', null)->where('type',0)->limit($tomorrow)->column('ID');
 
@@ -76,7 +79,7 @@ class Message extends Controller{
                 }
 
             }
-            //设置完今日展示后，更新history
+            //设置完今日展示后，更新history,使其＋1,下次从此处开始算日期
             //在config表中添加标记ispost = 1
             $list['ispost']=1;
             $list['history']=$history+1;
@@ -85,15 +88,8 @@ class Message extends Controller{
 
         }
 
-
-        //再次查询
-        $again =ShowerMsg::where('history',$history)->find();
-        if(empty($again)){
-            //上述代码设置失败
-            return msg(-1,'set wrong');
-        }
-        //若不为空，说明已经设置过，直接展示
-        if(!empty($again)){
+        //若$ispost==1，说明已经设置过，直接展示
+        if($ispost==1){
             //$query1 = ShowerMsg::where('history',$history)->where('pass',1)->where('type',0);
             //待添加逻辑，付费信息
             //$datas = ShowerMsg::getOpenData($query1)->select();
