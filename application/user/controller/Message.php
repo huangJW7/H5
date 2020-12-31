@@ -80,15 +80,16 @@ class Message extends Controller{
 
         //再次查询
         $again =ShowerMsg::where('history',$history)->find();
-        //设置了今日展示
-        if(!empty($again)){
 
+        if(!empty($again)){
+            //设置了今日展示
             if($isset==0){
                 $query1 = ShowerMsg::where('history',$history)->where('pass',1)->where('type',0);
                 //待添加逻辑，付费信息
                 $datas = ShowerMsg::getOpenData($query1)->select();
                 return msg(1,'ok',$datas);
             }
+            //未设置今日展示
             if($isset ==1){
                 $query1 = ShowerMsg::where('history',$history)->where('pass',1)->where('type',0);
                 //待添加逻辑，付费信息

@@ -1,6 +1,7 @@
 <?php
 namespace app\user\controller;
 use app\user\model\Payment;
+use app\user\model\Picture;
 use think\Db;
 use app\user\model\ShowerMsg;
 use think\Controller;
@@ -64,9 +65,23 @@ class History extends Controller{
             if($data != null){
                 $res =ShowerMsg::where('ID',$ID);
                 $return_data[$count] = ShowerMsg::getPrivateAndOpenData($res,'history')->find();
+
+                $return_data[$count]['image'] = Picture::field('address')->where('ID', $ID)->select();
+                foreach ($return_data[$count]['image'] as $key => $vaule){
+                    //vaule ="{\"address\":\"20201222\\/07316443315b68108d9f7d1299f88777.png\"}
+                    $vaule = json_decode($vaule,true);
+                    $return_data[$count]['image'][$key] = PREFIX.$vaule['address'];
+
+                }
             }else{
                 $res = ShowerMsg::where('ID',$ID);
                 $return_data[$count] = ShowerMsg::getOpenData($res,'history')->find();
+
+                $return_data[$count]['image'] = Picture::field('address')->where('ID', $ID)->select();
+                foreach ($return_data[$count]['image'] as $key => $vaule){
+                    //vaule ="{\"address\":\"20201222\\/07316443315b68108d9f7d1299f88777.png\"}
+                    $vaule = json_decode($vaule,true);
+                    $return_data[$count]['image'][$key] = PREFIX.$vaule['address'];
 
             }
             $count++;
