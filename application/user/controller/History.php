@@ -66,7 +66,7 @@ class History extends Controller{
                 $return_data[$count] = ShowerMsg::getPrivateAndOpenData($res,'history')->find();
             }else{
                 $res = ShowerMsg::where('ID',$ID);
-                $return_data[$count] = ShowerMsg::getOpenData($res)->find();
+                $return_data[$count] = ShowerMsg::getOpenData($res,'history')->find();
 
             }
             $count++;
