@@ -1,5 +1,6 @@
 <?php
 namespace app\user\controller;
+use app\user\model\Payment;
 use think\Db;
 use app\user\model\ShowerMsg;
 use think\Controller;
@@ -24,6 +25,7 @@ class History extends Controller{
         return msg(0,'ok',$return_data);
     }
     public function search(){
+        $openid =Request::param('openid');
         $maxage =Request::param('maxage');
         $minage =Request::param('minage');
         $maxheight = Request::param('maxheight');
@@ -51,15 +53,26 @@ class History extends Controller{
         if(isset($school))
             $query->where('school',$school);
             //echo $query->getLastSql();
-
+        $res_query =$query;
         //$datas=ShowerMsg::getOpenData($query)->select();
         $IDs = $query->column('ID');
         print_r($IDs);
-        //foreach ($IDs as )
+        $count = 0;
+        foreach ($IDs as $ID){
+            $data =Payment::where('actor',$ID)->where('openid',$openid)->where('ispay',1)->find();
+            if(!empty($data)){
+                $res = $res_query;
+                $res1 = ShowerMsg::getOpenData($res);
+                $return_data[$count] = ShowerMsg::getPrivateData($res1)->select();
+            }else{
+                $res = $res_query;
+                $return_data[$count] = ShowerMsg::getOpenData($res)->select();
+            }
+
+        }
         //echo $query->getLastSql();
-        if(empty($data))
-            echo 'get open data fail';
-        return msg(0,'ok');
+
+        return msg(0,'ok',$return_data);
 
 
     }
