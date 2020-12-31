@@ -55,7 +55,7 @@ class History extends Controller{
             //echo $query->getLastSql();
         $res_query =$query;
         //$datas=ShowerMsg::getOpenData($query)->select();
-        $IDs = $query->column('ID');
+        $IDs = $query->fetchSql()->column('ID');
 
         $count = 0;
         foreach ($IDs as $ID){
