@@ -54,7 +54,7 @@ class History extends Controller{
             $query->where('school',$school);
             //echo $query->getLastSql();
         $res_query =$query;
-        //$datas=ShowerMsg::getOpenData($query)->select();
+        //选出符合条件的IDs数组，并且pass =1
         $IDs = $query->column('ID');
 
 
@@ -62,16 +62,12 @@ class History extends Controller{
         foreach ($IDs as $ID){
             $data =Payment::where('actor',$ID)->where('openid',$openid)->where('ispay',1)->find();
             if($data != null){
-                echo 'not null';
-                $res = $res_query;
-                $return_data[$count] = ShowerMsg::getPrivateAndOpenData($res)->find();
-                echo $return_data[$count];
+                $res =ShowerMsg::where('ID',$ID);
+                $return_data[$count] = ShowerMsg::getPrivateAndOpenData($res,'history')->find();
             }else{
-                echo 'null';
-                $res = $res_query;
-                print_r($res);
-                $return_data[$count] = ShowerMsg::getOpenData($res)->fetchSql()->find();
-                echo $return_data[$count];
+                $res = ShowerMsg::where('ID',$ID);
+                $return_data[$count] = ShowerMsg::getOpenData($res)->find();
+
             }
 
         }
