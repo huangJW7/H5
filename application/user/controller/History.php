@@ -69,6 +69,7 @@ class History extends Controller{
                 $return_data[$count] = ShowerMsg::getOpenData($res)->find();
 
             }
+            $count++;
 
         }
         //echo $query->getLastSql();
