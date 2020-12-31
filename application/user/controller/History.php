@@ -61,6 +61,7 @@ class History extends Controller{
         foreach ($IDs as $ID){
             $data =Payment::where('actor',$ID)->where('openid',$openid)->where('ispay',1)->find();
             if($data != null){
+                print_r($data);
                 $res = $res_query;
                 $res1 = ShowerMsg::getOpenData($res);
                 $return_data[$count] = ShowerMsg::getPrivateData($res1)->select();
