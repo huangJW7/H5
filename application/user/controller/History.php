@@ -64,12 +64,12 @@ class History extends Controller{
                 echo 'not null';
                 $res = $res_query;
                 $res1 = ShowerMsg::getOpenData($res);
-                $return_data[$count] = ShowerMsg::getPrivateData($res1)->fetchSql()->select();
+                $return_data[$count] = ShowerMsg::getPrivateData($res1)->fetchSql()->find();
                 echo $return_data[$count];
             }else{
                 echo 'null';
                 $res = $res_query;
-                $return_data[$count] = ShowerMsg::getOpenData($res)->fetchSql()->select();
+                $return_data[$count] = ShowerMsg::getOpenData($res)->fetchSql()->find();
                 echo $return_data[$count];
             }
 
