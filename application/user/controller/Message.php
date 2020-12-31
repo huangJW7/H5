@@ -111,6 +111,9 @@ class Message extends Controller{
                 } else {
                     $res = ShowerMsg::where('ID', $ID);
                     $return_data[$count] = ShowerMsg::getOpenData($res)->find();
+                    if ($return_data[$count]==null){
+                        echo 'empty';
+                    }
                     print_r($return_data[$count]);
                     $return_data[$count]['image'] = Picture::field('address')->where('ID', $ID)->select();
                     foreach ($return_data[$count]['image'] as $key => $vaule) {
