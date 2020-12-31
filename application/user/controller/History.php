@@ -52,7 +52,10 @@ class History extends Controller{
             $query->where('school',$school);
             //echo $query->getLastSql();
 
-        $data=ShowerMsg::getOpenData($query)->select();
+        //$datas=ShowerMsg::getOpenData($query)->select();
+        $IDs = $query->field('ID')->select();
+        print_r($IDs);
+        //foreach ($datas as)
         //echo $query->getLastSql();
         if(empty($data))
             echo 'get open data fail';
