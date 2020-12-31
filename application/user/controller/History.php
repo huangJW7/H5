@@ -65,6 +65,7 @@ class History extends Controller{
                 $res = $res_query;
                 $res1 = ShowerMsg::getOpenData($res);
                 $return_data[$count] = ShowerMsg::getPrivateData($res1)->fetchSql()->select();
+                echo $return_data[$count];
             }else{
                 $res = $res_query;
                 $return_data[$count] = ShowerMsg::getOpenData($res)->select();
