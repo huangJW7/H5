@@ -2,6 +2,8 @@
 
 namespace app\index\controller;
 
+use app\index\model\Payment;
+use app\index\model\ShowerMsg;
 use Cassandra\Time;
 use think\Controller;
 use think\facade\Request;
@@ -18,14 +20,21 @@ class Wxpay extends Controller{
     /*
      * 构建订单
      */
-    public function build($openid,$actorID){
+    public function build($openid,$actorID,$msg){
+        $data = new Payment();
+        $ID = time();
+        $data->ID = $ID;
+        $data->openid =$openid;
+        $data->actor =$actorID;
+        $data->amount =FEE;
+        $data->save();
         $arr =[
             'appid' =>APP_ID,
             'mch_id'=>MCH_ID,
             'nonce_str'=>md5(time().'random'),
             'body'=>'成都高校脱单科技有限公司-用户信息',
-            'out_trade_no'=>time(),//内部订单号,待修改
-            'total_fee'=>1,//可以设为常量，添加到common.php
+            'out_trade_no'=>$ID,//内部订单号,待修改
+            'total_fee'=>FEE,//可以设为常量，添加到common.php
             'spbill_create_ip'=>$_SERVER['REMOTE_ADDR'],
             'notify_url'=>NOTIFY_URL,//返回信息的url
             'trade_type'=>'JSAPI',
@@ -120,7 +129,14 @@ class Wxpay extends Controller{
             return msg(-1,'empty openid');
         if(empty($actorID))
             return msg(-1,'empty actorid');
-        $prepayID = $this->build($openid,$actorID);
+
+        $data = ShowerMsg::where('ID',$actorID)->where('pass',1)->where('history','not null')->find();
+        if(empty($data)){
+            return msg(-1,'no such actor');
+        }
+        $msg = '第'.$data->history.'期'.$data->name.'嘉宾';
+
+        $prepayID = $this->build($openid,$actorID,$msg);
 
         if(empty($prepayID))
             return msg(-1,'wrong');
@@ -156,10 +172,16 @@ class Wxpay extends Controller{
         if($this->checkSign($arr)){
             if($arr['return_code']=='SUCCESS' && $arr['result_code']=='SUCCESS'){
                 if($arr['total_fee']==FEE){
-                    return msg(0,'ok');
+                    //内部订单号
+                    $query = Payment::where('ID', $arr['out_trade_no'])->find();
                     //成功支付，并修改payment的ispay =1
-                    $arr['out_trade_no'];//内部订单号
-                    $arr['transaction_id'];//微信支付订单号
+                    $query->ispay = 1;
+                    //微信支付订单号
+                    $query->wxid = $arr['transaction_id'];
+                    //确保save方法是更新
+                    $query->ID = $arr['out_trade_no'];
+                    $query->save();
+                    return msg(0,'ok');
                 }else{
                     return msg(-1,'amount wrong');
                 }

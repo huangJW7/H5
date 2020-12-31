@@ -5,6 +5,9 @@ use think\Controller;
 use think\Exception;
 use think\facade\Request;
 class Getcode extends Controller{
+    public function gettime(){
+        return time();
+    }
      public function geturl(){
     /*
      * 该接口可以得到用户访问的链接
