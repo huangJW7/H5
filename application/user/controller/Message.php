@@ -95,6 +95,7 @@ class Message extends Controller{
             //$datas = ShowerMsg::getOpenData($query1)->select();
             //获取通过审核，期数为今日期数，类型为普通上墙的ID数组
             $IDs =  ShowerMsg::where('history',$history)->where('pass',1)->where('type',0)->column('ID');
+            print_r($IDs);
             $count = 0;
             $return_data=[];
             foreach ($IDs as $ID) {
