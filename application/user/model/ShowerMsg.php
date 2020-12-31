@@ -17,7 +17,18 @@ class ShowerMsg extends Model
         return $query;
 
     }
-    
+    public static function getPrivateAndOpenData($query,$option=""){
+
+        if($option =='history'){
+            $query->field('ID,name,age,location,school,height,star,gender,introduction,goal,like,history,connect');
+        }
+        else{
+            $query->field('ID,name,age,location,school,height,star,gender,introduction,goal,like,connect');
+        }
+
+        return $query;
+
+    }
     /*
      * 返回公开数据
      */

@@ -55,8 +55,8 @@ class History extends Controller{
             //echo $query->getLastSql();
         $res_query =$query;
         //$datas=ShowerMsg::getOpenData($query)->select();
-        $IDs = $query->fetchSql()->column('ID');
-        echo $IDs;
+        $IDs = $query->column('ID');
+
 
         $count = 0;
         foreach ($IDs as $ID){
@@ -64,8 +64,7 @@ class History extends Controller{
             if($data != null){
                 echo 'not null';
                 $res = $res_query;
-                $res1 = ShowerMsg::getOpenData($res);
-                $return_data[$count] = ShowerMsg::getPrivateData($res1)->fetchSql()->find();
+                $return_data[$count] = ShowerMsg::getPrivateAndOpenData($res)->find();
                 echo $return_data[$count];
             }else{
                 echo 'null';
