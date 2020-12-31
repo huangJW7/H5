@@ -2,7 +2,7 @@
 namespace app\user\controller;
 use app\user\model\Payment;
 use app\user\model\Picture;
-use think\Db;
+
 use app\user\model\ShowerMsg;
 use think\Controller;
 use think\facade\Request;
@@ -55,7 +55,7 @@ class History extends Controller{
         if (isset($school))
             $query->where('school', $school);
         //echo $query->getLastSql();
-        $res_query = $query;
+
         //选出符合条件的IDs数组，并且pass =1
         $IDs = $query->column('ID');
 
@@ -85,9 +85,10 @@ class History extends Controller{
                     $return_data[$count]['image'][$key] = PREFIX . $vaule['address'];
 
                 }
-                $count++;
+
 
             }
+            $count++;
         }
         //echo $query->getLastSql();
 

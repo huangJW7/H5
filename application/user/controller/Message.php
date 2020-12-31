@@ -3,6 +3,7 @@ namespace app\user\controller;
 
 use app\admin\model\Config;
 use app\user\model\Likes;
+use app\user\model\Payment;
 use app\user\model\Picture;
 use app\user\model\ShowerMsg;
 use think\Controller;
@@ -23,9 +24,9 @@ class Message extends Controller{
     {
         //获取openid
 
-        $ID = Request::param('id');
+        $openid = Request::param('openid');
 
-        $flag =0;
+
         $config = Config::limit(1)->find();
         $isset = $config->isset;
         $history = $config->history;
@@ -39,7 +40,9 @@ class Message extends Controller{
 
         //没有设置今日展示，设置
 
-        //$datas 是需要更改history值的人
+        //$datas是需要更改history值的人
+        //判断是否设置过今日的展示信息
+        //未设置情况如下
         if (empty($query)) {
             //默认设置或明日设置
             if ($isset == 0) {
@@ -71,31 +74,56 @@ class Message extends Controller{
                 if ($user == false) {
                     return msg(-1, 'set fail');
                 }
-            }
-            $flag =1;
 
+            }
+            //设置完今日展示后，更新history
+            //在config表中添加标记ispost = 1
+            $list['ispost']=1;
+            $list['history']=$history+1;
+            $list['ID']=1;
+            $config->save($list,['ID'=>$list['ID']]);
 
         }
 
 
         //再次查询
         $again =ShowerMsg::where('history',$history)->find();
-
+        if(empty($again)){
+            //上述代码设置失败
+            return msg(-1,'set wrong');
+        }
+        //若不为空，说明已经设置过，直接展示
         if(!empty($again)){
-            //设置了今日展示
-            if($isset==0){
-                $query1 = ShowerMsg::where('history',$history)->where('pass',1)->where('type',0);
-                //待添加逻辑，付费信息
-                $datas = ShowerMsg::getOpenData($query1)->select();
-                return msg(1,'ok',$datas);
+            //$query1 = ShowerMsg::where('history',$history)->where('pass',1)->where('type',0);
+            //待添加逻辑，付费信息
+            //$datas = ShowerMsg::getOpenData($query1)->select();
+            //获取通过审核，期数为今日期数，类型为普通上墙的ID数组
+            $IDs =  ShowerMsg::where('history',$history)->where('pass',1)->where('type',0)->column('ID');
+            $count = 0;
+            foreach ($IDs as $ID) {
+                $data = Payment::where('actor', $ID)->where('openid',$openid)->where('ispay', 1)->find();
+                if ($data != null) {
+                    $res = ShowerMsg::where('ID', $ID);
+                    $return_data[$count] = ShowerMsg::getPrivateAndOpenData($res)->find();
+                    $return_data[$count]['image'] = Picture::field('address')->where('ID', $ID)->select();
+                    foreach ($return_data[$count]['image'] as $key => $vaule) {
+                        //vaule ="{\"address\":\"202012，22\\/07316443315b68108d9f7d1299f88777.png\"}
+                        $vaule = json_decode($vaule, true);
+                        $return_data[$count]['image'][$key] = PREFIX . $vaule['address'];
+                    }
+                } else {
+                    $res = ShowerMsg::where('ID', $ID);
+                    $return_data[$count] = ShowerMsg::getOpenData($res)->find();
+                    $return_data[$count]['image'] = Picture::field('address')->where('ID', $ID)->select();
+                    foreach ($return_data[$count]['image'] as $key => $vaule) {
+                        //vaule ="{\"address\":\"20201222\\/07316443315b68108d9f7d1299f88777.png\"}
+                        $vaule = json_decode($vaule, true);
+                        $return_data[$count]['image'][$key] = PREFIX . $vaule['address'];
+                    }
+                }
+                $count++;
             }
-            //未设置今日展示
-            if($isset ==1){
-                $query1 = ShowerMsg::where('history',$history)->where('pass',1)->where('type',0);
-                //待添加逻辑，付费信息
-                $datas = ShowerMsg::getOpenData($query1)->select();
-                return msg(1,'ok',$datas);
-            }
+            return msg(1,'ok',$return_data);
         }
     }
     public function picture(){
