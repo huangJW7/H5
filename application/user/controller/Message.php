@@ -96,6 +96,7 @@ class Message extends Controller{
             //获取通过审核，期数为今日期数，类型为普通上墙的ID数组
             $IDs =  ShowerMsg::where('history',$history)->where('pass',1)->where('type',0)->column('ID');
             $count = 0;
+            $return_data;
             foreach ($IDs as $ID) {
                 $data = Payment::where('actor', $ID)->where('openid',$openid)->where('ispay', 1)->find();
                 if ($data != null) {
