@@ -95,7 +95,7 @@ class Message extends Controller{
             //$datas = ShowerMsg::getOpenData($query1)->select();
             //获取通过审核，期数为今日期数，类型为普通上墙的ID数组
             $IDs =  ShowerMsg::where('history',$history)->where('pass',1)->where('type',0)->column('ID');
-            print_r($IDs);
+
             $count = 0;
             $return_data=[];
             foreach ($IDs as $ID) {
@@ -112,9 +112,6 @@ class Message extends Controller{
                 } else {
                     $res = ShowerMsg::where('ID', $ID);
                     $return_data[$count] = ShowerMsg::getOpenData($res)->find();
-                    if ($return_data[$count]==null){
-                        echo 'empty';
-                    }
                     print_r($return_data[$count]);
                     $return_data[$count]['image'] = Picture::field('address')->where('ID', $ID)->select();
                     foreach ($return_data[$count]['image'] as $key => $vaule) {
