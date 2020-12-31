@@ -25,74 +25,77 @@ class History extends Controller{
 
         return msg(0,'ok',$return_data);
     }
-    public function search(){
-        $openid =Request::param('openid');
-        $maxage =Request::param('maxage');
-        $minage =Request::param('minage');
+    public function search()
+    {
+        $openid = Request::param('openid');
+        $maxage = Request::param('maxage');
+        $minage = Request::param('minage');
         $maxheight = Request::param('maxheight');
         $minheight = Request::param('minheight');
         $place = Request::param('place');
-        $episode =Request::param('episode');
-        $school =Request::param('school');
+        $episode = Request::param('episode');
+        $school = Request::param('school');
 
         //
-        $query = ShowerMsg::where('pass',1);
+        $query = ShowerMsg::where('pass', 1);
 
-        if(isset($maxage) and isset($minage))
+        if (isset($maxage) and isset($minage))
 
-            $query->where('age','between',[$minage,$maxage]);
-            //echo $query->getLastSql();
-        if(isset($maxheight) and isset($minheight))
-            $query->where('height','between',[$minheight,$maxheight]);
-            //echo $query->getLastSql();
-        if(isset($place))
-            $query->where('location',$place);
-            //echo $query->getLastSql();
-        if(isset($episode))
-            $query->where('history',$episode);
-            //echo $query->getLastSql();
-        if(isset($school))
-            $query->where('school',$school);
-            //echo $query->getLastSql();
-        $res_query =$query;
+            $query->where('age', 'between', [$minage, $maxage]);
+        //echo $query->getLastSql();
+        if (isset($maxheight) and isset($minheight))
+            $query->where('height', 'between', [$minheight, $maxheight]);
+        //echo $query->getLastSql();
+        if (isset($place))
+            $query->where('location', $place);
+        //echo $query->getLastSql();
+        if (isset($episode))
+            $query->where('history', $episode);
+        //echo $query->getLastSql();
+        if (isset($school))
+            $query->where('school', $school);
+        //echo $query->getLastSql();
+        $res_query = $query;
         //选出符合条件的IDs数组，并且pass =1
         $IDs = $query->column('ID');
 
 
         $count = 0;
-        foreach ($IDs as $ID){
-            $data =Payment::where('actor',$ID)->where('openid',$openid)->where('ispay',1)->find();
-            if($data != null){
-                $res =ShowerMsg::where('ID',$ID);
-                $return_data[$count] = ShowerMsg::getPrivateAndOpenData($res,'history')->find();
+        foreach ($IDs as $ID) {
+            $data = Payment::where('actor', $ID)->where('openid', $openid)->where('ispay', 1)->find();
+            if ($data != null) {
+                $res = ShowerMsg::where('ID', $ID);
+                $return_data[$count] = ShowerMsg::getPrivateAndOpenData($res, 'history')->find();
 
                 $return_data[$count]['image'] = Picture::field('address')->where('ID', $ID)->select();
-                foreach ($return_data[$count]['image'] as $key => $vaule){
+                foreach ($return_data[$count]['image'] as $key => $vaule) {
                     //vaule ="{\"address\":\"20201222\\/07316443315b68108d9f7d1299f88777.png\"}
-                    $vaule = json_decode($vaule,true);
-                    $return_data[$count]['image'][$key] = PREFIX.$vaule['address'];
+                    $vaule = json_decode($vaule, true);
+                    $return_data[$count]['image'][$key] = PREFIX . $vaule['address'];
 
                 }
-            }else{
-                $res = ShowerMsg::where('ID',$ID);
-                $return_data[$count] = ShowerMsg::getOpenData($res,'history')->find();
+            } else {
+                $res = ShowerMsg::where('ID', $ID);
+                $return_data[$count] = ShowerMsg::getOpenData($res, 'history')->find();
 
                 $return_data[$count]['image'] = Picture::field('address')->where('ID', $ID)->select();
-                foreach ($return_data[$count]['image'] as $key => $vaule){
+                foreach ($return_data[$count]['image'] as $key => $vaule) {
                     //vaule ="{\"address\":\"20201222\\/07316443315b68108d9f7d1299f88777.png\"}
-                    $vaule = json_decode($vaule,true);
-                    $return_data[$count]['image'][$key] = PREFIX.$vaule['address'];
+                    $vaule = json_decode($vaule, true);
+                    $return_data[$count]['image'][$key] = PREFIX . $vaule['address'];
+
+                }
+                $count++;
 
             }
-            $count++;
-
         }
         //echo $query->getLastSql();
 
-        return msg(0,'ok',$return_data);
-
-
+        return msg(0, 'ok', $return_data);
     }
+
+
+
 
 
 }
