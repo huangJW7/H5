@@ -76,6 +76,7 @@ class History extends Controller{
 
 
         $count = 0;
+        $return_data=[];
         foreach ($IDs as $ID) {
             $data = Payment::where('actor', $ID)->where('openid', $openid)->where('ispay', 1)->find();
             if ($data != null) {
