@@ -74,7 +74,7 @@ class History extends Controller{
         //选出符合条件的IDs数组，并且pass =1
         $IDs = $query->column('ID');
 
-
+        print_r($IDs);
         $count = 0;
         $return_data=[];
         foreach ($IDs as $ID) {
@@ -82,7 +82,6 @@ class History extends Controller{
             if ($data != null) {
                 $res = ShowerMsg::where('ID', $ID);
                 $return_data[$count] = ShowerMsg::getPrivateAndOpenData($res, 'history')->find();
-
                 $return_data[$count]['image'] = Picture::field('address')->where('ID', $ID)->select();
                 foreach ($return_data[$count]['image'] as $key => $vaule) {
                     //vaule ="{\"address\":\"20201222\\/07316443315b68108d9f7d1299f88777.png\"}
