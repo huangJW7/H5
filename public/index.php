@@ -19,9 +19,14 @@ require __DIR__ . '/../thinkphp/base.php';
 
 // 执行应用并响应
 Container::get('app')->run()->send();
-
+/*
 header("Access-Control-Allow-Origin:*");
 header("Access-Control-Allow-Methods:GET, POST, OPTIONS, DELETE");
 header("Access-Control-Allow-Headers:DNT,X-Mx-ReqToken,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type, Accept-Language, Origin, Accept-Encoding");
-
+// 指定允许其他域名访问  */
+header('Access-Control-Allow-Origin:*');
+// 响应类型
+header('Access-Control-Allow-Methods:*');
+// 响应头设置
+header('Access-Control-Allow-Headers:x-requested-with,content-type');
 
