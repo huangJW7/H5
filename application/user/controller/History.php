@@ -2,7 +2,7 @@
 namespace app\user\controller;
 use app\user\model\Payment;
 use app\user\model\Picture;
-
+use app\admin\model\Config;
 use app\user\model\ShowerMsg;
 use think\Controller;
 use think\facade\Request;
@@ -24,6 +24,16 @@ class History extends Controller{
 
 
         return msg(0,'ok',$return_data);
+    }
+    public function episode(){
+        $query = Config::limit(1)->find();
+        $history =  $query->history;
+        $ispost = $query ->ispost;
+
+        if($ispost == 1){
+            $history-=1;
+        }
+        return msg(0,'ok',$history);
     }
     public function search()
     {

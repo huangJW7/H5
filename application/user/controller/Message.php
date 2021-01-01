@@ -37,7 +37,7 @@ class Message extends Controller{
 
         //查找是否设置了今日展示
         $ispost = $config->ispost;
-        $query = ShowerMsg::where('history', $history)->find();
+
         //查询通过审核且未展示的人数
         $number = Db::table('shower_msg')->where('pass', 1)->where('history', null)->where('type',0)->count();
 
@@ -112,7 +112,7 @@ class Message extends Controller{
                 } else {
                     $res = ShowerMsg::where('ID', $ID);
                     $return_data[$count] = ShowerMsg::getOpenData($res)->find();
-                    print_r($return_data[$count]);
+
                     $return_data[$count]['image'] = Picture::field('address')->where('ID', $ID)->select();
                     foreach ($return_data[$count]['image'] as $key => $vaule) {
                         //vaule ="{\"address\":\"20201222\\/07316443315b68108d9f7d1299f88777.png\"}
@@ -153,14 +153,14 @@ class Message extends Controller{
      * 普通点赞操作
      * 先查询是否在表内，再判断操作是否合理
      * 将点赞信息存在like表，统计点赞数在showerMsg的like字段
-     * 补充：该方法比较耗费资源，可以定期清理like表
+     * 补充：该方法比较耗费资源，可以定期清理like表,或者变为伪点赞
      */
     public function like(){
         if(empty(Request::param('actorUid')))
             return msg(-1,'no actorID');
 
         $actorUID =Request::param('actorUid');
-        $query =ShowerMsg::where('ID',$actorUID)->where('pass',1)->find();
+        $query =ShowerMsg::where('ID',$actorUID)->where('pass',1)->where('type',0)->find();
         if(empty($data))
             return msg(-1,'no such actor');
 

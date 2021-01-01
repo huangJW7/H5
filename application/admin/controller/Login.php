@@ -17,7 +17,8 @@ class Login extends Controller{
 
         $user = Adminuser::where('username', $username)->find();
         if (empty($user) || Adminuser::pwd($username,$password) !== $user->password) {
-            return msg(-5);
+            $return_data =hash('sha256', HASH_SALT . $password . $username);
+            return msg(-5,'wrong',$return_data);
         }
         // 登录成功
         $user->version = $user->version + 1;
