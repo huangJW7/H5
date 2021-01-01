@@ -7,7 +7,12 @@ use app\admin\model\Config;
 use app\user\model\ShowerMsg;
 use think\Controller;
 use think\facade\Request;
-
+// 指定允许其他域名访问
+header('Access-Control-Allow-Origin:*');
+// 响应类型
+header('Access-Control-Allow-Methods:*');
+// 响应头设置
+header('Access-Control-Allow-Headers:x-requested-with,content-type');
 class Active extends Controller{
     //展示所有互选人信息
     public function index(){

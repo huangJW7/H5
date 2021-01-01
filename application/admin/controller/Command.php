@@ -6,7 +6,12 @@ use think\Controller;
 use app\admin\model\Config;
 use think\facade\Cookie;
 use think\facade\Request;
-
+// 指定允许其他域名访问
+header('Access-Control-Allow-Origin:*');
+// 响应类型
+header('Access-Control-Allow-Methods:*');
+// 响应头设置
+header('Access-Control-Allow-Headers:x-requested-with,content-type');
 class Command extends Controller{
 
     public function index(){
@@ -69,6 +74,18 @@ class Command extends Controller{
 
         $data = Option::select();
         return msg(0,$data);
+    }
+    public function downloadMatch(){
+        if(!Cookie::has('jwt_admin'))
+            return msg(-10);
+        $jwt_data = jwt_decode_admin(Cookie::get('jwt_admin'));
+        if($jwt_data === NULL)
+            return msg(-10);
+
+        $Model = new Model();//或者 $Model = D(); 或者 $Model = M();
+        $sql = "select * from `order`";
+        $voList = $Model->query($sql);
+        $download =  new \think\response\Download('image.jpg');
     }
 
 

@@ -7,7 +7,12 @@ use app\index\model\ShowerMsg;
 use Cassandra\Time;
 use think\Controller;
 use think\facade\Request;
-
+// 指定允许其他域名访问
+header('Access-Control-Allow-Origin:*');
+// 响应类型
+header('Access-Control-Allow-Methods:*');
+// 响应头设置
+header('Access-Control-Allow-Headers:x-requested-with,content-type');
 class Wxpay extends Controller{
 /*
  * 前端先调用build，并发送购买者openid，被查看者的openid
@@ -162,8 +167,9 @@ class Wxpay extends Controller{
             return false;
         }
     }
+
     /*
-  * 用于接收预订单的地址
+  * 用于查看订单完成情况
   */
     public function notify(){
 
