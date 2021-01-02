@@ -127,7 +127,7 @@ class Message extends Controller{
                 }
                 $count++;
             }
-            return msg(1,'ok',$return_data);
+            return msg(0,'ok',$return_data);
         }
     }
     public function picture(){
