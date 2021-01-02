@@ -43,6 +43,9 @@ class Getcode extends Controller{
         *https://api.weixin.qq.com/sns/oauth2/access_token?appid=APPID&secret=SECRET&code=CODE
         &grant_type=authorization_code*/
         $code = Request::param('code');
+        if (empty($code)){
+            return msg(-1,'empty wx code');
+        }
         $state = Request::param('state');
         $url ="";
         $url= $url."https://api.weixin.qq.com/sns/oauth2/access_token?";
