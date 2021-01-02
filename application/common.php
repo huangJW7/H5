@@ -26,7 +26,7 @@ define('PREFIX','http://www.scgxtd.cn/public/public/picture/');
 //用于申请预订单的url
 define('POST_URL','https://api.mch.weixin.qq.com/pay/unifiedorder');
 // 返回预订单信息的回调地址
-define('NOTIFY_URL','http//www.scgxtd.cn/public/index/wxpay/notify');
+define('NOTIFY_URL','http://www.scgxtd.cn/public/index/wxpay/notify');
 //商户号API秘钥
 define('API_SECRET','8888888866666688888888scgxtdscgx');
 //付款金额，单位为分
