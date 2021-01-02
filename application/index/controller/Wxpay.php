@@ -177,8 +177,15 @@ class Wxpay extends Controller{
         $xmlDATA = file_get_contents("php://input");
         $arr =$this->XmlToArr($xmlDATA);
         if(empty($arr)){
+            $data = new Payment();
+            $data->ID = time()+10;
+            $data->openid = 'find wrong';
+            $data->actor ="find wrong";
+            $data->amount =2;
+            $data->save();
             return msg(-1,'empty xml');
         }
+
         if($this->checkSign($arr)){
             if($arr['return_code']=='SUCCESS' && $arr['result_code']=='SUCCESS'){
                 if($arr['total_fee']==FEE){
@@ -186,7 +193,7 @@ class Wxpay extends Controller{
                     $query = Payment::where('ID',$arr['out_trade_no'])->find();
                     if(empty($query)){
                         $data = new Payment();
-                        $data->ID = time();
+                        $data->ID = time()+200;
                         $data->openid = 'find wrong';
                         $data->actor ="find wrong";
                         $data->amount =2;
@@ -216,8 +223,8 @@ class Wxpay extends Controller{
                     return msg(-1,'amount wrong');
                 }
             }else{
-                $data = new Payment()+30;
-                $data->ID = time();
+                $data = new Payment();
+                $data->ID = time()+30;
                 $data->openid = 'success wrong';
                 $data->actor ="success wrong";
                 $data->amount =2;
