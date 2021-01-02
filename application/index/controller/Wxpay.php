@@ -187,7 +187,11 @@ class Wxpay extends Controller{
                     //确保save方法是更新
                     $query->ID = $arr['out_trade_no'];
                     $query->save();
-                    return msg(0,'ok');
+                    $return_params=[
+                        'return_code'=>'SUCCESS',
+                        'return_msg'=>'OK'
+                    ];
+                    echo $this->xml_encode($return_params);
                 }else{
                     return msg(-1,'amount wrong');
                 }
