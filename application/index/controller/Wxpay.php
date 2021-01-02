@@ -177,18 +177,21 @@ class Wxpay extends Controller{
         $xmlDATA = $GLOBALS['HTTP_RAW_POST_DATA'];
         $arr =$this->XmlToArr($xmlDATA);
         if(empty($arr)){
-            $url="http://www.scgxtd.cn/public/index/wxpay/tell";
-            $msg ="noxml";
-            $url.="?msg=".$msg;
-            header("Location:$url");
-            exit();
             return msg(-1,'empty xml');
         }
         if($this->checkSign($arr)){
             if($arr['return_code']=='SUCCESS' && $arr['result_code']=='SUCCESS'){
                 if($arr['total_fee']==FEE){
                     //内部订单号
-                    $query = Payment::where('ID', $arr['out_trade_no'])->find();
+                    $query = Payment::where('ID',$arr['out_trade_no'])->find();
+                    if(empty($query)){
+                        $data = new Payment();
+                        $data->ID = time();
+                        $data->openid = 'find wrong';
+                        $data->actor ="find wrong";
+                        $data->amount =2;
+                        $data->save();
+                    }
                     //成功支付，并修改payment的ispay =1
                     $query->ispay = 1;
                     //微信支付订单号
@@ -196,53 +199,47 @@ class Wxpay extends Controller{
                     //确保save方法是更新
                     $query->ID = $arr['out_trade_no'];
                     $query->save();
-                    $url="http://www.scgxtd.cn/public/index/wxpay/tell";
-                    $msg ="saveOK";
-                    $url.="?msg=".$msg;
-                    header("Location:$url");
-                    exit();
+
                     $return_params=[
                         'return_code'=>'SUCCESS',
                         'return_msg'=>'OK'
                     ];
-                    echo $this->xml_encode($return_params);
+                    return $this->xml_encode($return_params);
                 }else{
-                    $url="http://www.scgxtd.cn/public/index/wxpay/tell";
-                    $msg ="amountwrong";
-                    $url.="?msg=".$msg;
-                    header("Location:$url");
-                    exit();
+                    $data = new Payment();
+                    $data->ID = time()+100;
+                    $data->openid = 'amount wrong';
+                    $data->actor ="amount wrong";
+                    $data->amount =2;
+                    $data->save();
+
                     return msg(-1,'amount wrong');
                 }
             }else{
-                $url="http://www.scgxtd.cn/public/index/wxpay/tell";
-                $msg ="signwrong";
-                $url.="?msg=".$msg;
-                header("Location:$url");
-                exit();
+                $data = new Payment()+30;
+                $data->ID = time();
+                $data->openid = 'success wrong';
+                $data->actor ="success wrong";
+                $data->amount =2;
+                $data->save();
+
                 return msg(-1,'business wrong');
             }
         }else{
-            $url="http://www.scgxtd.cn/public/index/wxpay/tell";
-            $msg ="signwrong";
-            $url .="?msg=".$msg;
-            header("Location:$url");
-            exit();
+            $data = new Payment();
+            $data->ID = time()+50;
+            $data->openid = 'sign wrong';
+            $data->actor ="sign wrong";
+            $data->amount =2;
+            $data->save();
+
             return msg(-1,'sign wrong');
         }
 
 
 
     }
-    public function tell(){
-        $msg = Request::param('msg');
-        $data = new Option();
-        $data->content = $msg;
-        $data->contact =$msg;
-        $data->save();
 
-        echo $msg;
-    }
 
 
 
