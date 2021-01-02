@@ -173,7 +173,7 @@ class Wxpay extends Controller{
   */
     public function notify(){
 
-        $xmlDATA = file_get_contents('php://input');
+        $xmlDATA = $GLOBALS['HTTP_RAW_POST_DATA'];
         $arr =$this->XmlToArr($xmlDATA);
         if($this->checkSign($arr)){
             if($arr['return_code']=='SUCCESS' && $arr['result_code']=='SUCCESS'){
@@ -203,6 +203,9 @@ class Wxpay extends Controller{
         }
 
 
+
+    }
+    public function tell(){
 
     }
 
