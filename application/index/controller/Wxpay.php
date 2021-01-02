@@ -174,7 +174,7 @@ class Wxpay extends Controller{
   */
     public function notify(){
 
-        $xmlDATA = $GLOBALS['HTTP_RAW_POST_DATA'];
+        $xmlDATA = file_get_contents("php://input");
         $arr =$this->XmlToArr($xmlDATA);
         if(empty($arr)){
             return msg(-1,'empty xml');
