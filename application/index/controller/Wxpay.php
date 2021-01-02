@@ -186,66 +186,58 @@ class Wxpay extends Controller{
             return msg(-1,'empty xml');
         }
 
-        if($this->checkSign($arr)){
-            if($arr['return_code']=='SUCCESS' && $arr['result_code']=='SUCCESS'){
-                if($arr['total_fee']==FEE){
-                    //内部订单号
-                    $query = Payment::where('ID',$arr['out_trade_no'])->find();
-                    if(empty($query)){
-                        $data = new Payment();
-                        $data->ID = time()+200;
-                        $data->openid = 'find wrong';
-                        $data->actor ="find wrong";
-                        $data->amount =2;
-                        $data->save();
-                    }
-                    //成功支付，并修改payment的ispay =1
-                    $query->ispay = 1;
-                    //微信支付订单号
-                    $query->wxid = $arr['transaction_id'];
-                    //确保save方法是更新
-                    $query->ID = $arr['out_trade_no'];
-                    $query->save();
 
-                    $return_params=[
-                        'return_code'=>'SUCCESS',
-                        'return_msg'=>'OK'
-                    ];
-                    return $this->xml_encode($return_params);
-                }else{
+        if($arr['return_code']=='SUCCESS' && $arr['result_code']=='SUCCESS'){
+            if($arr['total_fee']==FEE){
+                //内部订单号
+                $query = Payment::where('ID',$arr['out_trade_no'])->find();
+                if(empty($query)){
                     $data = new Payment();
-                    $data->ID = time()+100;
-                    $data->openid = 'amount wrong';
-                    $data->actor ="amount wrong";
+                    $data->ID = time()+200;
+                    $data->openid = 'find wrong';
+                    $data->actor ="find wrong";
                     $data->amount =2;
                     $data->save();
-
-                    return msg(-1,'amount wrong');
                 }
+                //成功支付，并修改payment的ispay =1
+                $query->ispay = 1;
+                //微信支付订单号
+                $query->wxid = $arr['transaction_id'];
+                //确保save方法是更新
+                $query->ID = $arr['out_trade_no'];
+                $query->save();
+
+                $return_params=[
+                    'return_code'=>'SUCCESS',
+                    'return_msg'=>'OK'
+                ];
+                return $this->xml_encode($return_params);
             }else{
                 $data = new Payment();
-                $data->ID = time()+30;
-                $data->openid = 'success wrong';
-                $data->actor ="success wrong";
+                $data->ID = time()+100;
+                $data->openid = 'amount wrong';
+                $data->actor ="amount wrong";
                 $data->amount =2;
                 $data->save();
 
-                return msg(-1,'business wrong');
+                return msg(-1,'amount wrong');
             }
         }else{
             $data = new Payment();
-            $data->ID = time()+50;
-            $data->openid = 'sign wrong';
-            $data->actor ="sign wrong";
+            $data->ID = time()+30;
+            $data->openid = 'success wrong';
+            $data->actor ="success wrong";
             $data->amount =2;
             $data->save();
 
-            return msg(-1,'sign wrong');
+            return msg(-1,'business wrong');
         }
 
-
-
     }
+
+
+
+
 
 
 
