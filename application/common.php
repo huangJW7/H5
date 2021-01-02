@@ -22,7 +22,7 @@ define('MCH_ID','1604807688');
 //获取openid的回调地址
 define('REDIRECT_URI','http://www.scgxtd.cn/public/dist/#/');
 //网址前缀
-define('PREFIX','www.scgxtd.cn/public/public/picture/');
+define('PREFIX','http://www.scgxtd.cn/public/public/picture/');
 //用于申请预订单的url
 define('POST_URL','https://api.mch.weixin.qq.com/pay/unifiedorder');
 // 返回预订单信息的回调地址
