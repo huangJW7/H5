@@ -12,10 +12,11 @@ class Hello extends Controller{
         if(empty($data))
             return msg(-1,'empty data');
         //以下代码取消注释并commit
-        /*$list['isset'] =1;
+        $list['isset'] =1;
         $list['ID']=1;
         $data->save($list,['ID'=>$list['ID']]);
-        return msg(0,'change success',$data);*/
+        return msg(0,'change success',$data);
+
         return msg(0,'ok',$data);
     }
 }
