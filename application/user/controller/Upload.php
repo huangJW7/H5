@@ -39,6 +39,8 @@ class Upload extends Controller{
         $data->save();
         if($data===false)
             return msg(-1,'save error');
+        else
+            return msg(0,'ok');
 
     }
     public function active(){
@@ -66,6 +68,8 @@ class Upload extends Controller{
         $data->save();
         if($data===false)
             return msg(-1,'save error');
+        else
+            return msg(0,'ok');
 
     }
     public function picture(){
