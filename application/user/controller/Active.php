@@ -1,6 +1,7 @@
 <?php
 namespace app\user\controller;
 use app\user\model\Match;
+use app\user\model\Matcher;
 use app\user\model\Payment;
 use app\user\model\Picture;
 use app\admin\model\Config;
@@ -27,8 +28,8 @@ class Active extends Controller{
         if(empty($actorid)){
             return msg(-1,'empty actorid');
         }
-        $search = ShowerMsg::where('ID',$openid)->where('pass',1)->where('type',1)->find();
-        $data = ShowerMsg::where('ID',$actorid)->where('pass',1)->where('type',1)->find();
+        $search = Matcher::where('ID',$openid)->where('type',1)->find();
+        $data = Matcher::where('ID',$actorid)->where('type',1)->find();
         if(empty($search)){
             return msg(-1,'you cant match');
         }
