@@ -122,7 +122,7 @@ class Upload extends Controller{
             return msg(-1,'wrong type');
 
         $ID =Request::param('id');
-        $query = Match::where('id',$ID)->find();
+        $query = Matcher::where('id',$ID)->find();
         if(empty($query))
             return msg(-1,'no such actor');
 
