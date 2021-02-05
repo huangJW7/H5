@@ -3,9 +3,9 @@ namespace app\user\model;
 
 use think\Model;
 
-class ShowerMsg extends Model
+class Matcher extends Model
 {
-    protected $table = 'shower_msg';
+    protected $table = 'Matcher';
 
 
     /*

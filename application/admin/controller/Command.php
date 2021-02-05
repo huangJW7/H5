@@ -2,6 +2,7 @@
 namespace app\admin\controller;
 use app\user\model\Match;
 use app\user\model\Option;
+use app\user\model\ShowerMsg;
 use think\Controller;
 use app\admin\model\Config;
 use think\facade\Cookie;
@@ -60,7 +61,7 @@ class Command extends Controller{
         if($jwt_data === NULL)
             return msg(-10);
 
-        $data = Match::where('type',100)->select();
+        $data = Match::where('type',1)->select();
         return msg(0,'ok',$data);
 
     }
@@ -86,6 +87,38 @@ class Command extends Controller{
         $sql = "select * from `order`";
         $voList = $Model->query($sql);
         $download =  new \think\response\Download('image.jpg');
+    }
+/*待完成*/
+    public function changeinfo(){
+        if(!Cookie::has('jwt_admin'))
+            return msg(-10);
+        $jwt_data = jwt_decode_admin(Cookie::get('jwt_admin'));
+        if($jwt_data === NULL)
+            return msg(-10);
+
+        $openid = Request::param('openid');
+        if(empty($openid))
+            return msg(-1,'empty openid');
+
+        $data = ShowerMsg::where('ID',$openid)->find();
+        if(empty($data))
+            return msg(-1,'no such person');
+
+        $age = Request::param('age');
+        $location = Request::param('location');
+        $school = Request::param('school');
+        $email = Request::param('email');
+        $height = Request::param('height');
+        $star = Request::param('star');
+        $gender = Request::param('gender');
+        $introduction = Request::param('introduction');
+        $connect = Request::param('connect');
+        $goal = Request::param('goal');
+        $like = Request::param('like');
+        $background =Request::param('background');
+
+
+
     }
 
 

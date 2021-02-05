@@ -108,7 +108,7 @@ class Message extends Controller{
                 if ($data != null) {
                     $res = ShowerMsg::where('ID', $ID);
                     $return_data[$count] = ShowerMsg::getPrivateAndOpenData($res)->find();
-                    $return_data[$count]['image'] = Picture::field('address')->where('ID', $ID)->select();
+                    $return_data[$count]['image'] = Picture::field('address')->where('ID', $ID)->where('type', 0)->select();
                     foreach ($return_data[$count]['image'] as $key => $vaule) {
                         //vaule ="{\"address\":\"202012，22\\/07316443315b68108d9f7d1299f88777.png\"}
                         $vaule = json_decode($vaule, true);
@@ -118,7 +118,7 @@ class Message extends Controller{
                     $res = ShowerMsg::where('ID', $ID);
                     $return_data[$count] = ShowerMsg::getOpenData($res)->find();
 
-                    $return_data[$count]['image'] = Picture::field('address')->where('ID', $ID)->select();
+                    $return_data[$count]['image'] = Picture::field('address')->where('ID', $ID)->where('type', 0)->select();
                     foreach ($return_data[$count]['image'] as $key => $vaule) {
                         //vaule ="{\"address\":\"20201222\\/07316443315b68108d9f7d1299f88777.png\"}
                         $vaule = json_decode($vaule, true);
@@ -139,7 +139,7 @@ class Message extends Controller{
         foreach ($IDs as $ID) {
             $count2 = 0;
             $data[$count1]['ID'] = $ID['ID'];
-            $data[$count1]['image'] = Picture::field('address')->where('ID', $ID['ID'])->select();
+            $data[$count1]['image'] = Picture::field('address')->where('ID', $ID['ID'])->where('type', 0)->select();
             foreach ($data[$count1]['image'] as $key => $vaule){
                 //vaule ="{\"address\":\"20201222\\/07316443315b68108d9f7d1299f88777.png\"}
                 $vaule = json_decode($vaule,true);
