@@ -18,8 +18,7 @@ class Upload extends Controller{
     public function normal(){
         if(empty(Request::param('openid')))
             return msg(-1,'empty openid');
-        if(empty(Request::param('type')))
-            return msg(-1,'empty type');
+
         $data = new ShowerMsg();
         $data->ID = Request::param('openid');
         $data->name =Request::param('nickName');
