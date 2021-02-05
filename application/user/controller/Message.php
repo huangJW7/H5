@@ -139,7 +139,7 @@ class Message extends Controller{
         foreach ($IDs as $ID) {
             $count2 = 0;
             $data[$count1]['ID'] = $ID['ID'];
-            $data[$count1]['image'] = Picture::field('address')->where('ID', $ID['ID'])->where('type', 0)->select();
+            $data[$count1]['image'] = Picture::field('address')->where('ID', $ID['ID'])->where('type',0)->select();
             foreach ($data[$count1]['image'] as $key => $vaule){
                 //vaule ="{\"address\":\"20201222\\/07316443315b68108d9f7d1299f88777.png\"}
                 $vaule = json_decode($vaule,true);
@@ -161,28 +161,22 @@ class Message extends Controller{
      * 补充：该方法比较耗费资源，可以定期清理like表,或者变为伪点赞
      */
     public function like(){
+        if (empty(Request::param('ID')))
+            return msg(-1,'empty openid');
         if(empty(Request::param('actorUid')))
             return msg(-1,'no actorID');
 
         $actorUID =Request::param('actorUid');
         $query =ShowerMsg::where('ID',$actorUID)->where('pass',1)->where('type',0)->find();
-        if(empty($data))
+        if(empty($query))
             return msg(-1,'no such actor');
+        $query->like +=1;
+        $query->save();
+        if($query === false)
+            return msg(-1,'update fail');
 
-
-        $data = new Likes();
-        $data ->ID = Request::param('openid');
-        $data ->actorID = $actorUID;
-        $data->save();
-        if($data===true){
-            $query->like +=1;
-            $query->save();
-            if($query === false)
-                return msg(-1,'update fail');
-        }else{
-            return msg(-1,'save fail');
-        }
     }
+
 
     public function quit(){
         if(empty(Request::param('openid')))
