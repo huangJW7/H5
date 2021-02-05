@@ -161,8 +161,6 @@ class Message extends Controller{
      * 补充：该方法比较耗费资源，可以定期清理like表,或者变为伪点赞
      */
     public function like(){
-        if (empty(Request::param('ID')))
-            return msg(-1,'empty openid');
         if(empty(Request::param('actorUid')))
             return msg(-1,'no actorID');
 
@@ -174,7 +172,6 @@ class Message extends Controller{
         $query->save();
         if($query === false)
             return msg(-1,'update fail');
-
     }
 
 
