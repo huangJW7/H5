@@ -5,7 +5,7 @@ use think\Model;
 
 class Matcher extends Model
 {
-    protected $table = 'Matcher';
+    protected $table = 'matcher';
 
 
     /*
