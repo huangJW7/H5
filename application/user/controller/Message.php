@@ -165,7 +165,7 @@ class Message extends Controller{
             return msg(-1,'no actorID');
 
         $actorUID =Request::param('actorUid');
-        $query =ShowerMsg::where('ID',$actorUID)->where('pass',1)->where('type',0)->find();
+        $query =ShowerMsg::where('ID',$actorUID)->where('type',0)->find();
         if(empty($query))
             return msg(-1,'no such actor');
         $query->like +=1;
