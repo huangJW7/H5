@@ -46,6 +46,14 @@ class Upload extends Controller{
     public function active(){
         if(empty(Request::param('openid')))
             return msg(-1,'empty openid');
+        $search = Matcher::where('ID',Request::param('openid'))->find();
+        if(!empty($search)) {
+            $type = $search->type;
+            if ($type = 1) {
+                return msg(-1, 'you had sign up');
+            }
+            $search->delete();
+        }
 
         $data = new Matcher();
         $data->ID = Request::param('openid');
@@ -71,6 +79,12 @@ class Upload extends Controller{
             return msg(0,'ok');
 
     }
+
+
+
+
+
+
     public function picture(){
         //上墙图片接口
         if(empty(Request::param('id')))
@@ -98,9 +112,9 @@ class Upload extends Controller{
             $data->save();
             if($data !== false){
                 $url ='www.scgxtd.cn/public/public/picture/'.$info->getSaveName();
-                return msg (0,'ok',$url);
+                return msg (0,'ok');
             }else{
-                print_r($data);
+
                 return msg (-1,'save picture data fail');
             }
             // 输出 jpg
@@ -133,9 +147,9 @@ class Upload extends Controller{
             $data->save();
             if($data !== false){
                 $url ='www.scgxtd.cn/public/public/picture/'.$info->getSaveName();
-                return msg (0,'ok',$url);
+                return msg (0,'ok');
             }else{
-                print_r($data);
+
                 return msg (-1,'save picture data fail');
             }
             // 输出 jpg

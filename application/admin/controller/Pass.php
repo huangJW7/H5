@@ -1,5 +1,7 @@
 <?php
 namespace app\admin\controller;
+use app\user\model\Matcher;
+use app\user\model\Option;
 use app\user\model\Picture;
 use app\user\model\ShowerMsg;
 use think\Controller;
@@ -14,7 +16,67 @@ header('Access-Control-Allow-Methods:*');
 // 响应头设置
 header('Access-Control-Allow-Headers:x-requested-with,content-type');
 class Pass extends Controller{
-    public function index(){
+
+
+    public function getsuggestion(){
+        //展示意见情况
+//        if(!Cookie::has('jwt_admin'))
+//            return msg(-10);
+//        $jwt_data = jwt_decode_admin(Cookie::get('jwt_admin'));
+//        if($jwt_data === NULL)
+//            return msg(-10);
+
+        $return_datas = Option::where('status',0)->select();
+        return msg(0,'ok',$return_datas);
+
+    }
+
+    public function dealsuggestion(){
+
+        if(!Cookie::has('jwt_admin'))
+            return msg(-10);
+        $jwt_data = jwt_decode_admin(Cookie::get('jwt_admin'));
+        if($jwt_data === NULL)
+            return msg(-10);
+        //意见编号
+        $ID = Request::param('ID');
+        $query = Option::where('ID',$ID)->find();
+        $query ->status = 1;
+        $query->save();
+
+        if(!empty($query)){
+            return msg(0,'ok');
+
+        }else{
+            return msg(-1,'deal wrong');
+        }
+
+
+    }
+    public function normal(){
+        //用于通过审核
+        //登录逻辑
+        if(!Cookie::has('jwt_admin'))
+            return msg(-10);
+        $jwt_data = jwt_decode_admin(Cookie::get('jwt_admin'));
+        if($jwt_data === NULL)
+            return msg(-10);
+
+        if(empty(Request::param('ID')))
+            return msg(-1,'empty ID');
+        $ID = Request::param('ID');
+        $query = ShowerMsg::where('ID',$ID)->find();
+        if(empty($query))
+            return msg (-1,'no such actor');
+
+        $query->pass = 1;
+        $query->save();
+        if($query===false)
+            return msg(-1,'pass update fail');
+
+        return msg(0,'ok');
+    }
+    public function active(){
         //用于通过审核
         //登录逻辑
         if(!Cookie::has('jwt_admin'))
@@ -60,10 +122,10 @@ class Pass extends Controller{
         $return_data = [];
         if($pass == 1){
             if ($type == 1) {
-                $IDs = ShowerMsg::where('pass', 1)->where('type', 1)->where('history',null)->column('ID');
+                $IDs = Matcher::where('pass', 1)->where('type', 1)->where('history',null)->column('ID');
                 foreach ($IDs as $ID) {
-                    $res = ShowerMsg::where('ID', $ID);
-                    $return_data[$count] = ShowerMsg::getPrivateAndOpenData($res)->find();
+                    $res = Matcher::where('ID', $ID);
+                    $return_data[$count] = Matcher::getPrivateAndOpenData($res)->find();
                     $return_data[$count]['image'] = Picture::field('address')->where('ID', $ID)->where('type', 1)->select();
                     foreach ($return_data[$count]['image'] as $key => $vaule) {
                         //vaule ="{\"address\":\"20201222\\/07316443315b68108d9f7d1299f88777.png\"}
@@ -91,10 +153,10 @@ class Pass extends Controller{
         }
         if($pass == 0){
             if ($type == 1) {
-                $IDs = ShowerMsg::where('pass', 0)->where('type', 1)->column('ID');
+                $IDs = Matcher::where('pass', 0)->where('type', 1)->column('ID');
                 foreach ($IDs as $ID) {
-                    $res = ShowerMsg::where('ID', $ID);
-                    $return_data[$count] = ShowerMsg::getPrivateAndOpenData($res)->find();
+                    $res = Matcher::where('ID', $ID);
+                    $return_data[$count] = Matcher::getPrivateAndOpenData($res)->find();
                     $return_data[$count]['image'] = Picture::field('address')->where('ID', $ID)->where('type', 1)->select();
                     foreach ($return_data[$count]['image'] as $key => $vaule) {
                         //vaule ="{\"address\":\"20201222\\/07316443315b68108d9f7d1299f88777.png\"}
@@ -149,6 +211,11 @@ class Pass extends Controller{
         }
 
     }
+
+
+
+
+
     public function downWall(){
         if (!Cookie::has('jwt_admin'))
             return msg(-10);
@@ -162,16 +229,23 @@ class Pass extends Controller{
             return msg (-1,'empty openid');
         }
         if(!isset($type))
-        $query= ShowerMsg::where('ID',$openid)->where('type',$type)->find();
-        $query ->pass = -1;
-        $query->save();
-        if(empty($query)){
-            return msg(-1,'downWall failed');
+            return msg(-1,'empty type');
+        if($type == 0)
+            $query= ShowerMsg::where('ID',$openid)->where('type',$type)->find();
+            $query ->pass = -1;
+            $query->save();
+            if(empty($query))
+                return msg(-1,'downWall failed');
 
-        }
-        if (!empty($query)){
-            return msg(0,'ok');
-        }
+        if ($type == 1)
+            $search = Matcher::where('ID',$openid)->where('type',$type)->find();
+            $search->pass =-1;
+            $search->save();
+            if (empty($search))
+                return msg(-1,'wrong');
+
+        return msg(0,'ok');
+
     }
 
 }

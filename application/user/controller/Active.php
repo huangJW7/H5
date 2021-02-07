@@ -72,15 +72,32 @@ class Active extends Controller{
 
 
     }
-    //展示信息
+    //展示互选信息
     public function show(){
-        $id = Request::param('openid');
-        if(empty($id))
+        $openid = Request::param('openid');
+        if(empty($openid))
             return msg(-1,'empty openid');
-        //先查询是否点过赞
 
-        $datas = ShowerMsg::where('type', 1)->where('pass', 1)->select();
 
+        $IDs = Matcher::where('pass',1)->where('type', 1)->column('ID');
+
+        $count = 0;
+        $return_data=[];
+
+        foreach ($IDs as $ID) {
+
+            $res =Matcher::where('ID', $ID);
+            $return_data[$count] =Matcher::getOpenData($res)->find();
+
+            $return_data[$count]['image'] = Picture::field('address')->where('ID', $ID)->where('type', 0)->select();
+            foreach ($return_data[$count]['image'] as $key => $vaule) {
+                //vaule ="{\"address\":\"20201222\\/07316443315b68108d9f7d1299f88777.png\"}
+                $vaule = json_decode($vaule, true);
+                $return_data[$count]['image'][$key] = PREFIX . $vaule['address'];
+            }
+            $count++;
+        }
+        return msg(0,'ok',$return_data);
 
     }
     public function change(){

@@ -52,9 +52,49 @@ class Message extends Controller{
                 //从default获取人数
                 if ($number >= $default) {
                     $datas = ShowerMsg::where('pass', 1)->where('history', null)->where('type',0)->limit($default)->column('ID');
+                    foreach ($datas as $key => $value) {
+                        $user = ShowerMsg::where('ID', $value)->find();
+                        if (empty($user))
+                            return msg(-1, 'no found');
+                        $user->history = $history+1;
+                        $user->save();
+                        if ($user == false) {
+                            return msg(-1, 'set fail');
+                        }
 
+                    }
                 } else {
-                    return msg(-1, 'not enough persons');
+                    //没有足够的候选人，展示上一期
+                    $IDs =  ShowerMsg::where('history',$history)->where('pass',1)->where('type',0)->column('ID');
+
+                    $count = 0;
+                    $return_data=[];
+                    foreach ($IDs as $ID) {
+                        $data = Payment::where('actor', $ID)->where('openid',$openid)->where('ispay', 1)->find();
+                        if ($data != null) {
+                            $res = ShowerMsg::where('ID', $ID);
+                            $return_data[$count] = ShowerMsg::getPrivateAndOpenData($res)->find();
+                            $return_data[$count]['image'] = Picture::field('address')->where('ID', $ID)->where('type', 0)->select();
+                            foreach ($return_data[$count]['image'] as $key => $vaule) {
+                                //vaule ="{\"address\":\"202012，22\\/07316443315b68108d9f7d1299f88777.png\"}
+                                $vaule = json_decode($vaule, true);
+                                $return_data[$count]['image'][$key] = PREFIX . $vaule['address'];
+                            }
+                        } else {
+                            $res = ShowerMsg::where('ID', $ID);
+                            $return_data[$count] = ShowerMsg::getOpenData($res)->find();
+
+                            $return_data[$count]['image'] = Picture::field('address')->where('ID', $ID)->where('type', 0)->select();
+                            foreach ($return_data[$count]['image'] as $key => $vaule) {
+                                //vaule ="{\"address\":\"20201222\\/07316443315b68108d9f7d1299f88777.png\"}
+                                $vaule = json_decode($vaule, true);
+                                $return_data[$count]['image'][$key] = PREFIX . $vaule['address'];
+                            }
+                        }
+                        $count++;
+                    }
+                    return msg(0,'no enough person, show last post',$return_data);
+                    //return msg(-1, 'not enough persons');
                 }
             }
 
@@ -62,23 +102,53 @@ class Message extends Controller{
                 //从tomorrow获取人数
                 if ($number >= $tomorrow) {
                     $datas = ShowerMsg::where('pass', 1)->where('history', null)->where('type',0)->limit($tomorrow)->column('ID');
-
+                    foreach ($datas as $key => $value) {
+                        $user = ShowerMsg::where('ID', $value)->find();
+                        if (empty($user))
+                            return msg(-1, 'no found');
+                        $user->history = $history+1;
+                        $user->save();
+                        if ($user == false) {
+                            return msg(-1, 'set fail');
+                        }
+                    }
                 } else {
-                    return msg(-1, 'not enough persons');
-                }
-            }
-            //取要更改history的ID
-            foreach ($datas as $key => $value) {
-                $user = ShowerMsg::where('ID', $value)->find();
-                if (empty($user))
-                    return msg(-1, 'no found');
-                $user->history = $history;
-                $user->save();
-                if ($user == false) {
-                    return msg(-1, 'set fail');
-                }
+                    //没有足够的候选人，展示上一期
+                    $IDs =  ShowerMsg::where('history',$history)->where('pass',1)->where('type',0)->column('ID');
 
+                    $count = 0;
+                    $return_data=[];
+                    foreach ($IDs as $ID) {
+                        $data = Payment::where('actor', $ID)->where('openid',$openid)->where('ispay', 1)->find();
+                        if ($data != null) {
+                            $res = ShowerMsg::where('ID', $ID);
+                            $return_data[$count] = ShowerMsg::getPrivateAndOpenData($res)->find();
+                            $return_data[$count]['image'] = Picture::field('address')->where('ID', $ID)->where('type', 0)->select();
+                            foreach ($return_data[$count]['image'] as $key => $vaule) {
+                                //vaule ="{\"address\":\"202012，22\\/07316443315b68108d9f7d1299f88777.png\"}
+                                $vaule = json_decode($vaule, true);
+                                $return_data[$count]['image'][$key] = PREFIX . $vaule['address'];
+                            }
+                        } else {
+                            $res = ShowerMsg::where('ID', $ID);
+                            $return_data[$count] = ShowerMsg::getOpenData($res)->find();
+
+                            $return_data[$count]['image'] = Picture::field('address')->where('ID', $ID)->where('type', 0)->select();
+                            foreach ($return_data[$count]['image'] as $key => $vaule) {
+                                //vaule ="{\"address\":\"20201222\\/07316443315b68108d9f7d1299f88777.png\"}
+                                $vaule = json_decode($vaule, true);
+                                $return_data[$count]['image'][$key] = PREFIX . $vaule['address'];
+                            }
+                        }
+                        $count++;
+                    }
+                    return msg(0,'no enough person, show last post',$return_data);
+                    //return msg(-1, 'not enough persons');
+                }
             }
+
+
+
             //设置完今日展示后，更新history,使其＋1,下次从此处开始算日期
             //在config表中添加标记ispost = 1
             $list['ispost']=1;
@@ -86,7 +156,39 @@ class Message extends Controller{
             $list['ID']=1;
             $config->save($list,['ID'=>$list['ID']]);
 
+            //展示这一期
+            $IDs =  ShowerMsg::where('history',$history+1)->where('pass',1)->where('type',0)->column('ID');
+            $count = 0;
+            $return_data=[];
+            foreach ($IDs as $ID) {
+                $data = Payment::where('actor', $ID)->where('openid',$openid)->where('ispay', 1)->find();
+                if ($data != null) {
+                    $res = ShowerMsg::where('ID', $ID);
+                    $return_data[$count] = ShowerMsg::getPrivateAndOpenData($res)->find();
+                    $return_data[$count]['image'] = Picture::field('address')->where('ID', $ID)->where('type', 0)->select();
+                    foreach ($return_data[$count]['image'] as $key => $vaule) {
+                        //vaule ="{\"address\":\"202012，22\\/07316443315b68108d9f7d1299f88777.png\"}
+                        $vaule = json_decode($vaule, true);
+                        $return_data[$count]['image'][$key] = PREFIX . $vaule['address'];
+                    }
+                } else {
+                    $res = ShowerMsg::where('ID', $ID);
+                    $return_data[$count] = ShowerMsg::getOpenData($res)->find();
+
+                    $return_data[$count]['image'] = Picture::field('address')->where('ID', $ID)->where('type', 0)->select();
+                    foreach ($return_data[$count]['image'] as $key => $vaule) {
+                        //vaule ="{\"address\":\"20201222\\/07316443315b68108d9f7d1299f88777.png\"}
+                        $vaule = json_decode($vaule, true);
+                        $return_data[$count]['image'][$key] = PREFIX . $vaule['address'];
+                    }
+                }
+                $count++;
+            }
+            return msg(0,'ok',$return_data);
+            //return msg(-1, 'not enough persons');
         }
+
+
 
         //若$ispost==1，说明已经设置过，直接展示
         if($ispost==1){

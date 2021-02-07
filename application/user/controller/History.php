@@ -33,13 +33,9 @@ class History extends Controller{
     public function episode(){
         $query = Config::limit(1)->find();
         $history =  $query->history;
-        $ispost = $query ->ispost;
-
-        if($ispost == 1){
-            $history-=1;
-        }
         return msg(0,'ok',$history);
     }
+
     public function search()
     {
         $openid = Request::param('openid');

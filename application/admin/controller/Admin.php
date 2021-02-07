@@ -84,6 +84,7 @@ class Admin extends Controller{
         $jwt_data = jwt_decode_admin(Cookie::get('jwt_admin'));
         if($jwt_data === NULL)
             return msg(-10);
+
         $data=[];
         $userdata = Adminuser::all();
         foreach($userdata as $key => $user)
