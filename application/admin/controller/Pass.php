@@ -194,6 +194,7 @@ class Pass extends Controller{
                         foreach ($datas as $v){
                             print_r($v);
                             echo $v;
+                            $return_data[$count]['background']=[];
                             $return_data[$count]['background']['name']='证件';
                             $return_data[$count]['background']['url'] = PREFIX . $v;
                         }
