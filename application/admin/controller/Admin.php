@@ -78,7 +78,7 @@ class Admin extends Controller{
         if (empty($data))
             return msg(-60);
         if(!empty($data)){
-            if($data->ID!=1)
+            if($data->ID==1)
                 return msg(-1,'you dont have this permission');
 
         }
