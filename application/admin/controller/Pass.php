@@ -192,8 +192,9 @@ class Pass extends Controller{
                     print_r($data);
                     if(!empty($data)){
                         foreach ($data as $v){
+                            print_r($v);
                             $return_data[$count]['background']['name']=$v;
-                            $return_data[$count]['image']['url'] = PREFIX . $v;
+                            $return_data[$count]['background']['url'] = PREFIX . $v;
                         }
                     }
 
