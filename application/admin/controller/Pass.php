@@ -195,6 +195,7 @@ class Pass extends Controller{
                             $vaule = json_decode($vaule, true);
                             $return_data[$count]['background']['name'] =$vaule['address'];
                             $return_data[$count]['background']['url'] = PREFIX . $vaule['address'];
+                            unset($return_data[$count]['background']['address']);
                         }
                     }
 
