@@ -53,9 +53,13 @@ class Admin extends Controller{
         $newadminusers = new Adminuser;
         $newadminusers->username = Request::param('username');
         $newadminusers->password = Adminuser::pwd(Request::param('username'),Request::param('password'));
+        $newadminusers->ID = mt_rand(100,99999);
         $newadminusers->save();
+        if($newadminusers)
+            return msg(0,'ok');
+        else
+            return msg(-1,'try again');
 
-        return msg();
     }
 
     public function del()
