@@ -148,7 +148,7 @@ class Pass extends Controller{
                         $return_data[$count]['image'][$key] = PREFIX . $vaule['address'];
                     }
                     $backgroundIMG=Picture::field('address')->where('ID', $ID)->where('type', 2)->find();
-                    $return_data[$count]['background'] = PREFIX . $backgroundIMG->address;
+                    $return_data[$count]['background'] = PREFIX . $backgroundIMG;
                     $count++;
                 }
             }
@@ -181,7 +181,7 @@ class Pass extends Controller{
                         $return_data[$count]['image'][$key] = PREFIX . $vaule['address'];
                     }
                     $backgroundIMG=Picture::field('address')->where('ID', $ID)->where('type', 2)->find();
-                    $return_data[$count]['background'] = PREFIX . $backgroundIMG->address;
+                    $return_data[$count]['background'] = PREFIX . $backgroundIMG;
                     $count++;
                 }
             }
