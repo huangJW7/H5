@@ -145,11 +145,13 @@ class Pass extends Controller{
                     foreach ($return_data[$count]['image'] as $key => $vaule) {
                         //vaule ="{\"address\":\"20201222\\/07316443315b68108d9f7d1299f88777.png\"}
                         $vaule = json_decode($vaule, true);
-                        $return_data[$count]['image'][$key] = PREFIX . $vaule['address'];
+                        $return_data[$count]['image']['name'] =$vaule['address'];
+                        $return_data[$count]['image']['url'] = PREFIX . $vaule['address'];
                     }
                     $search=Picture::field('address')->where('ID', $ID)->where('type', 2)->find();
                     $vaule = json_decode($search, true);
-                    $return_data[$count]['background'] = PREFIX . $vaule['address'];
+                    $return_data[$count]['background']['name']=$vaule['address'];
+                    $return_data[$count]['background']['url'] = PREFIX . $vaule['address'];
                     $count++;
                 }
             }
@@ -179,11 +181,13 @@ class Pass extends Controller{
                     foreach ($return_data[$count]['image'] as $key => $vaule) {
                         //vaule ="{\"address\":\"20201222\\/07316443315b68108d9f7d1299f88777.png\"}
                         $vaule = json_decode($vaule, true);
-                        $return_data[$count]['image'][$key] = PREFIX . $vaule['address'];
+                        $return_data[$count]['image']['name'] =$vaule['address'];
+                        $return_data[$count]['image']['url'] = PREFIX . $vaule['address'];
                     }
                     $search=Picture::field('address')->where('ID', $ID)->where('type', 2)->find();
                     $vaule = json_decode($search, true);
-                    $return_data[$count]['background'] = PREFIX . $vaule['address'];
+                    $return_data[$count]['background']['name']=$vaule['address'];
+                    $return_data[$count]['background']['url'] = PREFIX . $vaule['address'];
                     $count++;
                 }
             }
