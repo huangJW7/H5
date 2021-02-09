@@ -188,13 +188,13 @@ class Pass extends Controller{
                         $return_data[$count]['image']['name'] =$vaule['address'];
                         $return_data[$count]['image']['url'] = PREFIX . $vaule['address'];
                     }
-                    $data=Picture::field('address')->where('ID', $ID)->where('type', 2)->column('address');
-                    print_r($data);
-                    if(!empty($data)){
-                        foreach ($data as $v){
+                    $datas=Picture::field('address')->where('ID', $ID)->where('type', 2)->column('address');
+                    print_r($datas);
+                    if(!empty($datas)){
+                        foreach ($datas as $v){
                             print_r($v);
                             echo $v;
-                            $return_data[$count]['background']['name']=$v;
+                            $return_data[$count]['background']['name']='证件';
                             $return_data[$count]['background']['url'] = PREFIX . $v;
                         }
                     }
