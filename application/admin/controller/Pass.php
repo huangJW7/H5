@@ -186,7 +186,7 @@ class Pass extends Controller{
                     }
                     $search=Picture::field('address')->where('ID', $ID)->where('type', 2)->find()->toArray();
 
-                    $return_data[$count]['background']['name']=$search['address'];
+                    //$return_data[$count]['background']['name']=$search['address'];
                     $return_data[$count]['background']['url'] = PREFIX . $search['address'];
                     $count++;
                 }
