@@ -88,7 +88,7 @@ class Pass extends Controller{
         if(empty(Request::param('ID')))
             return msg(-1,'empty ID');
         $ID = Request::param('ID');
-        $query = ShowerMsg::where('ID',$ID)->find();
+        $query = Matcher::where('ID',$ID)->find();
         if(empty($query))
             return msg (-1,'no such actor');
 
@@ -148,11 +148,12 @@ class Pass extends Controller{
                         $return_data[$count]['image']['name'] =$vaule['address'];
                         $return_data[$count]['image']['url'] = PREFIX . $vaule['address'];
                     }
-                    $search=Picture::field('address')->where('ID', $ID)->where('type', 2)->find()->toArray();
-                    if(!empty($search)){
-                        //$search = json_decode($search, true);
-                        $return_data[$count]['background']['name']=$search['address'];
-                        $return_data[$count]['background']['url'] = PREFIX . $search['address'];
+                    $return_data[$count]['background']=Picture::field('address')->where('ID', $ID)->where('type', 2)->find();
+
+                    if(!empty($return_data[$count]['background'])){
+                        $return_data[$count]['background'] = json_decode($return_data[$count]['background'], true);
+                        $return_data[$count]['background']['name']=$return_data[$count]['background']['address'];
+                        $return_data[$count]['background']['url'] = PREFIX . $return_data[$count]['background'];
                     }
                     $count++;
                 }
