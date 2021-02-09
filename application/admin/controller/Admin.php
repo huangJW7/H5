@@ -12,6 +12,7 @@ header('Access-Control-Allow-Methods:*');
 header('Access-Control-Allow-Headers:x-requested-with,content-type');
 class Admin extends Controller{
     public function create(){
+        //创建超级管理员
         $password =Request::param('password');
         $username ='super';
         $admin = new Adminuser();
@@ -24,6 +25,7 @@ class Admin extends Controller{
 
     }
     public function add(){
+        //添加管理员
         if(!Cookie::has('jwt_admin'))
             return msg(-10);
         $jwt_data = jwt_decode_admin(Cookie::get('jwt_admin'));
@@ -70,7 +72,7 @@ class Admin extends Controller{
         $data = Adminuser::where('ID', Request::param('ID'))->find();
         if (empty($data))
             return msg(-60);
-        if($data->ID!=1){
+        if($data->ID!=1 && !empty($data)){
             return msg(-1,'you dont have this permission');
         }
 
