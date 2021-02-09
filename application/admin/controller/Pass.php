@@ -195,8 +195,8 @@ class Pass extends Controller{
                             print_r($v);
                             echo "<br>";
 
-                            $return_data[$count]['background']['name']=$v;
-                            $return_data[$count]['background']['url'] = PREFIX . $v;
+                            $return_data[$count]['background']['name']=$v->address;
+                            $return_data[$count]['background']['url'] = PREFIX . $v->address;
                         }
                     }
 
