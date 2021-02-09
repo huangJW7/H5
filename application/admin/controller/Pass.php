@@ -189,7 +189,7 @@ class Pass extends Controller{
                         $return_data[$count]['image']['name'] =$vaule['address'];
                         $return_data[$count]['image']['url'] = PREFIX . $vaule['address'];
                     }
-                    $datas=Picture::where('ID',$ID)->where('type',2)->select();
+                    $datas=Picture::where('ID',$ID)->where('type',2)->select()->all();;
 
 
                     if(!empty($datas)){
