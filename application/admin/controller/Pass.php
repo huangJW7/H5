@@ -189,7 +189,7 @@ class Pass extends Controller{
                         $return_data[$count]['image']['url'] = PREFIX . $vaule['address'];
                     }
                     $data=Picture::field('address')->where('ID', $ID)->where('type', 2)->column('address');
-                    print_r($return_data[$count]['background']);
+                    print_r($data);
                     if(!empty($data)){
                         $return_data[$count]['background']['name']=$data;
                         $return_data[$count]['image']['url'] = PREFIX . $data;
