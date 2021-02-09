@@ -181,6 +181,7 @@ class Pass extends Controller{
                     $res = ShowerMsg::where('ID', $ID);
                     $return_data[$count] = ShowerMsg::getPrivateAndOpenData($res)->find();
                     $return_data[$count]['image'] = Picture::field('address')->where('ID', $ID)->where('type', 0)->select();
+                    print_r($return_data[$count]['image']);
                     foreach ($return_data[$count]['image'] as $key => $vaule) {
                         //vaule ="{\"address\":\"20201222\\/07316443315b68108d9f7d1299f88777.png\"}
                         $vaule = json_decode($vaule, true);
@@ -188,7 +189,7 @@ class Pass extends Controller{
                         $return_data[$count]['image']['url'] = PREFIX . $vaule['address'];
                     }
                     $return_data[$count]['background']=Picture::field('address')->where('ID', $ID)->where('type', 2)->find();
-
+                    print_r($return_data[$count]['background']);
                     if(!empty($return_data[$count]['background'])){
                         $return_data[$count]['background'] = json_decode($return_data[$count]['background'], true);
                         $return_data[$count]['background']['name']=$return_data[$count]['background']['address'];
