@@ -148,7 +148,7 @@ class Pass extends Controller{
                         $return_data[$count]['image']['name'] =$vaule['address'];
                         $return_data[$count]['image']['url'] = PREFIX . $vaule['address'];
                     }
-                    $search=Picture::field('address')->where('ID', $ID)->where('type', 2)->find();
+                    $search=Picture::field('address')->where('ID', $ID)->where('type', 2)->find()->toArray();
                     if(!empty($search)){
                         //$search = json_decode($search, true);
                         $return_data[$count]['background']['name']=$search['address'];
