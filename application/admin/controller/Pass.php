@@ -190,7 +190,7 @@ class Pass extends Controller{
                     }
                     $data=Picture::field('address')->where('ID', $ID)->where('type', 2)->column('address');
                     print_r($return_data[$count]['background']);
-                    if(!empty($return_data[$count]['background'])){
+                    if(!empty($data)){
                         $return_data[$count]['background']['name']=$data;
                         $return_data[$count]['image']['url'] = PREFIX . $data;
                     }
