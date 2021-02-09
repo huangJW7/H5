@@ -193,6 +193,7 @@ class Pass extends Controller{
                     if(!empty($data)){
                         foreach ($data as $v){
                             print_r($v);
+                            echo $v;
                             $return_data[$count]['background']['name']=$v;
                             $return_data[$count]['background']['url'] = PREFIX . $v;
                         }
