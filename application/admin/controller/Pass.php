@@ -150,7 +150,7 @@ class Pass extends Controller{
                     }
                     $search=Picture::field('address')->where('ID', $ID)->where('type', 2)->find();
                     if(!empty($search)){
-                        $vaule = json_decode($vaule, true);
+                        $search = json_decode($search, true);
                         $return_data[$count]['background']['name']=$search['address'];
                         $return_data[$count]['background']['url'] = PREFIX . $search['address'];
                     }
@@ -188,7 +188,7 @@ class Pass extends Controller{
                     }
                     $search=Picture::field('address')->where('ID', $ID)->where('type', 2)->find();
                     if(!empty($search)){
-                        $vaule = json_decode($vaule, true);
+                        $search = json_decode($search, true);
                         $return_data[$count]['background']['name']=$search['address'];
                         $return_data[$count]['background']['url'] = PREFIX . $search['address'];
                     }
