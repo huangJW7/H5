@@ -189,11 +189,11 @@ class Pass extends Controller{
                         $return_data[$count]['image']['url'] = PREFIX . $vaule['address'];
                     }
                     $datas=Picture::field('address')->where('ID', $ID)->where('type', 2)->select();
-                    print_r($datas);
+
                     if(!empty($datas)){
                         foreach ($datas as $k=>$v){
                             print_r($v);
-
+                            echo "<br>";
                             $vaule = json_decode($vaule, true);
                             $return_data[$count]['background']['name']=$v;
                             $return_data[$count]['background']['url'] = PREFIX . $v;
