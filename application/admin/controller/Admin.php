@@ -43,8 +43,9 @@ class Admin extends Controller{
         $user = Adminuser::where('username',Request::param('username'))->find();
         if(!empty($user)) return msg(-80);
 
-        if($user->ID!=1 &&!empty($user)){
-            return msg(-1,'you dont have this permission');
+        if(!empty($user)){
+            if($user->ID!=1)
+                return msg(-1,'you dont have this permission');
         }
 
         //TODO: 对密码进行校验，不能带非法字符
@@ -72,8 +73,10 @@ class Admin extends Controller{
         $data = Adminuser::where('ID', Request::param('ID'))->find();
         if (empty($data))
             return msg(-60);
-        if($data->ID!=1 && !empty($data)){
-            return msg(-1,'you dont have this permission');
+        if(!empty($data)){
+            if($data->ID!=1)
+                return msg(-1,'you dont have this permission');
+
         }
 
         $data->delete();
