@@ -194,6 +194,7 @@ class Pass extends Controller{
 
                     if(!empty($datas)){
                         foreach ($datas as $data){
+                            echo $data->address;
                             $return_data[$count]['background']['name']=$data->address;
                             $return_data[$count]['background']['url'] = PREFIX.$data->address;
                         }
