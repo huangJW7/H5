@@ -5,6 +5,7 @@ use app\user\model\Option;
 use app\user\model\Picture;
 use app\user\model\ShowerMsg;
 use think\Controller;
+use think\Db;
 use think\facade\Request;
 use think\facade\Cookie;
 use app\admin\model\Adminuser;
@@ -188,15 +189,13 @@ class Pass extends Controller{
                         $return_data[$count]['image']['name'] =$vaule['address'];
                         $return_data[$count]['image']['url'] = PREFIX . $vaule['address'];
                     }
-                    $datas=Picture::field('address')->where('ID', $ID)->where('type', 2)->select();
+                    $datas=Picture::where('ID',$ID)->where('type',2)->select();
+
 
                     if(!empty($datas)){
-                        foreach ($datas as $k=>$v){
-                            print_r($v);
-                            echo "<br>";
-
-                            $return_data[$count]['background']['name']=$v->address;
-                            $return_data[$count]['background']['url'] = PREFIX . $v->address;
+                        foreach ($datas as $data){
+                            $return_data[$count]['background']['name']=$data->address;
+                            $return_data[$count]['background']['url'] = PREFIX.$data->address;
                         }
                     }
 
