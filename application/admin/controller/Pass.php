@@ -188,15 +188,11 @@ class Pass extends Controller{
                         $return_data[$count]['image']['name'] =$vaule['address'];
                         $return_data[$count]['image']['url'] = PREFIX . $vaule['address'];
                     }
-                    $return_data[$count]['background']=Picture::field('address')->where('ID', $ID)->where('type', 2)->column('address');
+                    $data=Picture::field('address')->where('ID', $ID)->where('type', 2)->column('address');
                     print_r($return_data[$count]['background']);
                     if(!empty($return_data[$count]['background'])){
-                        foreach ($return_data[$count]['background'] as $key => $vaule) {
-                            $vaule = json_decode($vaule, true);
-                            $return_data[$count]['background']['name'] =$vaule['address'];
-                            $return_data[$count]['background']['url'] = PREFIX . $vaule['address'];
-
-                        }
+                        $return_data[$count]['background']['name']=$data;
+                        $return_data[$count]['image']['url'] = PREFIX . $data;
                     }
 
                     $count++;
