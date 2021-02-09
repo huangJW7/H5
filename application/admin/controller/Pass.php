@@ -194,7 +194,7 @@ class Pass extends Controller{
                         foreach ($datas as $k=>$v){
                             print_r($v);
                             echo "<br>";
-                            $vaule = json_decode($vaule, true);
+
                             $return_data[$count]['background']['name']=$v;
                             $return_data[$count]['background']['url'] = PREFIX . $v;
                         }
