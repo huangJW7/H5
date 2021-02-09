@@ -153,7 +153,7 @@ class Pass extends Controller{
                     if(!empty($return_data[$count]['background'])){
                         $return_data[$count]['background'] = json_decode($return_data[$count]['background'], true);
                         $return_data[$count]['background']['name']=$return_data[$count]['background']['address'];
-                        $return_data[$count]['background']['url'] = PREFIX . $return_data[$count]['background'];
+                        $return_data[$count]['background']['url'] = PREFIX . $return_data[$count]['background']['address'];
                     }
                     $count++;
                 }
@@ -187,11 +187,12 @@ class Pass extends Controller{
                         $return_data[$count]['image']['name'] =$vaule['address'];
                         $return_data[$count]['image']['url'] = PREFIX . $vaule['address'];
                     }
-                    $search=Picture::field('address')->where('ID', $ID)->where('type', 2)->find();
-                    if(!empty($search)){
-                        //$search = json_decode($search, true);
-                        $return_data[$count]['background']['name']=$search['address'];
-                        $return_data[$count]['background']['url'] = PREFIX . $search['address'];
+                    $return_data[$count]['background']=Picture::field('address')->where('ID', $ID)->where('type', 2)->find();
+
+                    if(!empty($return_data[$count]['background'])){
+                        $return_data[$count]['background'] = json_decode($return_data[$count]['background'], true);
+                        $return_data[$count]['background']['name']=$return_data[$count]['background']['address'];
+                        $return_data[$count]['background']['url'] = PREFIX . $return_data[$count]['background']['address'];
                     }
 
                     $count++;
