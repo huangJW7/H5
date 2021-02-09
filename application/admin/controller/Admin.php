@@ -40,7 +40,8 @@ class Admin extends Controller{
         //防止重复添加
         $user = Adminuser::where('username',Request::param('username'))->find();
         if(!empty($user)) return msg(-80);
-        if($user->ID!=1){
+
+        if($user->ID!=1 &&!empty($user)){
             return msg(-1,'you dont have this permission');
         }
 
