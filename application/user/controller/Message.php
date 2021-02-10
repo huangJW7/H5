@@ -24,7 +24,7 @@ class Message extends Controller{
     {
         //获取openid
 
-        $openid = Request::param('openid');
+        $openid = Request::param('id');
         if(empty($openid)){
             return  msg(-1,'empty openid');
         }
