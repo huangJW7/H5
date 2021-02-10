@@ -18,6 +18,13 @@ class Upload extends Controller{
     public function normal(){
         if(empty(Request::param('openid')))
             return msg(-1,'empty openid');
+        $search = ShowerMsg::where('ID',Request::param('openid'))->find();
+        if(!empty($search)) {
+            $type = $search->type;
+            if ($type == -1) {
+                $search->delete();
+            }
+        }
 
         $data = new ShowerMsg();
         $data->ID = Request::param('openid');
