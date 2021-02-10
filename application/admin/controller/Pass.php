@@ -196,8 +196,8 @@ class Pass extends Controller{
                         foreach ($return_data[$count]['background'] as $k=>$v){
                             $v = json_decode($v, true);
                             print_r($v);
-                            $return_data[$count]['background'][$k]['name']=$v['address'];
-                            $return_data[$count]['background'][$k]['url'] =PREFIX . $v['address'];
+                            $return_data[$count]['background'][0]['name']=$v['address'];
+                            $return_data[$count]['background'][0]['url'] =PREFIX . $v['address'];
 
                         }
 
