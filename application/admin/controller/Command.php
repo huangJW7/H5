@@ -143,7 +143,7 @@ class Command extends Controller{
         if(!empty(Request::param('nickName')))
             $list['name']=Request::param('nickName');
 
-        if(!is_numeric(Request::param('age')))
+        if(is_numeric(Request::param('age')))
             $list['age']=Request::param('age');
 
         if(!empty(Request::param('place')))
@@ -155,7 +155,7 @@ class Command extends Controller{
         if(!empty(Request::param('school')))
             $list['school']=Request::param('school');
 
-        if(!is_numeric(Request::param('height')))
+        if(is_numeric(Request::param('height')))
             $list['height']=Request::param('height');
 
         if(!empty(Request::param('constellation')))
@@ -173,13 +173,13 @@ class Command extends Controller{
         if(!empty(Request::param('target')))
             $list['goal']=Request::param('target');
 
-        if(!is_numeric(Request::param('like')))
+        if(is_numeric(Request::param('like')))
             $list['like']=Request::param('like');
 
         if(!empty(Request::param('background')))
             $list['background']=Request::param('background');
 
-        if(!is_numeric(Request::param('pass')))
+        if(is_numeric(Request::param('pass')))
             $list['pass']=Request::param('pass');
 
 
@@ -212,7 +212,7 @@ class Command extends Controller{
         if(!empty(Request::param('nickName')))
             $list['name']=Request::param('nickName');
 
-        if(!is_numeric(Request::param('age')))
+        if(is_numeric(Request::param('age')))
             $list['age']=Request::param('age');
 
         if(!empty(Request::param('place')))
@@ -224,7 +224,7 @@ class Command extends Controller{
         if(!empty(Request::param('school')))
             $list['school']=Request::param('school');
 
-        if(!is_numeric(Request::param('height')))
+        if(is_numeric(Request::param('height')))
             $list['height']=Request::param('height');
 
         if(!empty(Request::param('constellation')))
@@ -242,13 +242,13 @@ class Command extends Controller{
         if(!empty(Request::param('target')))
             $list['goal']=Request::param('target');
 
-        if(!is_numeric(Request::param('like')))
+        if(is_numeric(Request::param('like')))
             $list['like']=Request::param('like');
 
         if(!empty(Request::param('background')))
             $list['background']=Request::param('background');
 
-        if(!is_numeric(Request::param('pass')))
+        if(is_numeric(Request::param('pass')))
             $list['pass']=Request::param('pass');
 
 
