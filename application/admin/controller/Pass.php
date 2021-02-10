@@ -197,7 +197,7 @@ class Pass extends Controller{
                             echo $k;
                             $v = json_decode($v, true);
                             $return_data[$count]['background'][0]['name']=$v['address'];
-                            $return_data[$count]['background'][0]['url'] =PREFIX . $v['address'];
+                            $return_data[$count]['background'][$k]['url'] =PREFIX . $v['address'];
                             unset($return_data[$count]['image'][0]['address']);
 
                         }
