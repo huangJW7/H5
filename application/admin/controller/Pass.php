@@ -188,6 +188,7 @@ class Pass extends Controller{
                         $vaule = json_decode($vaule, true);
                         $return_data[$count]['image'][$key]['name'] =$vaule['address'];
                         $return_data[$count]['image'][$key]['url'] = PREFIX . $vaule['address'];
+                        unset($return_data[$count]['image'][$key]['address']);
                     }
 
                     $return_data[$count]['background']=Picture::field('address')->where('ID', $ID)->where('type', 2)->select();
@@ -198,6 +199,7 @@ class Pass extends Controller{
                             $return_data[$count]['background'][$key]['name']=$v['address'];
                             $return_data[$count]['background'][$key]['url'] =PREFIX . $v['address'];
                         }
+                        unset($return_data[$count]['background'][0]);
                     }
                     $count++;
                 }
