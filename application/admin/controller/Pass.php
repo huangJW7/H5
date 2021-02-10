@@ -191,8 +191,8 @@ class Pass extends Controller{
                     }
 
                     $return_data[$count]['background']=Picture::field('address')->where('ID', $ID)->where('type', 2)->select();
-                    if(!empty($return_data[$count]['image'])){
-                        foreach ($return_data[$count]['image'] as $k=>$v){
+                    if(!empty($return_data[$count]['background'])){
+                        foreach ($return_data[$count]['background'] as $k=>$v){
                             $v = json_decode($v, true);
                             print_r($v);
                             $return_data[$count]['background']['name']=$v['address'];
