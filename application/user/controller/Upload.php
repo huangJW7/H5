@@ -20,9 +20,9 @@ class Upload extends Controller{
             return msg(-1,'empty openid');
         $search = ShowerMsg::where('ID',Request::param('openid'))->find();
         if(!empty($search)) {
-            $type = $search->type;
-            if ($type == -1) {
-                $query=ShowerMsg::where('ID',param('openid'))->delete();
+            $pass = $search->pass;
+            if ($pass == -1) {
+                $search->delete();
             }
         }
 
