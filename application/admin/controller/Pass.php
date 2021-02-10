@@ -198,8 +198,9 @@ class Pass extends Controller{
                             print_r($v);
                             $return_data[$count]['background'][$key]['name']=$v['address'];
                             $return_data[$count]['background'][$key]['url'] =PREFIX . $v['address'];
+                            unset($return_data[$count]['background'][$key]);
                         }
-                        unset($return_data[$count]['background'][0]);
+
                     }
                     $count++;
                 }
