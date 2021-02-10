@@ -23,6 +23,7 @@ class Upload extends Controller{
             $pass = $search->pass;
             if ($pass == -1) {
                 $search->delete();
+
             }
         }
 

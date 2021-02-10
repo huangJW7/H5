@@ -271,6 +271,8 @@ class Pass extends Controller{
             $query= ShowerMsg::where('ID',$openid)->where('type',$type)->find();
             $query ->pass = -1;
             $query->save();
+            Db::table('picture')->where('ID',$openid)->where('type',$type)->update(['type' => -1]);
+            Db::table('picture')->where('ID',$openid)->where('type',$type)->update(['type' => -1]);
             if(empty($query))
                 return msg(-1,'downWall failed');
 
@@ -278,6 +280,8 @@ class Pass extends Controller{
             $search = Matcher::where('ID',$openid)->where('type',$type)->find();
             $search->pass =-1;
             $search->save();
+            Db::table('picture')->where('ID',$openid)->where('type',$type)->update(['type' => -1]);
+
             if (empty($search))
                 return msg(-1,'wrong');
 
