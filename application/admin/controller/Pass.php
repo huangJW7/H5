@@ -131,7 +131,9 @@ class Pass extends Controller{
                     foreach ($return_data[$count]['image'] as $key => $vaule) {
                         //vaule ="{\"address\":\"20201222\\/07316443315b68108d9f7d1299f88777.png\"}
                         $vaule = json_decode($vaule, true);
-                        $return_data[$count]['image'][$key] = PREFIX . $vaule['address'];
+                        $return_data[$count]['image'][$key]['name'] =$vaule['address'];
+                        $return_data[$count]['image'][$key]['url'] = PREFIX . $vaule['address'];
+                        unset($return_data[$count]['image'][$key]['address']);
                     }
                     $count++;
                 }
@@ -146,15 +148,22 @@ class Pass extends Controller{
                     foreach ($return_data[$count]['image'] as $key => $vaule) {
                         //vaule ="{\"address\":\"20201222\\/07316443315b68108d9f7d1299f88777.png\"}
                         $vaule = json_decode($vaule, true);
-                        $return_data[$count]['image']['name'] =$vaule['address'];
-                        $return_data[$count]['image']['url'] = PREFIX . $vaule['address'];
+                        $return_data[$count]['image'][$key]['name'] =$vaule['address'];
+                        $return_data[$count]['image'][$key]['url'] = PREFIX . $vaule['address'];
+                        unset($return_data[$count]['image'][$key]['address']);
                     }
-                    $return_data[$count]['background']=Picture::field('address')->where('ID', $ID)->where('type', 2)->find();
 
+                    $return_data[$count]['background']=Picture::field('address')->where('ID', $ID)->where('type', 2)->select();
                     if(!empty($return_data[$count]['background'])){
-                        $return_data[$count]['background'] = json_decode($return_data[$count]['background'], true);
-                        $return_data[$count]['background']['name']=$return_data[$count]['background']['address'];
-                        $return_data[$count]['background']['url'] = PREFIX . $return_data[$count]['background']['address'];
+                        foreach ($return_data[$count]['background'] as $k=>$v){
+
+                            $v = json_decode($v, true);
+                            $return_data[$count]['background'][$k]['name']=$v['address'];
+                            $return_data[$count]['background'][$k]['url'] =PREFIX . $v['address'];
+                            unset($return_data[$count]['background'][$k]['address']);
+
+                        }
+
                     }
                     $count++;
                 }
@@ -170,7 +179,9 @@ class Pass extends Controller{
                     foreach ($return_data[$count]['image'] as $key => $vaule) {
                         //vaule ="{\"address\":\"20201222\\/07316443315b68108d9f7d1299f88777.png\"}
                         $vaule = json_decode($vaule, true);
-                        $return_data[$count]['image'][$key] = PREFIX . $vaule['address'];
+                        $return_data[$count]['image'][$key]['name'] =$vaule['address'];
+                        $return_data[$count]['image'][$key]['url'] = PREFIX . $vaule['address'];
+                        unset($return_data[$count]['image'][$key]['address']);
                     }
                     $count++;
                 }
@@ -194,7 +205,7 @@ class Pass extends Controller{
                     $return_data[$count]['background']=Picture::field('address')->where('ID', $ID)->where('type', 2)->select();
                     if(!empty($return_data[$count]['background'])){
                         foreach ($return_data[$count]['background'] as $k=>$v){
-                            echo $k;
+
                             $v = json_decode($v, true);
                             $return_data[$count]['background'][$k]['name']=$v['address'];
                             $return_data[$count]['background'][$k]['url'] =PREFIX . $v['address'];

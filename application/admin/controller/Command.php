@@ -17,6 +17,27 @@ header('Access-Control-Allow-Methods:*');
 header('Access-Control-Allow-Headers:x-requested-with,content-type');
 class Command extends Controller{
 
+    public function getConfig(){
+        if(!Cookie::has('jwt_admin'))
+            return msg(-10);
+        $jwt_data = jwt_decode_admin(Cookie::get('jwt_admin'));
+        if($jwt_data === NULL)
+            return msg(-10);
+
+        $data = Config::where('ID',1)->find();
+        $isset = $data->isset;
+        if($isset ==1){
+            $list['tomorrow'] = $data->tomorrow;
+            $list['isset']=$isset;
+            return msg(0,'you have set tomorrow post',$list);
+        }
+        if($isset ==0){
+            $list['default'] = $data->default;
+            $list['isset']=$isset;
+            return msg(0,'you have set default post',$list);
+        }
+    }
+
     public function index(){
         //Config 的isset 通过mysql的事件每日变为0
 
