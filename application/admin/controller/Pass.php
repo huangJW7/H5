@@ -153,14 +153,14 @@ class Pass extends Controller{
                         unset($return_data[$count]['image'][$key]['address']);
                     }
 
-                    $return_data[$count]['background']=Picture::field('address')->where('ID', $ID)->where('type', 2)->select();
-                    if(!empty($return_data[$count]['background'])){
-                        foreach ($return_data[$count]['background'] as $k=>$v){
+                    $return_data[$count]['backgroundIMG']=Picture::field('address')->where('ID', $ID)->where('type', 2)->select();
+                    if(!empty($return_data[$count]['backgroundIMG'])){
+                        foreach ($return_data[$count]['backgroundIMG'] as $k=>$v){
 
                             $v = json_decode($v, true);
-                            $return_data[$count]['background'][$k]['name']=$v['address'];
-                            $return_data[$count]['background'][$k]['url'] =PREFIX . $v['address'];
-                            unset($return_data[$count]['background'][$k]['address']);
+                            $return_data[$count]['backgroundIMG'][$k]['name']=$v['address'];
+                            $return_data[$count]['backgroundIMG'][$k]['url'] =PREFIX . $v['address'];
+                            unset($return_data[$count]['backgroundIMG'][$k]['address']);
 
                         }
 
@@ -202,14 +202,14 @@ class Pass extends Controller{
                         unset($return_data[$count]['image'][$key]['address']);
                     }
 
-                    $return_data[$count]['background']=Picture::field('address')->where('ID', $ID)->where('type', 2)->select();
-                    if(!empty($return_data[$count]['background'])){
-                        foreach ($return_data[$count]['background'] as $k=>$v){
+                    $return_data[$count]['backgroundIMG']=Picture::field('address')->where('ID', $ID)->where('type', 2)->select();
+                    if(!empty($return_data[$count]['backgroundIMG'])){
+                        foreach ($return_data[$count]['backgroundIMG'] as $k=>$v){
 
                             $v = json_decode($v, true);
-                            $return_data[$count]['background'][$k]['name']=$v['address'];
-                            $return_data[$count]['background'][$k]['url'] =PREFIX . $v['address'];
-                            unset($return_data[$count]['background'][$k]['address']);
+                            $return_data[$count]['backgroundIMG'][$k]['name']=$v['address'];
+                            $return_data[$count]['backgroundIMG'][$k]['url'] =PREFIX . $v['address'];
+                            unset($return_data[$count]['backgroundIMG'][$k]['address']);
 
                         }
 
