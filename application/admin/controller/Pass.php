@@ -260,6 +260,7 @@ class Pass extends Controller{
             return msg(-10);
 
         $openid = Request::param('openid');
+        $type =null;
         $type = Request::param('type');
         if(empty($openid)){
             return msg (-1,'empty openid');
