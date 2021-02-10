@@ -49,7 +49,7 @@ class Upload extends Controller{
         $search = Matcher::where('ID',Request::param('openid'))->find();
         if(!empty($search)) {
             $type = $search->type;
-            if ($type = 1) {
+            if ($type == 1) {
                 return msg(-1, 'you had sign up');
             }
             $search->delete();
