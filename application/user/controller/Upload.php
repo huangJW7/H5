@@ -22,7 +22,7 @@ class Upload extends Controller{
         if(!empty($search)) {
             $type = $search->type;
             if ($type == -1) {
-                $search->delete();
+                $query=ShowerMsg::where('ID',param('openid'))->delete();
             }
         }
 
