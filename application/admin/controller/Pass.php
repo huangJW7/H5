@@ -186,8 +186,8 @@ class Pass extends Controller{
                     foreach ($return_data[$count]['image'] as $key => $vaule) {
                         //vaule ="{\"address\":\"20201222\\/07316443315b68108d9f7d1299f88777.png\"}
                         $vaule = json_decode($vaule, true);
-                        $return_data[$count]['image']['name'] =$vaule['address'];
-                        $return_data[$count]['image']['url'] = PREFIX . $vaule['address'];
+                        $return_data[$count]['image'][$key]['name'] =$vaule['address'];
+                        $return_data[$count]['image'][$key]['url'] = PREFIX . $vaule['address'];
                     }
 
                     $return_data[$count]['background']=Picture::field('address')->where('ID', $ID)->where('type', 2)->select();
