@@ -28,204 +28,39 @@ class Message extends Controller{
         if(empty($openid)){
             return  msg(-1,'empty openid');
         }
-
         $config = Config::limit(1)->find();
-        $isset = $config->isset;//0为从default获取人数，1为从tomorrow获取人数
         $history = $config->history;
-        $default = $config->default;
-        $tomorrow = $config->tomorrow;
 
-        //查找是否设置了今日展示
-        $ispost = $config->ispost;
-
-        //查询通过审核且未展示的人数
-        $number = Db::table('shower_msg')->where('pass', 1)->where('history', null)->where('type',0)->count();
-
-        //没有设置今日展示，设置
-
-        //$datas是需要更改history值的人
-        //判断是否设置过今日的展示信息
-        //未设置情况如下
-        if ($ispost==0) {
-            //默认设置或明日设置
-            if ($isset == 0) {
-                //从default获取人数
-                if ($number >= $default) {
-                    $datas = ShowerMsg::where('pass', 1)->where('history', null)->where('type',0)->limit($default)->column('ID');
-                    foreach ($datas as $key => $value) {
-                        $user = ShowerMsg::where('ID', $value)->find();
-                        if (empty($user))
-                            return msg(-1, 'no found');
-                        $user->history = $history+1;
-                        $user->save();
-                        if ($user == false) {
-                            return msg(-1, 'set fail');
-                        }
-
-                    }
-                } else {
-                    //没有足够的候选人，展示上一期
-                    $IDs =  ShowerMsg::where('history',$history)->where('pass',1)->where('type',0)->column('ID');
-
-                    $count = 0;
-                    $return_data=[];
-                    foreach ($IDs as $ID) {
-                        $data = Payment::where('actor', $ID)->where('openid',$openid)->where('ispay', 1)->find();
-                        if ($data != null) {
-                            $res = ShowerMsg::where('ID', $ID);
-                            $return_data[$count] = ShowerMsg::getPrivateAndOpenData($res)->find();
-                            $return_data[$count]['image'] = Picture::field('address')->where('ID', $ID)->where('type', 0)->select();
-                            foreach ($return_data[$count]['image'] as $key => $vaule) {
-                                //vaule ="{\"address\":\"202012，22\\/07316443315b68108d9f7d1299f88777.png\"}
-                                $vaule = json_decode($vaule, true);
-                                $return_data[$count]['image'][$key] = PREFIX . $vaule['address'];
-                            }
-                        } else {
-                            $res = ShowerMsg::where('ID', $ID);
-                            $return_data[$count] = ShowerMsg::getOpenData($res)->find();
-
-                            $return_data[$count]['image'] = Picture::field('address')->where('ID', $ID)->where('type', 0)->select();
-                            foreach ($return_data[$count]['image'] as $key => $vaule) {
-                                //vaule ="{\"address\":\"20201222\\/07316443315b68108d9f7d1299f88777.png\"}
-                                $vaule = json_decode($vaule, true);
-                                $return_data[$count]['image'][$key] = PREFIX . $vaule['address'];
-                            }
-                        }
-                        $count++;
-                    }
-                    return msg(0,'no enough person, show last post',$return_data);
-                    //return msg(-1, 'not enough persons');
+        //从config读取history期数，返回数据
+        $IDs =  ShowerMsg::where('history',$history)->where('pass',1)->where('type',0)->column('ID');
+        $count = 0;
+        $return_data=[];
+        foreach ($IDs as $ID) {
+            $data = Payment::where('actor', $ID)->where('openid',$openid)->where('ispay', 1)->find();
+            if ($data != null) {
+                $res = ShowerMsg::where('ID', $ID);
+                $return_data[$count] = ShowerMsg::getPrivateAndOpenData($res)->find();
+                $return_data[$count]['ispay']=1;
+                $return_data[$count]['image'] = Picture::field('address')->where('ID', $ID)->where('type', 0)->select();
+                foreach ($return_data[$count]['image'] as $key => $vaule) {
+                    //vaule ="{\"address\":\"202012，22\\/07316443315b68108d9f7d1299f88777.png\"}
+                    $vaule = json_decode($vaule, true);
+                    $return_data[$count]['image'][$key] = PREFIX . $vaule['address'];
+                }
+            } else {
+                $res = ShowerMsg::where('ID', $ID);
+                $return_data[$count] = ShowerMsg::getPrivateAndOpenData($res)->find();
+                $return_data[$count]['ispay']=0;
+                $return_data[$count]['image'] = Picture::field('address')->where('ID', $ID)->where('type', 0)->select();
+                foreach ($return_data[$count]['image'] as $key => $vaule) {
+                    //vaule ="{\"address\":\"20201222\\/07316443315b68108d9f7d1299f88777.png\"}
+                    $vaule = json_decode($vaule, true);
+                    $return_data[$count]['image'][$key] = PREFIX . $vaule['address'];
                 }
             }
-
-            if ($isset == 1) {
-                //从tomorrow获取人数
-                if ($number >= $tomorrow) {
-                    $datas = ShowerMsg::where('pass', 1)->where('history', null)->where('type',0)->limit($tomorrow)->column('ID');
-                    foreach ($datas as $key => $value) {
-                        $user = ShowerMsg::where('ID', $value)->find();
-                        if (empty($user))
-                            return msg(-1, 'no found');
-                        $user->history = $history+1;
-                        $user->save();
-                        if ($user == false) {
-                            return msg(-1, 'set fail');
-                        }
-                    }
-                } else {
-                    //没有足够的候选人，展示上一期
-                    $IDs =  ShowerMsg::where('history',$history)->where('pass',1)->where('type',0)->column('ID');
-
-                    $count = 0;
-                    $return_data=[];
-                    foreach ($IDs as $ID) {
-                        $data = Payment::where('actor', $ID)->where('openid',$openid)->where('ispay', 1)->find();
-                        if ($data != null) {
-                            $res = ShowerMsg::where('ID', $ID);
-                            $return_data[$count] = ShowerMsg::getPrivateAndOpenData($res)->find();
-                            $return_data[$count]['image'] = Picture::field('address')->where('ID', $ID)->where('type', 0)->select();
-                            foreach ($return_data[$count]['image'] as $key => $vaule) {
-                                //vaule ="{\"address\":\"202012，22\\/07316443315b68108d9f7d1299f88777.png\"}
-                                $vaule = json_decode($vaule, true);
-                                $return_data[$count]['image'][$key] = PREFIX . $vaule['address'];
-                            }
-                        } else {
-                            $res = ShowerMsg::where('ID', $ID);
-                            $return_data[$count] = ShowerMsg::getOpenData($res)->find();
-
-                            $return_data[$count]['image'] = Picture::field('address')->where('ID', $ID)->where('type', 0)->select();
-                            foreach ($return_data[$count]['image'] as $key => $vaule) {
-                                //vaule ="{\"address\":\"20201222\\/07316443315b68108d9f7d1299f88777.png\"}
-                                $vaule = json_decode($vaule, true);
-                                $return_data[$count]['image'][$key] = PREFIX . $vaule['address'];
-                            }
-                        }
-                        $count++;
-                    }
-                    return msg(0,'no enough person, show last post',$return_data);
-                    //return msg(-1, 'not enough persons');
-                }
-            }
-
-
-
-            //设置完今日展示后，更新history,使其＋1,下次从此处开始算日期
-            //在config表中添加标记ispost = 1
-            $list['ispost']=1;
-            $list['history']=$history+1;
-            $list['ID']=1;
-            $config->save($list,['ID'=>$list['ID']]);
-
-            //展示这一期
-            $IDs =  ShowerMsg::where('history',$history+1)->where('pass',1)->where('type',0)->column('ID');
-            $count = 0;
-            $return_data=[];
-            foreach ($IDs as $ID) {
-                $data = Payment::where('actor', $ID)->where('openid',$openid)->where('ispay', 1)->find();
-                if ($data != null) {
-                    $res = ShowerMsg::where('ID', $ID);
-                    $return_data[$count] = ShowerMsg::getPrivateAndOpenData($res)->find();
-                    $return_data[$count]['image'] = Picture::field('address')->where('ID', $ID)->where('type', 0)->select();
-                    foreach ($return_data[$count]['image'] as $key => $vaule) {
-                        //vaule ="{\"address\":\"202012，22\\/07316443315b68108d9f7d1299f88777.png\"}
-                        $vaule = json_decode($vaule, true);
-                        $return_data[$count]['image'][$key] = PREFIX . $vaule['address'];
-                    }
-                } else {
-                    $res = ShowerMsg::where('ID', $ID);
-                    $return_data[$count] = ShowerMsg::getOpenData($res)->find();
-
-                    $return_data[$count]['image'] = Picture::field('address')->where('ID', $ID)->where('type', 0)->select();
-                    foreach ($return_data[$count]['image'] as $key => $vaule) {
-                        //vaule ="{\"address\":\"20201222\\/07316443315b68108d9f7d1299f88777.png\"}
-                        $vaule = json_decode($vaule, true);
-                        $return_data[$count]['image'][$key] = PREFIX . $vaule['address'];
-                    }
-                }
-                $count++;
-            }
-            return msg(0,'ok',$return_data);
-            //return msg(-1, 'not enough persons');
+            $count++;
         }
-
-
-
-        //若$ispost==1，说明已经设置过，直接展示
-        if($ispost==1){
-            //$query1 = ShowerMsg::where('history',$history)->where('pass',1)->where('type',0);
-            //待添加逻辑，付费信息
-            //$datas = ShowerMsg::getOpenData($query1)->select();
-            //获取通过审核，期数为今日期数，类型为普通上墙的ID数组
-            $IDs =  ShowerMsg::where('history',$history)->where('pass',1)->where('type',0)->column('ID');
-
-            $count = 0;
-            $return_data=[];
-            foreach ($IDs as $ID) {
-                $data = Payment::where('actor', $ID)->where('openid',$openid)->where('ispay', 1)->find();
-                if ($data != null) {
-                    $res = ShowerMsg::where('ID', $ID);
-                    $return_data[$count] = ShowerMsg::getPrivateAndOpenData($res)->find();
-                    $return_data[$count]['image'] = Picture::field('address')->where('ID', $ID)->where('type', 0)->select();
-                    foreach ($return_data[$count]['image'] as $key => $vaule) {
-                        //vaule ="{\"address\":\"202012，22\\/07316443315b68108d9f7d1299f88777.png\"}
-                        $vaule = json_decode($vaule, true);
-                        $return_data[$count]['image'][$key] = PREFIX . $vaule['address'];
-                    }
-                } else {
-                    $res = ShowerMsg::where('ID', $ID);
-                    $return_data[$count] = ShowerMsg::getOpenData($res)->find();
-
-                    $return_data[$count]['image'] = Picture::field('address')->where('ID', $ID)->where('type', 0)->select();
-                    foreach ($return_data[$count]['image'] as $key => $vaule) {
-                        //vaule ="{\"address\":\"20201222\\/07316443315b68108d9f7d1299f88777.png\"}
-                        $vaule = json_decode($vaule, true);
-                        $return_data[$count]['image'][$key] = PREFIX . $vaule['address'];
-                    }
-                }
-                $count++;
-            }
-            return msg(0,'ok',$return_data);
-        }
+        return msg(0,'no enough person, show last post',$return_data);
     }
     public function picture(){
         $config = Config::limit(1)->find();

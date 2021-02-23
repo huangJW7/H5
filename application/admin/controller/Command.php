@@ -3,7 +3,9 @@ namespace app\admin\controller;
 use app\user\model\Match;
 use app\user\model\Matcher;
 use app\user\model\Option;
+use app\user\model\Picture;
 use app\user\model\ShowerMsg;
+use think\console\command\make\Model;
 use think\Controller;
 use app\admin\model\Config;
 use think\Db;
@@ -17,6 +19,63 @@ header('Access-Control-Allow-Methods:*');
 header('Access-Control-Allow-Headers:x-requested-with,content-type');
 class Command extends Controller{
 
+
+
+    public function setConfig(){
+
+        $data = Config::where('ID',1)->find();
+        $history = $data->history;
+        $isset = $data->isset;
+        $number =0;
+        if($isset == 1){
+            $number = $data->tomorrow;
+        }
+        if($isset ==0 ){
+            $number = $data->default;
+        }
+        $man = floor($number);
+        $women = $number - $man;
+        $time ='2021-02-17 16:37:00';
+
+        $event1 = Db::execute(
+            "ALTER EVENT update_config
+            ON SCHEDULE
+                EVERY 1 DAY
+                    STARTS '$time'
+            ON completion preserve ENABLE
+            DO
+            update config set history=history+1;");
+
+
+        $event2 = Db::execute(
+            "ALTER EVENT update_man_shower
+            ON SCHEDULE
+                EVERY 1 DAY
+                    STARTS '$time'
+            ON completion preserve ENABLE
+            DO
+            update shower_msg set history=$history where ID in (select t.ID from (select ID from shower_msg where type=0 and pass=1 and gender='男' and history is null limit $man) as t);");
+
+        $event3 =Db::execute (
+            "ALTER EVENT update_woman_shower
+            ON SCHEDULE
+                EVERY 1 DAY
+                    STARTS '$time'
+            ON completion preserve ENABLE
+            DO
+            update shower_msg set history=$history where ID in (select t.ID from (select ID from shower_msg where type=0 and pass=1 and gender='女' and history is null limit $women) as t);");
+
+        $event4 =Db::execute(
+            "ALTER EVENT update_config_isset
+            ON SCHEDULE
+                EVERY 1 DAY
+                    STARTS '$time'
+            ON completion preserve ENABLE
+            DO
+            update config set isset =0 where ID=1;");
+        echo $event1,$event2,$event3,$event4;
+
+    }
     public function getConfig(){
         if(!Cookie::has('jwt_admin'))
             return msg(-10);
@@ -37,7 +96,6 @@ class Command extends Controller{
             return msg(0,'you have set default post',$list);
         }
     }
-
     public function index(){
         //Config 的isset 通过mysql的事件每日变为0
 
@@ -323,7 +381,31 @@ class Command extends Controller{
 
         return msg(-1,'ok',$list);
 
+    }
 
+    public function delete(){
+
+        $openid = Request::param('openid');
+        $type = Request::param('type');
+        if(empty($openid)){
+            return msg(-1,'empty openid');
+        }
+        if (!is_numeric($type)){
+            return msg(-1,'wrong type');
+        }
+
+        if($type == 0){
+            $data = ShowerMsg::destroy($openid);
+            $where =['ID'=>['eq',$openid],'tpye'=>[['eq',0],['eq',2],['eq',-1],'or']];
+            $pictures = Picture::where($where)->column('address');
+            print_r($pictures);
+        }
+        if($type == 1){
+            $where =['ID'=>['eq',$openid],'tpye'=>[['eq',1],['eq',-1],'or']];
+            $data = Matcher::destroy($openid);
+            $pictures = Picture::where($where)->column('address');
+            print_r($pictures);
+        }
 
 
 
@@ -337,12 +419,6 @@ class Command extends Controller{
         print_r($list);
 
     }
-
-
-
-
-
-
 
 
 }
