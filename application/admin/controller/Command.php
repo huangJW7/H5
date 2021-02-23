@@ -399,15 +399,15 @@ class Command extends Controller{
         if($type == 0){
             //$data = ShowerMsg::destroy($openid);
             $pictures = Picture::where('ID',$openid)->where('type','<>',1)->column('address');
-            print_r($pictures);
+
             foreach ($pictures as $picture){
                 $filename = ROOT_PATH .$picture;
                 if(file_exists($filename)){
                     unlink($filename);
-                }else{
-                    return '我已经被删除了哦！';
                 }
             }
+            $delete = Picture::where('ID',$openid)->where('type','<>',1)->delete();
+
         }
         if($type == 1){
             //$data = Matcher::destroy($openid);
@@ -416,10 +416,9 @@ class Command extends Controller{
                 $filename = ROOT_PATH .$picture;
                 if(file_exists($filename)){
                     unlink($filename);
-                }else{
-                    return '我已经被删除了哦！';
                 }
             }
+            $pictures = Picture::where('type=1 or type =-1')->delete();
         }
 
 
