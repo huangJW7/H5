@@ -95,6 +95,7 @@ class Command extends Controller{
             $list['isset']=$isset;
             return msg(0,'you have set default post',$list);
         }
+
     }
     public function index(){
         //Config 的isset 通过mysql的事件每日变为0
@@ -387,29 +388,45 @@ class Command extends Controller{
 
         $openid = Request::param('openid');
         $type = Request::param('type');
-        if(empty($openid)){
-            return msg(-1,'empty openid');
-        }
-        if (!is_numeric($type)){
-            return msg(-1,'wrong type');
-        }
-
+//        if(empty($openid)){
+//            return msg(-1,'empty openid');
+//        }
+//        if (!is_numeric($type)){
+//            return msg(-1,'wrong type');
+//        }
+        $openid ='ontNP6MT8n-UiTxgiVTnmc94W29o';
+        $type =0;
         if($type == 0){
-            $data = ShowerMsg::destroy($openid);
-            $where =['ID'=>['eq',$openid],'tpye'=>[['eq',0],['eq',2],['eq',-1],'or']];
-            $pictures = Picture::where($where)->column('address');
+            //$data = ShowerMsg::destroy($openid);
+            $pictures = Picture::where('ID',$openid)->where('type','<>',1)->column('address');
             print_r($pictures);
+            foreach ($pictures as $picture){
+                $filename = ROOT_PATH .$picture;
+                if(file_exists($filename)){
+                    unlink($filename);
+                }else{
+                    return '我已经被删除了哦！';
+                }
+            }
         }
         if($type == 1){
-            $where =['ID'=>['eq',$openid],'tpye'=>[['eq',1],['eq',-1],'or']];
-            $data = Matcher::destroy($openid);
-            $pictures = Picture::where($where)->column('address');
-            print_r($pictures);
+            //$data = Matcher::destroy($openid);
+            $pictures = Picture::where('type=1 or type =-1')->column('address');
+            foreach ($pictures as $picture){
+                $filename = ROOT_PATH .$picture;
+                if(file_exists($filename)){
+                    unlink($filename);
+                }else{
+                    return '我已经被删除了哦！';
+                }
+            }
         }
+
 
 
 
     }
+
     public function test1(){
 
         $searchs =ShowerMsg::field('gender,count(*) as count')->group('gender')->select();
