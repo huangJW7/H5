@@ -35,6 +35,7 @@ class Command extends Controller{
         }
         $man = floor($number);
         $women = $number - $man;
+
         $time ='2021-02-17 16:37:00';
 
         $event1 = Db::execute(
@@ -327,8 +328,8 @@ class Command extends Controller{
         if ($jwt_data === NULL)
             return msg(-10);
 
-        Db::table('matcher')->where('type', 1)->update(['type' => -1]);
-        Db::table('picture')->where('type',1)->update(['type' => -1]);
+        Db::table('matcher')->delete(true);
+        Db::table('picture')->where('type = 1 or type =-1')->delete();
 
         return msg(0,'ok');
 
@@ -385,21 +386,20 @@ class Command extends Controller{
     }
 
     public function delete(){
+        //传入openid与type 将图片与个人信息 彻底删除
 
         $openid = Request::param('openid');
         $type = Request::param('type');
-//        if(empty($openid)){
-//            return msg(-1,'empty openid');
-//        }
-//        if (!is_numeric($type)){
-//            return msg(-1,'wrong type');
-//        }
-        $openid ='ontNP6MT8n-UiTxgiVTnmc94W29o';
-        $type =0;
-        if($type == 0){
-            //$data = ShowerMsg::destroy($openid);
-            $pictures = Picture::where('ID',$openid)->where('type','<>',1)->column('address');
+        if(empty($openid)){
+            return msg(-1,'empty openid');
+        }
+        if (!is_numeric($type)){
+            return msg(-1,'wrong type');
+        }
 
+        if($type == 0){
+            $data = ShowerMsg::destroy($openid);
+            $pictures = Picture::where('ID',$openid)->where('type','<>',1)->column('address');
             foreach ($pictures as $picture){
                 $filename = ROOT_PATH .$picture;
                 if(file_exists($filename)){
@@ -410,7 +410,7 @@ class Command extends Controller{
 
         }
         if($type == 1){
-            //$data = Matcher::destroy($openid);
+            $data = Matcher::destroy($openid);
             $pictures = Picture::where('type=1 or type =-1')->column('address');
             foreach ($pictures as $picture){
                 $filename = ROOT_PATH .$picture;
@@ -428,11 +428,7 @@ class Command extends Controller{
 
     public function test1(){
 
-        $searchs =ShowerMsg::field('gender,count(*) as count')->group('gender')->select();
-        foreach ($searchs as $search){
-            $list['gender'][$search->gender] = $search->count;
-        }
-        print_r($list);
+        Db::table('matcher')->delete(true);
 
     }
 

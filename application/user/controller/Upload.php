@@ -23,7 +23,12 @@ class Upload extends Controller{
             $pass = $search->pass;
             if ($pass == -1) {
                 $search->delete();
-
+            }
+            if($pass == 0){
+                $search->delete();
+            }
+            if($pass == 1){
+                return msg(-1,'you cant do this');
             }
         }
 
@@ -56,11 +61,17 @@ class Upload extends Controller{
             return msg(-1,'empty openid');
         $search = Matcher::where('ID',Request::param('openid'))->find();
         if(!empty($search)) {
-            $type = $search->type;
-            if ($type == 1) {
+            $pass = $search->pass;
+            if ($pass == 1) {
                 return msg(-1, 'you had sign up');
             }
-            $search->delete();
+            if($pass ==0){
+                $search->delete();
+            }
+            if($pass == -1){
+                $search->delete();
+            }
+
         }
 
         $data = new Matcher();
@@ -168,4 +179,5 @@ class Upload extends Controller{
             echo $file->getError();
         }
     }
+
 }
