@@ -16,6 +16,7 @@ header('Access-Control-Allow-Methods:*');
 header('Access-Control-Allow-Headers:x-requested-with,content-type');
 class Upload extends Controller{
     public function normal(){
+        $ID=Request::param('openid');
         if(empty(Request::param('openid')))
             return msg(-1,'empty openid');
         $search = ShowerMsg::where('ID',Request::param('openid'))->find();
@@ -33,7 +34,7 @@ class Upload extends Controller{
         }
 
         $data = new ShowerMsg();
-        $data->ID = Request::param('openid');
+        $data->ID = $ID;
         $data->name =Request::param('nickName');
         $data->gender = Request::param('sex');
         $data->school = Request::param('school');
