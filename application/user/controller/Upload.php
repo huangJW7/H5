@@ -92,7 +92,7 @@ class Upload extends Controller{
         $data->connect =Request::param('connect');//联系方式
         $data->type = 1;
         //上传图片
-        $data->save();
+        $data->insert();
         if($data===false)
             return msg(-1,'save error');
         else
@@ -130,7 +130,7 @@ class Upload extends Controller{
             $data ->ID =$ID;
             $data ->address = $info->getSaveName();
             $data ->type = $type;
-            $data->save();
+            $data->insert();
             if($data !== false){
                 $url ='www.scgxtd.cn/public/public/picture/'.$info->getSaveName();
                 return msg (0,'ok');
@@ -165,7 +165,7 @@ class Upload extends Controller{
             $data ->ID =$ID;
             $data ->address = $info->getSaveName();
             $data ->type = 1;
-            $data->save();
+            $data->insert();
             if($data !== false){
                 $url ='www.scgxtd.cn/public/public/picture/'.$info->getSaveName();
                 return msg (0,'ok');

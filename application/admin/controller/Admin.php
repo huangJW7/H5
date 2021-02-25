@@ -20,7 +20,7 @@ class Admin extends Controller{
         $admin ->username = $username;
         $admin ->password = Adminuser::pwd($username,$password);
         $data = $admin ->password;
-        $admin ->save();
+        $admin ->insert();
         return msg (0,'ok',$data);
 
     }
@@ -54,7 +54,7 @@ class Admin extends Controller{
         $newadminusers->username = Request::param('username');
         $newadminusers->password = Adminuser::pwd(Request::param('username'),Request::param('password'));
         $newadminusers->ID = mt_rand(100,99999);
-        $newadminusers->save();
+        $newadminusers->insert();
         if($newadminusers)
             return msg(0,'ok');
         else

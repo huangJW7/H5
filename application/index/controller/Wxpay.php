@@ -33,7 +33,7 @@ class Wxpay extends Controller{
         $data->openid =$openid;
         $data->actor =$actorID;
         $data->amount =FEE;
-        $data->save();
+        $data->insert();
         $arr =[
             'appid' =>APP_ID,
             'mch_id'=>MCH_ID,
