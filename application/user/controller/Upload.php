@@ -50,7 +50,7 @@ class Upload extends Controller{
         $data->connect =Request::param('connect');//联系方式
         $data->type = 0;
         //上传图片
-        $data->save(['ID'=>$ID]);
+        $data->insert();
         if($data===false)
             return msg(-1,'save error');
         else
