@@ -26,6 +26,7 @@ class Login extends Controller{
             return msg(-5,'wrong',$return_data);
         }
         // 登录成功
+        echo json_decode($user);
         $user->version = $user->version + 1;
         $ID = $user->ID;
         $user->save();
