@@ -27,8 +27,9 @@ class Login extends Controller{
         }
         // 登录成功
         $user->version = $user->version + 1;
+        $ID = $user->ID;
         $user->save();
-        Cookie::set('jwt_admin', jwt_encode_admin($user->ID));
+        Cookie::set('jwt_admin', jwt_encode_admin($ID));
         return msg();
 
     }
