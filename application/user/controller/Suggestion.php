@@ -24,7 +24,7 @@ class Suggestion extends Controller{
 
         $option->content = Request::param('question');
         $option->contact = Request::param('connect');
-        $option->insert();
+        $option->save();
         if($option)
             return msg(0,'ok');
         else

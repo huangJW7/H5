@@ -130,7 +130,7 @@ class Upload extends Controller{
             $data ->ID =$ID;
             $data ->address = $info->getSaveName();
             $data ->type = $type;
-            $data->insert();
+            $data->save();
             if($data !== false){
                 $url ='www.scgxtd.cn/public/public/picture/'.$info->getSaveName();
                 return msg (0,'ok');
@@ -165,7 +165,7 @@ class Upload extends Controller{
             $data ->ID =$ID;
             $data ->address = $info->getSaveName();
             $data ->type = 1;
-            $data->insert();
+            $data->save();
             if($data !== false){
                 $url ='www.scgxtd.cn/public/public/picture/'.$info->getSaveName();
                 return msg (0,'ok');

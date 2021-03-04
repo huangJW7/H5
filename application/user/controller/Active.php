@@ -55,7 +55,7 @@ class Active extends Controller{
                 $data1->ID = $openid;
                 $data1->actorID = $actorid;
                 $data1->type = 1;
-                $data1->insert();
+                $data1->save();
 
                 if($data1){
                     //记录点赞信息并返回
