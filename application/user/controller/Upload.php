@@ -50,7 +50,7 @@ class Upload extends Controller{
         $data->connect =Request::param('connect');//联系方式
         $data->type = 0;
         //上传图片
-        $data->insert();
+        $data->save();
         if($data===false)
             return msg(-1,'save error');
         else
@@ -91,8 +91,8 @@ class Upload extends Controller{
         $data->background =Request::param('background');
         $data->connect =Request::param('connect');//联系方式
         $data->type = 1;
-        //上传图片
-        $data->insert();
+
+        $data->save();
         if($data===false)
             return msg(-1,'save error');
         else
