@@ -31,6 +31,10 @@ define('NOTIFY_URL','http://www.scgxtd.cn/public/index/wxpay/notify');
 define('API_SECRET','8888888866666688888888scgxtdscgx');
 //付款金额，单位为分
 define('FEE',1);
+//男付款金额，单位为分
+define('MAN_FEE',1);
+//女付款金额，单位为分
+define('WOMAN_FEE',1);
 //图片目录
 define('ROOT_PATH','/data/www/default/public/public/picture/');
 //error_reporting(E_ERROR | E_PARSE );

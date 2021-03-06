@@ -1,5 +1,6 @@
 <?php
 namespace app\admin\controller;
+use app\admin\model\Amount;
 use app\user\model\Match;
 use app\user\model\Matcher;
 use app\user\model\Option;
@@ -35,8 +36,14 @@ class Command extends Controller{
         }
         $man = floor($number);
         $women = $number - $man;
-
-        $time ='2021-02-17 16:37:00';
+        $hour = Request::param('hour');
+        $minute = Request::param('minute');
+        if(!is_numeric($hour)|| !is_numeric($minute)){
+            return msg (-1,'wrong param');
+        }
+        $time ='2021-02-17 ';
+        $time =$time.$hour.':';
+        $time =$time.$minute.':00';
 
         $event1 = Db::execute(
             "ALTER EVENT update_config
@@ -74,7 +81,7 @@ class Command extends Controller{
             ON completion preserve ENABLE
             DO
             update config set isset =0 where ID=1;");
-        echo $event1,$event2,$event3,$event4;
+        return msg (0,"set $time ok");
 
     }
     public function getConfig(){
@@ -329,7 +336,16 @@ class Command extends Controller{
             return msg(-10);
 
         Db::table('matcher')->delete(true);
+        $pictures = Picture::where('type=1 or type =-1')->column('address');
+        foreach ($pictures as $picture){
+            $filename = ROOT_PATH .$picture;
+            if(file_exists($filename)){
+                unlink($filename);
+            }
+        }
         Db::table('picture')->where('type = 1 or type =-1')->delete();
+        Db::table('match')->delete(true);
+
 
         return msg(0,'ok');
 
@@ -425,10 +441,101 @@ class Command extends Controller{
 
 
     }
+    //导出excel
+    public function outexcel(){
+        //导出
+        $path = dirname(__FILE__); //找到当前脚本所在路径
+//        vendor("PHPExcel.PHPExcel.PHPExcel");
+//        vendor("PHPExcel.PHPExcel.Writer.IWriter");
+//        vendor("PHPExcel.PHPExcel.Writer.Abstract");
+//        vendor("PHPExcel.PHPExcel.Writer.Excel5");
+//        vendor("PHPExcel.PHPExcel.Writer.Excel2007");
+//        vendor("PHPExcel.PHPExcel.IOFactory");
+        $objPHPExcel = new \PHPExcel();
+        $objWriter = new \PHPExcel_Writer_Excel5($objPHPExcel);
+        $objWriter = new \PHPExcel_Writer_Excel2007($objPHPExcel);
 
+
+        // 实例化完了之后就先把数据库里面的数据查出来
+        $sql = Db::table('shower_msg')->select();
+
+        // 设置表头信息
+        $objPHPExcel->setActiveSheetIndex(0)
+            ->setCellValue('A1', '名称')
+            ->setCellValue('B1', '年龄')
+            ->setCellValue('C1', '地址')
+            ->setCellValue('D1', '邮箱')
+            ->setCellValue('E1', '学校')
+            ->setCellValue('F1', '身高')
+            ->setCellValue('G1', '星座')
+            ->setCellValue('H1', '性别')
+            ->setCellValue('I1', '自我介绍')
+            ->setCellValue('J1', '联系方式')
+            ->setCellValue('K1', '心中的ta')
+            ->setCellValue('L1', '点赞量')
+            ->setCellValue('M1', '学历');
+
+        /*--------------开始从数据库提取信息插入Excel表中------------------*/
+
+        $i=2;  //定义一个i变量，目的是在循环输出数据是控制行数
+        $count = count($sql);//计算有多少条数据
+        print($count);
+        for ($i = 2; $i <= $count+1; $i++) {
+            $objPHPExcel->getActiveSheet()->setCellValue('A' . $i, $sql[$i-2]['name']);
+            $objPHPExcel->getActiveSheet()->setCellValue('B' . $i, $sql[$i-2]['age']);
+            $objPHPExcel->getActiveSheet()->setCellValue('C' . $i, $sql[$i-2]['location']);
+            $objPHPExcel->getActiveSheet()->setCellValue('D' . $i, $sql[$i-2]['email']);
+            $objPHPExcel->getActiveSheet()->setCellValue('E' . $i, $sql[$i-2]['school']);
+            $objPHPExcel->getActiveSheet()->setCellValue('F' . $i, $sql[$i-2]['height']);
+            $objPHPExcel->getActiveSheet()->setCellValue('G' . $i, $sql[$i-2]['star']);
+            $objPHPExcel->getActiveSheet()->setCellValue('H' . $i, $sql[$i-2]['gender']);
+            $objPHPExcel->getActiveSheet()->setCellValue('I' . $i, $sql[$i-2]['introduction']);
+            $objPHPExcel->getActiveSheet()->setCellValue('J' . $i, $sql[$i-2]['connect']);
+            $objPHPExcel->getActiveSheet()->setCellValue('K' . $i, $sql[$i-2]['goal']);
+            $objPHPExcel->getActiveSheet()->setCellValue('L' . $i, $sql[$i-2]['like']);
+            $objPHPExcel->getActiveSheet()->setCellValue('M' . $i, $sql[$i-2]['background']);
+        }
+
+        /*--------------下面是设置其他信息------------------*/
+        ob_end_clean();
+        $objPHPExcel->getActiveSheet()->setTitle('companyInformation');      //设置sheet的名称
+        $objPHPExcel->setActiveSheetIndex(0);                   //设置sheet的起始位置
+        $objWriter = \PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');   //通过PHPExcel_IOFactory的写函数将上面数据写出来
+
+        $PHPWriter = \PHPExcel_IOFactory::createWriter( $objPHPExcel,"Excel2007");
+
+        header('Content-Disposition: attachment;filename="shower_msg.xlsx"');
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+
+        $PHPWriter->save("php://output"); //表示在$path路径下面生成demo.xlsx文件
+
+
+
+    }
+
+    public function setAmount(){
+
+
+        $fee = Request::param('fee');
+        $man = Request::param('man');
+        $woman = Request::param('woman');
+        if(!is_numeric($fee) || !is_numeric($man)||!is_numeric($woman)){
+            return msg(-1,'wrong param');
+        }
+        $data = Amount::where('ID',1)->find();
+        $data->fee = $fee;
+        $data->man = $man;
+        $data ->woman = $woman;
+        $data->save();
+
+        return msg(0,'ok');
+    }
     public function test1(){
 
-        Db::table('matcher')->delete(true);
+        $query = Amount::where('ID',1)->find();
+        echo $query->fee;
+        echo $query->man;
+        echo $query->woman;
 
     }
 

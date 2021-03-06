@@ -1,7 +1,8 @@
 <?php
 
 namespace app\index\controller;
-
+use app\admin\model\Amount;
+use think\Db;
 use app\index\model\Payment;
 use app\index\model\ShowerMsg;
 use app\user\model\Option;
@@ -27,12 +28,22 @@ class Wxpay extends Controller{
      * 构建订单
      */
     public function build($openid,$actorID,$msg){
+
+        $search = ShowerMsg::where('ID',$actorID)->field('gender')->find();
+        $query = Amount::where('ID',1)->find();
+        $fee = $query->fee;
+        if($search->gender == '男'){
+            $fee = $query->man;
+        }
+        if($search->gender == '女'){
+            $fee = $query->woman;
+        }
         $data = new Payment();
         $ID = time();
         $data->ID = $ID;
         $data->openid =$openid;
         $data->actor =$actorID;
-        $data->amount =FEE;
+        $data->amount =$fee;
         $data->save();
         $arr =[
             'appid' =>APP_ID,
@@ -40,7 +51,7 @@ class Wxpay extends Controller{
             'nonce_str'=>md5(time().'random'),
             'body'=>'成都高校脱单科技有限公司-用户信息',
             'out_trade_no'=>$ID,//内部订单号,待修改
-            'total_fee'=>FEE,//可以设为常量，添加到common.php
+            'total_fee'=>$fee,//可以设为常量，添加到common.php
             'spbill_create_ip'=>$_SERVER['REMOTE_ADDR'],
             'notify_url'=>NOTIFY_URL,//返回信息的url
             'trade_type'=>'JSAPI',
@@ -176,9 +187,9 @@ class Wxpay extends Controller{
 
         $xmlDATA = file_get_contents("php://input");
         $arr =$this->XmlToArr($xmlDATA);
-
+        $data = Amount::where('ID',1)->find();
         if($arr['return_code']=='SUCCESS' && $arr['result_code']=='SUCCESS'){
-            if($arr['total_fee']==FEE){
+            if($arr['total_fee']==$data->fee || $arr['total_fee']==$data->man || $arr['total_fee']==$data->woman){
                 //内部订单号
                 $query = Payment::where('ID',$arr['out_trade_no'])->find();
 
