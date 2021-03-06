@@ -20,7 +20,7 @@ define('APP_SECRET','ea35365c0ca500ab7cf4151d5bfe3e78');
 //商户号mch_id
 define('MCH_ID','1604807688');
 //获取openid的回调地址
-define('REDIRECT_URI','http://www.scgxtd.cn/public/dist/#/');
+define('REDIRECT_URI','http://www.scgxtd.cn/public/getcode/token');
 //网址前缀
 define('PREFIX','http://www.scgxtd.cn/public/public/picture/');
 //用于申请预订单的url
