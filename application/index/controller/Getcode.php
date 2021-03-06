@@ -57,7 +57,7 @@ class Getcode extends Controller{
         $token = file_get_contents($url);
 
         $datas = json_decode($token,true);
-        print_r($datas);
+
         foreach ($datas as $key => $value){
             if ($key == 'openid'){
                 return msg(0,'ok',$value);
