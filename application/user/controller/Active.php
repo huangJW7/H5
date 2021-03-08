@@ -31,7 +31,7 @@ class Active extends Controller{
         $search = Matcher::where('ID',$openid)->where('type',1)->find();
         $data = Matcher::where('ID',$actorid)->where('type',1)->find();
         if(empty($search)){
-            return msg(-1,'you cant match');
+            return msg(-1,'you must sign up first');
         }
         if (empty($data)){
             return msg(-1,'no such actor');
