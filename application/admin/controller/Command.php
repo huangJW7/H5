@@ -424,6 +424,7 @@ class Command extends Controller{
                 }
             }
             $delete = Picture::where('ID',$openid)->where('type=0 or type =2')->delete();
+            return msg(0,'ok');
 
         }
         if($type == 1){
@@ -436,6 +437,7 @@ class Command extends Controller{
                 }
             }
             $pictures = Picture::where('type',1)->delete();
+            return msg(0,'ok');
         }
 
 
