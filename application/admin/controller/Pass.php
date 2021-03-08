@@ -123,7 +123,7 @@ class Pass extends Controller{
         $return_data = [];
         if($pass == 1){
             if ($type == 1) {
-                $IDs = Matcher::where('pass', 1)->where('type', 1)->where('history',null)->column('ID');
+                $IDs = Matcher::where('pass', 1)->where('type', 1)->column('ID');
                 foreach ($IDs as $ID) {
                     $res = Matcher::where('ID', $ID);
                     $return_data[$count] = Matcher::getPrivateAndOpenData($res)->find();
@@ -140,7 +140,7 @@ class Pass extends Controller{
             }
 
             if ($type == 0) {
-                $IDs = ShowerMsg::where('pass',1)->where('type', 0)->where('history',null)->column('ID');
+                $IDs = ShowerMsg::where('pass',1)->where('type', 0)->column('ID');
                 foreach ($IDs as $ID) {
                     $res = ShowerMsg::where('ID', $ID);
                     $return_data[$count] = ShowerMsg::getPrivateAndOpenData($res)->find();
@@ -217,6 +217,38 @@ class Pass extends Controller{
                     $count++;
                 }
             }
+
+        }
+        if($pass == -1){
+            if($type == 0){
+                $IDs = ShowerMsg::where('pass',-1)->where('type', 0)->column('ID');
+                foreach ($IDs as $ID) {
+                    $res = ShowerMsg::where('ID', $ID);
+                    $return_data[$count] = ShowerMsg::getPrivateAndOpenData($res)->find();
+                    $return_data[$count]['image'] = Picture::field('address')->where('ID', $ID)->where('type', 0)->select();
+                    foreach ($return_data[$count]['image'] as $key => $vaule) {
+                        //vaule ="{\"address\":\"20201222\\/07316443315b68108d9f7d1299f88777.png\"}
+                        $vaule = json_decode($vaule, true);
+                        $return_data[$count]['image'][$key]['name'] = $vaule['address'];
+                        $return_data[$count]['image'][$key]['url'] = PREFIX . $vaule['address'];
+                        unset($return_data[$count]['image'][$key]['address']);
+                    }
+
+                    $return_data[$count]['backgroundIMG'] = Picture::field('address')->where('ID', $ID)->where('type', 2)->select();
+                    if (!empty($return_data[$count]['backgroundIMG'])) {
+                        foreach ($return_data[$count]['backgroundIMG'] as $k => $v) {
+
+                            $v = json_decode($v, true);
+                            $return_data[$count]['backgroundIMG'][$k]['name'] = $v['address'];
+                            $return_data[$count]['backgroundIMG'][$k]['url'] = PREFIX . $v['address'];
+                            unset($return_data[$count]['backgroundIMG'][$k]['address']);
+
+                        }
+
+                    }
+                    $count++;
+                }
+            }
         }
 
         return msg(0,'ok',$return_data);
@@ -271,8 +303,7 @@ class Pass extends Controller{
             $query= ShowerMsg::where('ID',$openid)->where('type',$type)->find();
             $query ->pass = -1;
             $query->save();
-            Db::table('picture')->where('ID',$openid)->where('type',$type)->update(['type' => -1]);
-            Db::table('picture')->where('ID',$openid)->where('type',$type)->update(['type' => -1]);
+
             if(empty($query))
                 return msg(-1,'downWall failed');
 
@@ -280,7 +311,6 @@ class Pass extends Controller{
             $search = Matcher::where('ID',$openid)->where('type',$type)->find();
             $search->pass =-1;
             $search->save();
-            Db::table('picture')->where('ID',$openid)->where('type',$type)->update(['type' => -1]);
 
             if (empty($search))
                 return msg(-1,'wrong');

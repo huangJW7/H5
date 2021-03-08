@@ -145,6 +145,7 @@ class Command extends Controller{
 
     }
     public function active(){
+
         if(!Cookie::has('jwt_admin'))
             return msg(-10);
         $jwt_data = jwt_decode_admin(Cookie::get('jwt_admin'));
@@ -415,26 +416,26 @@ class Command extends Controller{
 
         if($type == 0){
             $data = ShowerMsg::destroy($openid);
-            $pictures = Picture::where('ID',$openid)->where('type','<>',1)->column('address');
+            $pictures = Picture::where('ID',$openid)->where('type=0 or type =2')->column('address');
             foreach ($pictures as $picture){
                 $filename = ROOT_PATH .$picture;
                 if(file_exists($filename)){
                     unlink($filename);
                 }
             }
-            $delete = Picture::where('ID',$openid)->where('type','<>',1)->delete();
+            $delete = Picture::where('ID',$openid)->where('type=0 or type =2')->delete();
 
         }
         if($type == 1){
             $data = Matcher::destroy($openid);
-            $pictures = Picture::where('type=1 or type =-1')->column('address');
+            $pictures = Picture::where('type',1)->column('address');
             foreach ($pictures as $picture){
                 $filename = ROOT_PATH .$picture;
                 if(file_exists($filename)){
                     unlink($filename);
                 }
             }
-            $pictures = Picture::where('type=1 or type =-1')->delete();
+            $pictures = Picture::where('type',1)->delete();
         }
 
 
