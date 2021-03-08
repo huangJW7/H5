@@ -517,17 +517,22 @@ class Command extends Controller{
     public function setAmount(){
 
 
-        $fee = Request::param('fee');
+
         $man = Request::param('man');
         $woman = Request::param('woman');
-        if(!is_numeric($fee) || !is_numeric($man)||!is_numeric($woman)){
-            return msg(-1,'wrong param');
+        $list=[];
+        if(is_numeric($man)){
+            $list['man'] =$man;
         }
+        if(is_numeric($woman)){
+            $list['woman'] =$woman;
+        }
+        if(!is_numeric($man) ||!is_numeric($woman)){
+            return msg(-1,'you must set at least one');
+        }
+
         $data = Amount::where('ID',1)->find();
-        $data->fee = $fee;
-        $data->man = $man;
-        $data ->woman = $woman;
-        $data->save();
+        $data->save($list);
 
         return msg(0,'ok');
     }

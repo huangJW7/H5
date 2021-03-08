@@ -41,7 +41,6 @@ class Active extends Controller{
             return msg(-1,'you cant do it twice');
         if(empty($query)){
             //自己没点过赞，则
-
             //查看另一个人是否给他点赞
             $data2 = Match::where('ID',$actorid)->where('actorID',$openid)->where('type',1)->find();
             if(!empty($data2)){
