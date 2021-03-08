@@ -72,9 +72,7 @@ class Upload extends Controller{
             if($pass == -1){
                 $search->delete();
             }
-
         }
-
         $data = new Matcher();
         $data->ID = Request::param('openid');
         $data->name =Request::param('nickName');

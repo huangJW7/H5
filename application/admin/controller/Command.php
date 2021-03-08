@@ -429,14 +429,14 @@ class Command extends Controller{
         }
         if($type == 1){
             $data = Matcher::where('ID',$openid)->delete();
-            $pictures = Picture::where('type',1)->column('address');
+            $pictures = Picture::where('ID',$openid)->where('type',1)->column('address');
             foreach ($pictures as $picture){
                 $filename = ROOT_PATH .$picture;
                 if(file_exists($filename)){
                     unlink($filename);
                 }
             }
-            $pictures = Picture::where('type',1)->delete();
+            $pictures = Picture::where('ID',$openid)->where('type',1)->delete();
             return msg(0,'ok');
         }
 
