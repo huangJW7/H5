@@ -88,7 +88,7 @@ class Active extends Controller{
             $res =Matcher::where('ID', $ID);
             $return_data[$count] =Matcher::getOpenData($res)->find();
 
-            $return_data[$count]['image'] = Picture::field('address')->where('ID', $ID)->where('type', 0)->select();
+            $return_data[$count]['image'] = Picture::field('address')->where('ID', $ID)->where('type', 1)->select();
             foreach ($return_data[$count]['image'] as $key => $vaule) {
                 //vaule ="{\"address\":\"20201222\\/07316443315b68108d9f7d1299f88777.png\"}
                 $vaule = json_decode($vaule, true);
