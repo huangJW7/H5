@@ -143,7 +143,7 @@ class Pass extends Controller{
                 $IDs = ShowerMsg::where('pass',1)->where('type', 0)->column('ID');
                 foreach ($IDs as $ID) {
                     $res = ShowerMsg::where('ID', $ID);
-                    $return_data[$count] = ShowerMsg::getPrivateAndOpenData($res)->find();
+                    $return_data[$count] = ShowerMsg::getPrivateAndOpenData($res,'history')->find();
                     $return_data[$count]['image'] = Picture::field('address')->where('ID', $ID)->where('type', 0)->select();
                     foreach ($return_data[$count]['image'] as $key => $vaule) {
                         //vaule ="{\"address\":\"20201222\\/07316443315b68108d9f7d1299f88777.png\"}
