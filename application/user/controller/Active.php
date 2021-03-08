@@ -29,6 +29,7 @@ class Active extends Controller{
             return msg(-1,'empty actorid');
         }
         $search = Matcher::where('ID',$openid)->where('type',1)->find();
+        $search2 =Matcher::where('ID',$actorid)->where('actorID',$openid)->where('type',0)->find();
         $data = Matcher::where('ID',$actorid)->where('type',1)->find();
         if(empty($search)){
             return msg(-1,'you must sign up first');
@@ -39,6 +40,9 @@ class Active extends Controller{
         $query = Match::where('ID',$openid)->where('type',1)->find();
         if(!empty($query))
             return msg(-1,'you cant do it twice');
+        if(!empty($search2)){
+            return msg(-1,'you have made a pair successfully');
+        }
         if(empty($query)){
             //自己没点过赞，则
             //查看另一个人是否给他点赞
