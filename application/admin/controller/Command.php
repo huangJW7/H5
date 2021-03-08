@@ -415,7 +415,7 @@ class Command extends Controller{
         }
 
         if($type == 0){
-            $data = ShowerMsg::destroy($openid);
+            $data = ShowerMsg::where('ID',$openid)->delete();
             $pictures = Picture::where('ID',$openid)->where('type=0 or type =2')->column('address');
             foreach ($pictures as $picture){
                 $filename = ROOT_PATH .$picture;
@@ -427,7 +427,7 @@ class Command extends Controller{
 
         }
         if($type == 1){
-            $data = Matcher::destroy($openid);
+            $data = Matcher::where('ID',$openid)->delete();
             $pictures = Picture::where('type',1)->column('address');
             foreach ($pictures as $picture){
                 $filename = ROOT_PATH .$picture;
