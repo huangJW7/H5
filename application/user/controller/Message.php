@@ -28,7 +28,7 @@ class Message extends Controller{
         if(empty($openid)){
             return  msg(-1,'empty openid');
         }
-        $config = Config::limit(1)->find();
+        $config = Config::where('ID',1)->find();
         $history = $config->history;
 
         //从config读取history期数，返回数据
@@ -63,7 +63,7 @@ class Message extends Controller{
         return msg(0,'no enough person, show last post',$return_data);
     }
     public function picture(){
-        $config = Config::limit(1)->find();
+        $config = Config::where('ID',1)->find();
         $history = $config->history;
         $IDs = ShowerMsg::field('ID')->where('history',$history)->where('pass',1)->where('type',0)->select();
         $count1 = 0;

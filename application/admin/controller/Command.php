@@ -133,7 +133,7 @@ class Command extends Controller{
             }
         }
         if(isset($tomorrow)) {
-            $data = Config::limit(1)->find();
+            $data = Config::where('ID',1)->find();
             $data->tomorrow = $tomorrow;
             $data->isset = 1;
             $data->save();
