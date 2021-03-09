@@ -49,13 +49,14 @@ class Command extends Controller{
         }
         $time ='2021-02-17 ';
         $time =$time.$hour.':';
-        $time =$time.$minute.':00';
+        $set_history_time =$time.$minute.':00';
+        $time =$time.$minute.':05';
 
         $event1 = Db::execute(
             "ALTER EVENT update_config
             ON SCHEDULE
                 EVERY 1 DAY
-                    STARTS '$time'
+                    STARTS '$set_history_time'
             ON completion preserve ENABLE
             DO
             update config set history=history+1;");
