@@ -39,7 +39,8 @@ class Command extends Controller{
         if($isset ==0 ){
             $number = $data->default;
         }
-        $man = floor($number);
+
+        $man = floor($number/2);
         $women = $number - $man;
         $hour = Request::param('hour');
         $minute = Request::param('minute');
