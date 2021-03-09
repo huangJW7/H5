@@ -158,8 +158,8 @@ class Command extends Controller{
         foreach ($datas as $data){
             $oneID= $data ->ID;
             $twoID = $data ->actorID;
-            $return_data[$count][1]=Matcher::where('ID',$oneID)->find();
-            $return_data[$count][2]=Matcher::where('ID',$twoID)->find();
+            $return_data[$count]['a']=Matcher::where('ID',$oneID)->find();
+            $return_data[$count]['b']=Matcher::where('ID',$twoID)->find();
             $count++;
         }
 
