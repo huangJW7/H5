@@ -55,7 +55,7 @@ class Command extends Controller{
             "ALTER EVENT update_config
             ON SCHEDULE
                 EVERY 1 DAY
-                    STARTS 'time'
+                    STARTS '$time'
             ON completion preserve ENABLE
             DO
             update config set history=history+1;");
