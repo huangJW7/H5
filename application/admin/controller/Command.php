@@ -95,12 +95,12 @@ class Command extends Controller{
         $isset = $data->isset;
         if($isset ==1){
             $list['tomorrow'] = $data->tomorrow;
-            $list['isset']=$isset;
+
             return msg(0,'you have set tomorrow post',$list);
         }
         if($isset ==0){
             $list['default'] = $data->default;
-            $list['isset']=$isset;
+
             return msg(0,'you have set default post',$list);
         }
 
