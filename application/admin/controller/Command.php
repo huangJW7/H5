@@ -23,6 +23,11 @@ class Command extends Controller{
 
 
     public function setConfig(){
+        if(!Cookie::has('jwt_admin'))
+            return msg(-10);
+        $jwt_data = jwt_decode_admin(Cookie::get('jwt_admin'));
+        if($jwt_data === NULL)
+            return msg(-10);
 
         $data = Config::where('ID',1)->find();
         $history = $data->history;
@@ -404,6 +409,11 @@ class Command extends Controller{
 
     public function delete(){
         //传入openid与type 将图片与个人信息 彻底删除
+        if(!Cookie::has('jwt_admin'))
+            return msg(-10);
+        $jwt_data = jwt_decode_admin(Cookie::get('jwt_admin'));
+        if($jwt_data === NULL)
+            return msg(-10);
 
         $openid = Request::param('openid');
         $type = Request::param('type');
@@ -446,6 +456,11 @@ class Command extends Controller{
     }
     //导出excel
     public function outexcel(){
+        if(!Cookie::has('jwt_admin'))
+            return msg(-10);
+        $jwt_data = jwt_decode_admin(Cookie::get('jwt_admin'));
+        if($jwt_data === NULL)
+            return msg(-10);
         //导出
         $path = dirname(__FILE__); //找到当前脚本所在路径
 //        vendor("PHPExcel.PHPExcel.PHPExcel");
@@ -517,6 +532,12 @@ class Command extends Controller{
     }
 
     public function setAmount(){
+
+        if(!Cookie::has('jwt_admin'))
+            return msg(-10);
+        $jwt_data = jwt_decode_admin(Cookie::get('jwt_admin'));
+        if($jwt_data === NULL)
+            return msg(-10);
 
 
 
