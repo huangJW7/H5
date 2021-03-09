@@ -550,9 +550,6 @@ class Command extends Controller{
         if(is_numeric($woman)){
             $list['woman'] =$woman;
         }
-        if(!is_numeric($man) ||!is_numeric($woman)){
-            return msg(-1,'you must set at least one');
-        }
 
         $data = Amount::where('ID',1)->find();
         $data->save($list);
@@ -565,6 +562,9 @@ class Command extends Controller{
         echo $query->fee;
         echo $query->man;
         echo $query->woman;
+        $a = $query->man;
+        $b = $query->woman;
+        echo $a/$b;
 
     }
 
