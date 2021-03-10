@@ -160,7 +160,7 @@ class Wxpay extends Controller{
 
         $param =[
             'appId'=>APP_ID,
-            'timeStamp'=>time(),
+            'timeStamp'=>(string)time(),
             'nonceStr'=>md5(time()),
             'package'=>'prepay_id='.$prepayID,
             'signType'=>'MD5'

@@ -523,10 +523,19 @@ class Command extends Controller{
 
         $PHPWriter = \PHPExcel_IOFactory::createWriter( $objPHPExcel,"Excel2007");
 
-        header('Content-Disposition: attachment;filename="shower_msg.xlsx"');
-        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        /*header('Content-Disposition: attachment;filename="shower_msg.xlsx"');
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');*/
+        header("Content-Type: application/force-download");
+        header("Content-Type: application/octet-stream");
+        header("Content-Type: application/download");
+        header('Content-Disposition:inline;filename="shower_msg.xlsx"');
+
+
+
 
         $PHPWriter->save("php://output"); //表示在$path路径下面生成demo.xlsx文件
+
+        echo file_get_contents('shower_msg.xlsx');
 
 
 
