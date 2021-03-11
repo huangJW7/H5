@@ -530,7 +530,7 @@ class Command extends Controller{
         header("Content-Type: application/octet-stream");
         header("Content-Type: application/download");
         header('Content-Disposition:inline;filename="shower_msg.xlsx"');
-
+        header('Content-Type: application/vnd.ms-excel');
 
 
 
