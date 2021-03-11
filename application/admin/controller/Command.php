@@ -457,11 +457,11 @@ class Command extends Controller{
     }
     //导出excel
     public function outexcel(){
-        if(!Cookie::has('jwt_admin'))
-            return msg(-10);
-        $jwt_data = jwt_decode_admin(Cookie::get('jwt_admin'));
-        if($jwt_data === NULL)
-            return msg(-10);
+//        if(!Cookie::has('jwt_admin'))
+//            return msg(-10);
+//        $jwt_data = jwt_decode_admin(Cookie::get('jwt_admin'));
+//        if($jwt_data === NULL)
+//            return msg(-10);
         //导出
         $path = dirname(__FILE__); //找到当前脚本所在路径
 //        vendor("PHPExcel.PHPExcel.PHPExcel");
@@ -517,7 +517,7 @@ class Command extends Controller{
 
         /*--------------下面是设置其他信息------------------*/
         ob_end_clean();
-        $objPHPExcel->getActiveSheet()->setTitle('companyInformation');      //设置sheet的名称
+        $objPHPExcel->getActiveSheet()->setTitle('上墙用户信息表');      //设置sheet的名称
         $objPHPExcel->setActiveSheetIndex(0);                   //设置sheet的起始位置
         $objWriter = \PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');   //通过PHPExcel_IOFactory的写函数将上面数据写出来
 
