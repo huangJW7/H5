@@ -471,7 +471,7 @@ class Command extends Controller{
 //        vendor("PHPExcel.PHPExcel.Writer.Excel2007");
 //        vendor("PHPExcel.PHPExcel.IOFactory");
         $objPHPExcel = new \PHPExcel();
-        $objWriter = new \PHPExcel_Writer_Excel5($objPHPExcel);
+
         $objWriter = new \PHPExcel_Writer_Excel2007($objPHPExcel);
 
 
@@ -519,7 +519,7 @@ class Command extends Controller{
 
         $objPHPExcel->getActiveSheet()->setTitle('上墙用户信息表');      //设置sheet的名称
         $objPHPExcel->setActiveSheetIndex(0);                   //设置sheet的起始位置
-        $objWriter = \PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');   //通过PHPExcel_IOFactory的写函数将上面数据写出来
+        //通过PHPExcel_IOFactory的写函数将上面数据写出来
 
         $PHPWriter = \PHPExcel_IOFactory::createWriter( $objPHPExcel,"Excel2007");
 
