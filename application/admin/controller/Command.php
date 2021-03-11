@@ -516,7 +516,7 @@ class Command extends Controller{
         }
 
         /*--------------下面是设置其他信息------------------*/
-        ob_end_clean();
+
         $objPHPExcel->getActiveSheet()->setTitle('上墙用户信息表');      //设置sheet的名称
         $objPHPExcel->setActiveSheetIndex(0);                   //设置sheet的起始位置
         $objWriter = \PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');   //通过PHPExcel_IOFactory的写函数将上面数据写出来
@@ -525,6 +525,7 @@ class Command extends Controller{
 
         /*header('Content-Disposition: attachment;filename="shower_msg.xlsx"');
         header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');*/
+        ob_end_clean();
         header("Content-Type: application/force-download");
         header("Content-Type: application/octet-stream");
         header("Content-Type: application/download");
@@ -535,7 +536,7 @@ class Command extends Controller{
 
         $PHPWriter->save("php://output"); //表示在$path路径下面生成demo.xlsx文件
 
-        echo file_get_contents('shower_msg.xlsx');
+
 
 
 
