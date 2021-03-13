@@ -82,6 +82,11 @@ class Active extends Controller{
         if(empty($openid))
             return msg(-1,'empty openid');
 
+        $search = Matcher::where('ID',$openid)->find();
+        if(empty($search)){
+            return msg(-1,'you must sing up first');
+        }
+
 
         $IDs = Matcher::where('pass',1)->where('type', 1)->column('ID');
 
