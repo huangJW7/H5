@@ -28,8 +28,8 @@ class Message extends Controller{
         if(empty($openid)){
             return  msg(-1,'empty openid');
         }
-        $config = Config::where('ID',1)->find();
-        $history = $config->history;
+        $history = Db::table('shower_msg')->max('history');
+
 
         //从config读取history期数，返回数据
         $IDs =  ShowerMsg::where('history',$history)->where('pass',1)->where('type',0)->column('ID');

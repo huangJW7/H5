@@ -569,14 +569,8 @@ class Command extends Controller{
     }
     public function test1(){
 
-        $query = Amount::where('ID',1)->find();
-        echo $query->fee;
-        echo $query->man;
-        echo $query->woman;
-        $a = $query->man;
-        $b = $query->woman;
-        echo $a/$b;
-
+        $history = Db::table('shower_msg')->max('history');
+        echo $history;
     }
 
 
