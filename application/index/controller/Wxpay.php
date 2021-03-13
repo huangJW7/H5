@@ -49,7 +49,7 @@ class Wxpay extends Controller{
             'appid' =>APP_ID,
             'mch_id'=>MCH_ID,
             'nonce_str'=>md5(time().'random'),
-            'body'=>'成都高校脱单科技有限公司-用户信息',
+            'body'=>'成都高校脱单科技有限公司-相亲交友会员费',
             'out_trade_no'=>$ID,//内部订单号,待修改
             'total_fee'=>$fee,//可以设为常量，添加到common.php
             'spbill_create_ip'=>$_SERVER['REMOTE_ADDR'],

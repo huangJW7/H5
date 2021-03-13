@@ -23,9 +23,25 @@ class Upload extends Controller{
         if(!empty($search)) {
             $pass = $search->pass;
             if ($pass == -1) {
+                $pictures = Picture::where('ID',$ID)->where('type=0 or type =2')->column('address');
+                foreach ($pictures as $picture){
+                    $filename = ROOT_PATH .$picture;
+                    if(file_exists($filename)){
+                        unlink($filename);
+                    }
+                }
+                $delete = Picture::where('ID',$ID)->where('type=0 or type =2')->delete();
                 $search->delete();
             }
             if($pass == 0){
+                $pictures = Picture::where('ID',$ID)->where('type=0 or type =2')->column('address');
+                foreach ($pictures as $picture){
+                    $filename = ROOT_PATH .$picture;
+                    if(file_exists($filename)){
+                        unlink($filename);
+                    }
+                }
+                $delete = Picture::where('ID',$ID)->where('type=0 or type =2')->delete();
                 $search->delete();
             }
             if($pass == 1){

@@ -29,7 +29,7 @@ class Active extends Controller{
             return msg(-1,'empty actorid');
         }
         $search = Matcher::where('ID',$openid)->where('type',1)->find();
-        $search2 =Matcher::where('ID',$actorid)->where('actorID',$openid)->where('type',0)->find();
+
         $data = Matcher::where('ID',$actorid)->where('type',1)->find();
         if(empty($search)){
             return msg(-1,'you must sign up first');
@@ -40,6 +40,7 @@ class Active extends Controller{
         $query = Match::where('ID',$openid)->where('type',1)->find();
         if(!empty($query))
             return msg(-1,'you cant do it twice');
+        $search2 =Match::where('ID',$actorid)->where('actorID',$openid)->where('type',0)->find();
         if(!empty($search2)){
             return msg(-1,'you have made a pair successfully');
         }
@@ -103,7 +104,19 @@ class Active extends Controller{
         return msg(0,'ok',$return_data);
 
     }
-    public function change(){
+    public function check(){
+        $openid = Request::param('openid');
+        if(empty($openid))
+            return msg(-1,'empty openid');
+
+        $search = Matcher::where('ID',$openid)->find();
+        if(empty($search)){
+            return msg(-1,'you must sing up first');
+        }else{
+            return msg(0);
+        }
+
+
         //删除showermsg，picture，match中type=-1的字段
         //bug待解决:若已经成功配对，则不能参与后续活动
 
