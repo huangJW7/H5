@@ -48,7 +48,7 @@ class History extends Controller{
         $school = Request::param('school');
 
         //
-        $query = ShowerMsg::where('pass', 1);
+        $query = ShowerMsg::where('pass', 1)->where('history','not null');
 
         if (is_numeric($maxage) && is_numeric($minage))
 
