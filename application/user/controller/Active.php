@@ -41,7 +41,8 @@ class Active extends Controller{
         if(!empty($query))
             return msg(-1,'you cant do it twice');
         $search2 =Match::where('ID',$actorid)->where('actorID',$openid)->where('type',0)->find();
-        if(!empty($search2)){
+        $search3 =Match::where('ID',$openid)->where('actorID',$actorid)->where('type',0)->find();
+        if(!empty($search2) || !empty($search3)){
             return msg(-1,'you have made a pair successfully');
         }
         if(empty($query)){
