@@ -38,6 +38,8 @@ define('WOMAN_FEE',1);
 //图片目录
 define('ROOT_PATH','/data/www/default/public/public/picture/');
 //error_reporting(E_ERROR | E_PARSE );
+define('WEIBO_APPKEY','3190024882');
+define('WEIBO_redirect_url','http://www.scgxtd.cn/public/index/getcode/getwbcode');
 function msg($msgcode = 0, $msg = "", $data = null)
 {
     $common_msg = [

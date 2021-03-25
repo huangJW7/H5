@@ -114,7 +114,7 @@ class Message extends Controller{
             return msg(-1,'empty email');
         $openID = Request::param('openid');
         $email =  Request::param('email');
-        $query =ShowerMsg::where('openid',$openID)->where('email',$email)->find();
+        $query =ShowerMsg::where('ID',$openID)->where('email',$email)->find();
         if(empty($query))
             return msg(-1,'email or openid wrong');
         /*

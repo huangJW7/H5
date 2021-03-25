@@ -65,6 +65,55 @@ class Getcode extends Controller{
         }
     }
 
+    public function getwbcode(){
+
+
+        /*使用code得到access_token
+        *并存储到数据库(未实现)
+        *https://api.weixin.qq.com/sns/oauth2/access_token?appid=APPID&secret=SECRET&code=CODE
+        &grant_type=authorization_code*/
+        $code = Request::param('code');
+        if (empty($code)){
+            return msg(-1,'empty wb code');
+        }
+
+        $state = Request::param('state');
+        $url ="";
+        $url= $url."https://api.weibo.com/oauth2/access_token";
+        $url= $url."appid=".APP_ID;
+        $url= $url."&secret=".APP_SECRET;
+        $url= $url."&code=".$code;
+        $url= $url."&grant_type=authorization_code";
+        $token ="";
+        $token = file_get_contents($url);
+
+        $datas = json_decode($token,true);
+
+        foreach ($datas as $key => $value){
+            if ($key == 'openid'){
+                return msg(0,'ok',$value);
+            }
+        }
+    }
+    public function send(){
+        /*
+         * 该接口可以得到用户访问的链接
+         * 并直接跳入用户的入口界面REDIRECT_URI
+         */
+
+        $url ="";
+        $url="https://api.weibo.com/oauth2/authorize?";
+        $url=$url."client_id=".WEIBO_APPKEY;
+        $url=$url."&redirect_uri=".urlencode(WEIBO_redirect_url);//REDIRECT_URI是返回信息的地址
+
+        //跳转到链接
+        //https://open.weixin.qq.com/connect/oauth2/authorize?appid=APPID&redirect_uri=REDIRECT_URI&
+        //response_type=code&scope=SCOPE&state=STATE#wechat_redirect
+        header("Location:$url");
+        exit();
+
+    }
+
 
 
 }
