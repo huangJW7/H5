@@ -59,7 +59,7 @@ class Getcode extends Controller{
         $datas = json_decode($token,true);
 
         foreach ($datas as $key => $value){
-            if ($key == 'openid'){
+            if ($key == 'code'){
                 return msg(0,'ok',$value);
             }
         }
@@ -96,10 +96,7 @@ class Getcode extends Controller{
         }
     }
     public function send(){
-        /*
-         * 该接口可以得到用户访问的链接
-         * 并直接跳入用户的入口界面REDIRECT_URI
-         */
+
 
         $url ="";
         $url="https://api.weibo.com/oauth2/authorize?";

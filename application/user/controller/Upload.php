@@ -163,8 +163,11 @@ class Upload extends Controller{
         //互选图片接口
         if(empty(Request::param('id')))
             return msg(-1,'empty id');
-        //type区分 1为互选 0为上墙 -1为弃用
+        //type区分 1为互选 0为上墙 -1为弃用,3为互选学历
+        $type = Request::param('type');
 
+        if(!is_numeric($type))
+            return msg(-1,'wrong type');
 
         $ID =Request::param('id');
         $query = Matcher::where('id',$ID)->find();
@@ -178,7 +181,7 @@ class Upload extends Controller{
             $data = new Picture();
             $data ->ID =$ID;
             $data ->address = $info->getSaveName();
-            $data ->type = 1;
+            $data ->type = $type;
             $data->save();
             if($data !== false){
                 $url ='www.scgxtd.cn/public/public/picture/'.$info->getSaveName();

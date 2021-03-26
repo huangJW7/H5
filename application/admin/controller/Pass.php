@@ -135,6 +135,18 @@ class Pass extends Controller{
                         $return_data[$count]['image'][$key]['url'] = PREFIX . $vaule['address'];
                         unset($return_data[$count]['image'][$key]['address']);
                     }
+                    $return_data[$count]['backgroundIMG']=Picture::field('address')->where('ID', $ID)->where('type', 3)->select();
+                    if(!empty($return_data[$count]['backgroundIMG'])){
+                        foreach ($return_data[$count]['backgroundIMG'] as $k=>$v){
+                            $v = json_decode($v, true);
+                            $return_data[$count]['backgroundIMG'][$k]['name']=$v['address'];
+                            $return_data[$count]['backgroundIMG'][$k]['url'] =PREFIX . $v['address'];
+                            unset($return_data[$count]['backgroundIMG'][$k]['address']);
+
+                        }
+
+                    }
+
                     $count++;
                 }
             }
@@ -183,6 +195,16 @@ class Pass extends Controller{
                         $return_data[$count]['image'][$key]['url'] = PREFIX . $vaule['address'];
                         unset($return_data[$count]['image'][$key]['address']);
                     }
+                    $return_data[$count]['backgroundIMG']=Picture::field('address')->where('ID', $ID)->where('type', 3)->select();
+                    if(!empty($return_data[$count]['backgroundIMG'])){
+                        foreach ($return_data[$count]['backgroundIMG'] as $k=>$v){
+                            $v = json_decode($v, true);
+                            $return_data[$count]['backgroundIMG'][$k]['name']=$v['address'];
+                            $return_data[$count]['backgroundIMG'][$k]['url'] =PREFIX . $v['address'];
+                            unset($return_data[$count]['backgroundIMG'][$k]['address']);
+                        }
+                    }
+
                     $count++;
                 }
             }
@@ -210,7 +232,6 @@ class Pass extends Controller{
                             $return_data[$count]['backgroundIMG'][$k]['name']=$v['address'];
                             $return_data[$count]['backgroundIMG'][$k]['url'] =PREFIX . $v['address'];
                             unset($return_data[$count]['backgroundIMG'][$k]['address']);
-
                         }
 
                     }
