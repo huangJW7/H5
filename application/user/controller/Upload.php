@@ -76,6 +76,7 @@ class Upload extends Controller{
     public function active(){
         if(empty(Request::param('openid')))
             return msg(-1,'empty openid');
+        $ID = Request::param('openid');
         $search = Matcher::where('ID',Request::param('openid'))->find();
         if(!empty($search)) {
             $pass = $search->pass;
@@ -83,9 +84,25 @@ class Upload extends Controller{
                 return msg(-1, 'you had sign up');
             }
             if($pass ==0){
+                $pictures = Picture::where('ID',$ID)->where('type=1 or type =3')->column('address');
+                foreach ($pictures as $picture){
+                    $filename = ROOT_PATH .$picture;
+                    if(file_exists($filename)){
+                        unlink($filename);
+                    }
+                }
+                $delete = Picture::where('ID',$ID)->where('type=1 or type =3')->delete();
                 $search->delete();
             }
             if($pass == -1){
+                $pictures = Picture::where('ID',$ID)->where('type=1 or type =3')->column('address');
+                foreach ($pictures as $picture){
+                    $filename = ROOT_PATH .$picture;
+                    if(file_exists($filename)){
+                        unlink($filename);
+                    }
+                }
+                $delete = Picture::where('ID',$ID)->where('type=1 or type =3')->delete();
                 $search->delete();
             }
         }

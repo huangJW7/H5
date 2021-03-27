@@ -20,10 +20,10 @@ class Matcher extends Model
     public static function getPrivateAndOpenData($query,$option=""){
 
         if($option =='history'){
-            $query->field('ID,name,age,location,school,height,star,gender,introduction,goal,like,history,background,connect');
+            $query->field('ID,name,age,location,school,height,star,gender,introduction,goal,like,history,background,connect,email');
         }
         else{
-            $query->field('ID,name,age,location,school,height,star,gender,introduction,goal,like,background,connect');
+            $query->field('ID,name,age,location,school,height,star,gender,introduction,goal,like,background,connect,email');
         }
 
         return $query;

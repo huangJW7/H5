@@ -127,6 +127,7 @@ class Pass extends Controller{
                 foreach ($IDs as $ID) {
                     $res = Matcher::where('ID', $ID);
                     $return_data[$count] = Matcher::getPrivateAndOpenData($res)->find();
+                    $return_data[$count]['mail']=$return_data[$count]['email'];
                     $return_data[$count]['image'] = Picture::field('address')->where('ID', $ID)->where('type', 1)->select();
                     foreach ($return_data[$count]['image'] as $key => $vaule) {
                         //vaule ="{\"address\":\"20201222\\/07316443315b68108d9f7d1299f88777.png\"}
@@ -156,6 +157,7 @@ class Pass extends Controller{
                 foreach ($IDs as $ID) {
                     $res = ShowerMsg::where('ID', $ID);
                     $return_data[$count] = ShowerMsg::getPrivateAndOpenData($res,'history')->find();
+                    $return_data[$count]['mail']=$return_data[$count]['email'];
                     $return_data[$count]['image'] = Picture::field('address')->where('ID', $ID)->where('type', 0)->select();
                     foreach ($return_data[$count]['image'] as $key => $vaule) {
                         //vaule ="{\"address\":\"20201222\\/07316443315b68108d9f7d1299f88777.png\"}
@@ -187,6 +189,7 @@ class Pass extends Controller{
                 foreach ($IDs as $ID) {
                     $res = Matcher::where('ID', $ID);
                     $return_data[$count] = Matcher::getPrivateAndOpenData($res)->find();
+                    $return_data[$count]['mail']=$return_data[$count]['email'];
                     $return_data[$count]['image'] = Picture::field('address')->where('ID', $ID)->where('type', 1)->select();
                     foreach ($return_data[$count]['image'] as $key => $vaule) {
                         //vaule ="{\"address\":\"20201222\\/07316443315b68108d9f7d1299f88777.png\"}
@@ -214,6 +217,7 @@ class Pass extends Controller{
                 foreach ($IDs as $ID) {
                     $res = ShowerMsg::where('ID', $ID);
                     $return_data[$count] = ShowerMsg::getPrivateAndOpenData($res)->find();
+                    $return_data[$count]['mail']=$return_data[$count]['email'];
                     $return_data[$count]['image'] = Picture::field('address')->where('ID', $ID)->where('type', 0)->select();
 
                     foreach ($return_data[$count]['image'] as $key => $vaule) {
@@ -246,6 +250,7 @@ class Pass extends Controller{
                 foreach ($IDs as $ID) {
                     $res = ShowerMsg::where('ID', $ID);
                     $return_data[$count] = ShowerMsg::getPrivateAndOpenData($res)->find();
+                    $return_data[$count]['mail']=$return_data[$count]['email'];
                     $return_data[$count]['image'] = Picture::field('address')->where('ID', $ID)->where('type', 0)->select();
                     foreach ($return_data[$count]['image'] as $key => $vaule) {
                         //vaule ="{\"address\":\"20201222\\/07316443315b68108d9f7d1299f88777.png\"}
