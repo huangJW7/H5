@@ -583,6 +583,9 @@ class Command extends Controller{
 
     public function saveWBAccessToken(){
         $access_token = Request::param('accesstoken');
+        if(empty($access_token)){
+            return msg(-1,'empty');
+        }
         $search = Wb::where(ID,1)->delete();
         $data = new Wb();
         $data->ID = 1;
