@@ -1,6 +1,7 @@
 <?php
 namespace app\admin\controller;
 use app\admin\model\Amount;
+use app\admin\model\Wb;
 use app\user\model\Match;
 use app\user\model\Matcher;
 use app\user\model\Option;
@@ -571,6 +572,22 @@ class Command extends Controller{
 
         $history = Db::table('shower_msg')->max('history');
         echo $history;
+    }
+
+    public function getWBAccessToken(){
+        
+        return json();
+
+
+    }
+
+    public function saveWBAccessToken(){
+        $access_token = Request::param('accesstoken');
+        $data = new Wb();
+        $data->ID = 1;
+        $data->token = $access_token;
+        $data->save();
+        header("Location:http://scgxtd.cn/public/libweibo-master/weibolist.php?access_token=$access_token");
     }
 
 

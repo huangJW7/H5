@@ -16,9 +16,22 @@ if (isset($_REQUEST['code'])) {
 	}
 }
 
+
+
+
 if ($token) {
 	$_SESSION['token'] = $token;
 	setcookie( 'weibojs_'.$o->client_id, http_build_query($token) );
+//发送到数据库储存access_token
+if(array_key_exists('access_token',$token)){
+    $url ="";
+    $url ="http://www.scgxtd.cn/public/admin/command/saveWBaccesstoken?";
+    $url.="accesstoken=".$token['access_token'];
+    header("Location:$url");
+}
+
+
+
 ?>
 授权完成,<a href="weibolist.php">进入你的微博列表页面</a><br />
 <?php

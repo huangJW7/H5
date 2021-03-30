@@ -3,8 +3,12 @@ session_start();
 
 include_once( 'config.php' );
 include_once( 'saetv2.ex.class.php' );
+if (isset($_REQUEST['access_token'])) {
+    $c = new SaeTClientV2( WB_AKEY , WB_SKEY , $_REQUEST['access_token'] );
+} else{
+    $c = new SaeTClientV2( WB_AKEY , WB_SKEY , $_SESSION['token']['access_token'] );
+}
 
-$c = new SaeTClientV2( WB_AKEY , WB_SKEY , $_SESSION['token']['access_token'] );
 $ms  = $c->home_timeline(); // done
 $uid_get = $c->get_uid();
 $uid = $uid_get['uid'];
