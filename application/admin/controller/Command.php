@@ -586,7 +586,7 @@ class Command extends Controller{
         if(empty($access_token)){
             return msg(-1,'empty');
         }
-        $search = Wb::where(ID,1)->delete();
+        $search = Wb::where('ID',1)->delete();
         $data = new Wb();
         $data->ID = 1;
         $data->token = $access_token;
