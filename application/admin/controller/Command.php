@@ -588,7 +588,9 @@ class Command extends Controller{
         $data->ID = 1;
         $data->token = $access_token;
         $data->save();
-        header("Location:http://scgxtd.cn/public/libweibo-master/weibolist.php?access_token=$access_token");
+        if($data){
+            return msg(0,$access_token);
+        }
     }
 
 
