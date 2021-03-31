@@ -45,7 +45,7 @@ class Upload extends Controller{
                 $search->delete();
             }
             if($pass == 1){
-                return msg(-1,'you cant do this');
+                return msg(-1,'系统已经存在您的信息，请联系管理员');
             }
         }
 
