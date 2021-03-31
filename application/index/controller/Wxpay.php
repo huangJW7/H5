@@ -38,6 +38,10 @@ class Wxpay extends Controller{
         if($search->gender == '女'){
             $fee = $query->woman;
         }
+
+        //清空之前无效订单
+
+        $delete = Payment::where('openid',$openid)->where('actor',$actorID)->where('ispay',0)->delete();
         $data = new Payment();
         $ID = time();
         $data->ID = $ID;
