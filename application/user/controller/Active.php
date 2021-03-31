@@ -29,7 +29,7 @@ class Active extends Controller{
             return msg(-1,'empty actorid');
         }
         $search = Matcher::where('ID',$openid)->where('pass',1)->find();
-        $data = Matcher::where('ID',$actorid)->where('type',1)->find();
+        $data = Matcher::where('ID',$actorid)->where('pass',1)->find();
 
         if(empty($search)){
             return msg(-1,'请先报名活动');
