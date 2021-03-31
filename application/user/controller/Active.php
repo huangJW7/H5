@@ -28,15 +28,17 @@ class Active extends Controller{
         if(empty($actorid)){
             return msg(-1,'empty actorid');
         }
-        $search = Matcher::where('ID',$openid)->where('type',1)->find();
-
+        $search = Matcher::where('ID',$openid)->where('pass',1)->find();
         $data = Matcher::where('ID',$actorid)->where('type',1)->find();
+
         if(empty($search)){
             return msg(-1,'请先报名活动');
         }
         if (empty($data)){
             return msg(-1,'没有目标用户');
         }
+        $start = new Match();
+        $start->startTrans();
         $query = Match::where('ID',$openid)->where('type',1)->find();
         if(!empty($query))
             return msg(-1,'每个用户只能点赞一次');
