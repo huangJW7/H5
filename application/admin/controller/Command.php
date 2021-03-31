@@ -13,7 +13,7 @@ use app\admin\model\Config;
 use think\Db;
 use think\facade\Cookie;
 use think\facade\Request;
-require_once ('extend/saetv2.ex.class.php');
+
 // 指定允许其他域名访问
 header('Access-Control-Allow-Origin:*');
 // 响应类型
