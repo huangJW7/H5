@@ -32,18 +32,18 @@ class Active extends Controller{
 
         $data = Matcher::where('ID',$actorid)->where('type',1)->find();
         if(empty($search)){
-            return msg(-1,'you must sign up first');
+            return msg(-1,'请先报名活动');
         }
         if (empty($data)){
-            return msg(-1,'no such actor');
+            return msg(-1,'没有目标用户');
         }
         $query = Match::where('ID',$openid)->where('type',1)->find();
         if(!empty($query))
-            return msg(-1,'you cant do it twice');
+            return msg(-1,'每个用户只能点赞一次');
         $search2 =Match::where('actorID',$openid)->where('type',0)->find();
         $search3 =Match::where('ID',$openid)->where('type',0)->find();
         if(!empty($search2) || !empty($search3)){
-            return msg(-1,'you have made a pair successfully');
+            return msg(-1,'每个用户只能点赞一次');
         }
         if(empty($query)){
             //自己没点过赞，则
