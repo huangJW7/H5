@@ -205,6 +205,7 @@ class Wxpay extends Controller{
                 $query->ID = $arr['out_trade_no'];
                 $query->save();
 
+                $delete = Payment::where('ispay',0)->delete();
                 $return_params=[
                     'return_code'=>'SUCCESS',
                     'return_msg'=>'OK'
