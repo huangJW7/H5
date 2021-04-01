@@ -81,7 +81,7 @@ class Upload extends Controller{
         if(!empty($search)) {
             $pass = $search->pass;
             if ($pass == 1) {
-                return msg(-1, 'you had sign up');
+                return msg(-1, '您已经报名成功且通过审核');
             }
             if($pass ==0){
                 $pictures = Picture::where('ID',$ID)->where('type=1 or type =3')->column('address');
