@@ -90,9 +90,9 @@ class Active extends Controller{
         if(empty($openid))
             return msg(-1,'empty openid');
 
-        $search = Matcher::where('ID',$openid)->find();
+        $search = Matcher::where('ID',$openid)->where('pass',1)->find();
         if(empty($search)){
-            return msg(-1,'you must sing up first');
+            return msg(-1,'尚未报名或通过审核');
         }
 
 
