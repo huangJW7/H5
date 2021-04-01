@@ -116,15 +116,21 @@ class Message extends Controller{
         $email =  Request::param('email');
         $query =ShowerMsg::where('ID',$openID)->where('email',$email)->find();
         if(empty($query))
-            return msg(-1,'email or openid wrong');
+            return msg(-1,'邮箱与用户不匹配');
         /*
          * pass =1表示上墙中，0表示审核中，-1表示下墙或审核失败
          * 这里可以改变两种状态
          */
         $query ->pass = -1;
         $query->save();
-        if($query===false)
-            return msg(-1,'update fail');
+        if($query===false){
+            return msg(-1,'下墙失败');
+        }
+
+        else{
+            return msg(0,'下墙成功');
+
+        }
 
     }
 
