@@ -40,11 +40,15 @@ class Active extends Controller{
         $start = new Match();
         $start->startTrans();
         $query = Match::where('ID',$openid)->where('type',1)->find();
-        if(!empty($query))
+        if(!empty($query)){
+            $start->commit();
             return msg(-1,'每个用户只能点赞一次');
+        }
+
         $search2 =Match::where('actorID',$openid)->where('type',0)->find();
         $search3 =Match::where('ID',$openid)->where('type',0)->find();
         if(!empty($search2) || !empty($search3)){
+            $start->commit();
             return msg(-1,'每个用户只能点赞一次');
         }
         if(empty($query)){
@@ -55,6 +59,7 @@ class Active extends Controller{
                 //两人匹配成功，更新Match表，其中type = 0 表示成功匹配
                 $data2 ->type =0;
                 $data2->save();
+                $start->commit();
                 return msg(0,'ok');
             }else{
                 //对方没有给你点赞
@@ -63,7 +68,7 @@ class Active extends Controller{
                 $data1->actorID = $actorid;
                 $data1->type = 1;
                 $data1->save();
-
+                $start->commit();
                 if($data1){
                     //记录点赞信息并返回
                     return msg(0,'ok');
