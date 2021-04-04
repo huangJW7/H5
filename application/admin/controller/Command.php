@@ -602,7 +602,7 @@ class Command extends Controller{
 
         $o = new \SaeTClientV2('3190024882' , '747c0c57d6e943ddeff70f496a2b9544' , $access_token);
 
-        $text ="测试   换行了吗  这次呢";
+        $text ="http://www.scgxtd.cn/public/public/picture/20210404/042acc16c4234f2f5b45dd4411bd4ed3.png 测试   换行了吗  这次呢";
         $app_img_file = __DIR__.'/../../../public/public/picture/20210404/042acc16c4234f2f5b45dd4411bd4ed3.png';
         if (file_exists($app_img_file)) {
             $fp = fopen($app_img_file, "r");
@@ -610,9 +610,11 @@ class Command extends Controller{
             fclose($fp);
         }
         $post_text = urlencode($text);
-        $ret = $o->share($post_text,$content);	//发送微博
+        $content1 = 'http://www.scgxtd.cn/public/public/picture/20210404/042acc16c4234f2f5b45dd4411bd4ed3.png';
+        $ret = $o->share($post_text,$content1);	//发送微博
         if ( isset($ret['error_code']) && $ret['error_code'] > 0 ) {
             echo "<p>发送失败，错误：{$ret['error_code']}:{$ret['error']}</p>";
+            echo $content;
         } else {
             echo "<p>发送成功</p>";
         }
