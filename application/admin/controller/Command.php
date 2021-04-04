@@ -13,7 +13,7 @@ use app\admin\model\Config;
 use think\Db;
 use think\facade\Cookie;
 use think\facade\Request;
-use SaeTClientV2;
+require __DIR__.'/../../../public/libweibo-master/saetv2.ex.class.php' ;
 // 指定允许其他域名访问
 header('Access-Control-Allow-Origin:*');
 // 响应类型
@@ -599,7 +599,8 @@ class Command extends Controller{
     public function asd(){
         $data = Wb::where('ID',1)->find();
         $access_token = $data->token;
-        $o = new SaeTClientV2(WB_AKEY , WB_SKEY , $access_token);
+
+        $o = new \SaeTClientV2('3190024882' , '747c0c57d6e943ddeff70f496a2b9544' , $access_token);
         $text ="测试   换行了吗  这次呢";
         $pic_url ="http://www.scgxtd.cn/public/public/picture/20210324/c4164f164b0b9b63f4982799e9fbb04c.png";
         $ret = $o->upload_url_text($text,$pic_url);	//发送微博

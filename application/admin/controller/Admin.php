@@ -74,6 +74,9 @@ class Admin extends Controller{
             return msg(-1, "ID empty");
         if (Request::param('ID') === $jwt_data['ID'])
             return msg(-1, "can't delete yourself");
+        if ($jwt_data['ID'] != 1){
+            return msg('你没有此权限');
+        }
         $data = Adminuser::where('ID', Request::param('ID'))->find();
         if (empty($data))
             return msg(-60);
