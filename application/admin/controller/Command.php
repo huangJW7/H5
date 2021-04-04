@@ -601,9 +601,16 @@ class Command extends Controller{
         $access_token = $data->token;
 
         $o = new \SaeTClientV2('3190024882' , '747c0c57d6e943ddeff70f496a2b9544' , $access_token);
+
         $text ="测试   换行了吗  这次呢";
-        $pic_url ="http://www.scgxtd.cn/public/public/picture/20210324/c4164f164b0b9b63f4982799e9fbb04c.png";
-        $ret = $o->upload_url_text($text,$pic_url);	//发送微博
+        $app_img_file = __DIR__.'/../../../public/public/picture/20210404/042acc16c4234f2f5b45dd4411bd4ed3.png';
+        if (file_exists($app_img_file)) {
+            $fp = fopen($app_img_file, "r");
+            $content = fread($fp, filesize($app_img_file));
+            fclose($fp);
+        }
+        $post_text = urlencode($text);
+        $ret = $o->share($post_text,$content);	//发送微博
         if ( isset($ret['error_code']) && $ret['error_code'] > 0 ) {
             echo "<p>发送失败，错误：{$ret['error_code']}:{$ret['error']}</p>";
         } else {
