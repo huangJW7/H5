@@ -602,7 +602,10 @@ class Command extends Controller{
 
         $o = new \SaeTClientV2('3190024882' , '747c0c57d6e943ddeff70f496a2b9544' , $access_token);
 
-        $text ="测试   换行了吗  这次呢? http://www.scgxtd.cn/public/dist/img/qrcode.6f760a25.png";
+        $text ="测试
+        换行了吗  
+        这次呢? 
+        http://www.scgxtd.cn/public/dist/img/qrcode.6f760a25.png";
         $app_img_file = __DIR__.'/../../../public/public/picture/20210404/042acc16c4234f2f5b45dd4411bd4ed3.png';
         if (file_exists($app_img_file)) {
             $fp = fopen($app_img_file, "r");
