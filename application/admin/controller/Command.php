@@ -206,11 +206,14 @@ class Command extends Controller{
         if ($jwt_data === NULL)
             return msg(-10);
 
+
         $openid = Request::param('openid');
         if(empty($openid))
             return msg(-1,'empty openid');
 
         $data = ShowerMsg::where('ID',$openid)->find();
+        $config_data = Wb::where('ID',1)->find();
+        $like = $config_data->likes;
 
         if(empty($data))
             return msg(-1,'no such person');
@@ -249,8 +252,16 @@ class Command extends Controller{
         if(!empty(Request::param('target')))
             $list['goal']=Request::param('target');
 
-        if(is_numeric(Request::param('like')))
+        if(is_numeric(Request::param('like'))){
             $list['like']=Request::param('like');
+            if(Request::param('like')>=$like){
+                //发送微博
+                
+            }
+        }
+
+
+
 
         if(!empty(Request::param('background')))
             $list['background']=Request::param('background');
@@ -571,16 +582,42 @@ class Command extends Controller{
     }
     public function test1(){
 
-        $history = Db::table('shower_msg')->max('history');
-        echo $history;
+        echo   date("Y-m-d", strtotime("+1 months",strtotime("now")));
     }
 
-    public function getWBAccessToken(){
-        
-        return json();
+    public function getMessage(){
+        if(!Cookie::has('jwt_admin'))
+            return msg(-10);
+        $jwt_data = jwt_decode_admin(Cookie::get('jwt_admin'));
+        if($jwt_data === NULL)
+            return msg(-10);
 
+        $return_list =[];
+        $search = Wb::where('ID',1)->find();
+        $return_list['endtime'] = $search->endtime;
+        $return_list['like'] = $search->likes;
+        return msg(0,'ok',$return_list);
 
     }
+
+    public function setWBLike(){
+        if(!Cookie::has('jwt_admin'))
+            return msg(-10);
+        $jwt_data = jwt_decode_admin(Cookie::get('jwt_admin'));
+        if($jwt_data === NULL)
+            return msg(-10);
+
+        $like =Request::param('like');
+        if(!is_numeric($like)){
+            return msg(-1,'wrong type');
+        }
+
+        $search = Wb::where('ID',1)->find();
+        $search->likes =$like;
+        $search->save();
+        return msg(0,'',$like);
+    }
+
 
     public function saveWBAccessToken(){
         $access_token = Request::param('accesstoken');
@@ -591,6 +628,8 @@ class Command extends Controller{
         $data = new Wb();
         $data->ID = 1;
         $data->token = $access_token;
+        $data->endtime = date("Y-m-d", strtotime("+1 months", strtotime("now")));
+        $data->likes =1000;
         $data->save();
         if($data){
             return msg(0,$access_token);
@@ -599,9 +638,7 @@ class Command extends Controller{
     public function asd(){
         $data = Wb::where('ID',1)->find();
         $access_token = $data->token;
-
         $o = new \SaeTClientV2('3190024882' , '747c0c57d6e943ddeff70f496a2b9544' , $access_token);
-
         $text ="测试
         换行了吗  
         这次呢? 
@@ -623,6 +660,7 @@ class Command extends Controller{
         }
 
     }
+
 
 
 }
