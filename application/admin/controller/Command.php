@@ -255,8 +255,9 @@ class Command extends Controller{
         if(is_numeric(Request::param('like'))){
             $list['like']=Request::param('like');
             if(Request::param('like')>=$like){
+
                 //发送微博
-                
+
             }
         }
 
@@ -624,12 +625,10 @@ class Command extends Controller{
         if(empty($access_token)){
             return msg(-1,'empty');
         }
-        $search = Wb::where('ID',1)->delete();
-        $data = new Wb();
-        $data->ID = 1;
+        $data = Wb::where('ID',1)->find();
+
         $data->token = $access_token;
         $data->endtime = date("Y-m-d", strtotime("+1 months", strtotime("now")));
-        $data->likes =1000;
         $data->save();
         if($data){
             return msg(0,$access_token);
@@ -642,7 +641,8 @@ class Command extends Controller{
         $text ="测试
         换行了吗  
         这次呢? 
-        http://www.scgxtd.cn/public/dist/img/qrcode.6f760a25.png";
+        http://www.scgxtd.cn/public/dist/img/qrcode.e31cac66.png";
+        
         $app_img_file = __DIR__.'/../../../public/public/picture/20210404/042acc16c4234f2f5b45dd4411bd4ed3.png';
         if (file_exists($app_img_file)) {
             $fp = fopen($app_img_file, "r");
