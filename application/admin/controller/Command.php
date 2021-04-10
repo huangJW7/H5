@@ -267,8 +267,8 @@ class Command extends Controller{
 
         $data->isUpdate(true)->save($list);
         if($data) {
-            $data = ShowerMsg::where('ID',$openid)->find();
-            if($data->like >=$like && is_numeric($data->history)){
+            /* $data = ShowerMsg::where('ID',$openid)->find();
+           if($data->like >=$like && is_numeric($data->history)){
 
                 $text = "【".$config_data->number."号".$data->gender."神】 第".$data->history."期 蹲评论区
                 Nickname：".$data->name."
@@ -287,7 +287,7 @@ class Command extends Controller{
                 $o = new \SaeTClientV2('3190024882' , '747c0c57d6e943ddeff70f496a2b9544' , $config_data->token);
                 $post_text = urlencode($text);
                 $ret = $o->share($post_text,$content1);	//发送微博
-            }
+            }*/
             return msg('0','ok');
         }
 
