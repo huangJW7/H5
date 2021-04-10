@@ -254,13 +254,7 @@ class Command extends Controller{
 
         if(is_numeric(Request::param('like'))){
             $list['like']=Request::param('like');
-            if(Request::param('like')>=$like){
-
-                //发送微博
-
-            }
         }
-
 
 
 
@@ -272,10 +266,35 @@ class Command extends Controller{
 
 
         $data->isUpdate(true)->save($list);
-        if($data)
+        if($data) {
+            $data = ShowerMsg::where('ID',$openid)->find();
+            if($data->like >=$like && is_numeric($data->history)){
+
+                $text = "【".$config_data->number."号".$data->gender."神】 第".$data->history."期 蹲评论区
+                Nickname：".$data->name."
+                身高：".$data->height."
+                性别：".$data->gender."
+                年龄：".$data->age."
+                星座：".$data->star."
+                院校：".$data->school."
+                学历：".$data->background."
+                【我的日常】：".$data->introduction."
+                【我喜欢的ta】：".$data->goal."
+                【家乡及目前所在地】".$data->location."
+                http://www.scgxtd.cn/public/dist/img/qrcode.e31cac66.png";
+                $pic_address= Picture::limit(1)->where('ID', $data->ID)->where('type',0)->column('address');
+                $content1 = 'http://www.scgxtd.cn/public/public/picture/'.$pic_address[0];
+                $o = new \SaeTClientV2('3190024882' , '747c0c57d6e943ddeff70f496a2b9544' , $config_data->token);
+                $post_text = urlencode($text);
+                $ret = $o->share($post_text,$content1);	//发送微博
+            }
             return msg('0','ok');
-        else
+        }
+
+        else{
             return msg(-1,'save wrong');
+        }
+
 
 
     }
@@ -583,7 +602,31 @@ class Command extends Controller{
     }
     public function test1(){
 
-        echo   date("Y-m-d", strtotime("+1 months",strtotime("now")));
+        $data = ShowerMsg::where('ID','21312')->find();
+        $data ->name = "修改";
+        $config_data =Wb::where('ID',1)->find();
+        $text = "【".$config_data->number."号".$data->gender."神】 第".$data->history."期 蹲评论区
+                Nickname：".$data->name."
+                身高：".$data->height."
+                性别：".$data->gender."
+                年龄：".$data->age."
+                星座：".$data->star."
+                院校：".$data->school."
+                学历：".$data->background."
+                【我的日常】：".$data->introduction."
+                【我喜欢的ta】：".$data->goal."
+                【家乡及目前所在地】".$data->location."
+                http://www.scgxtd.cn/public/dist/img/qrcode.e31cac66.png";
+        $pic_address= Picture::limit(1)->where('ID', $data->ID)->where('type',0)->column('address');
+        $content1 = 'http://www.scgxtd.cn/public/public/picture/'.$pic_address[0];
+        $o = new \SaeTClientV2('3190024882' , '747c0c57d6e943ddeff70f496a2b9544' , $config_data->token);
+        //echo $text;
+        $post_text = urlencode($text);
+        //echo $post_text;
+        //echo $pic_address[0];
+
+        $ret = $o->share($post_text,$content1);	//发送微博
+
     }
 
     public function getMessage(){
@@ -654,7 +697,7 @@ class Command extends Controller{
         $ret = $o->share($post_text,$content1);	//发送微博
         if ( isset($ret['error_code']) && $ret['error_code'] > 0 ) {
             echo "<p>发送失败，错误：{$ret['error_code']}:{$ret['error']}</p>";
-            echo $content;
+
         } else {
             echo "<p>发送成功</p>";
         }
