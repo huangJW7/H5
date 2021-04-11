@@ -39,8 +39,9 @@ class Message extends Controller{
             $data = Payment::where('actor', $ID)->where('openid',$openid)->where('ispay', 1)->find();
             if ($data != null) {
                 $res = ShowerMsg::where('ID', $ID);
-                $return_data[$count] = ShowerMsg::getPrivateAndOpenData($res)->find();
+                $return_data[$count] = ShowerMsg::getPrivateAndOpenData($res,'history')->find();
                 $return_data[$count]['ispay']=1;
+                $return_data[$count]['number']= $count+1;
                 $return_data[$count]['image'] = Picture::field('address')->where('ID', $ID)->where('type', 0)->select();
                 foreach ($return_data[$count]['image'] as $key => $vaule) {
                     //vaule ="{\"address\":\"202012，22\\/07316443315b68108d9f7d1299f88777.png\"}
@@ -49,8 +50,9 @@ class Message extends Controller{
                 }
             } else {
                 $res = ShowerMsg::where('ID', $ID);
-                $return_data[$count] = ShowerMsg::getPrivateAndOpenData($res)->find();
+                $return_data[$count] = ShowerMsg::getPrivateAndOpenData($res,'history')->find();
                 $return_data[$count]['ispay']=0;
+                $return_data[$count]['number']= $count+1;
                 $return_data[$count]['image'] = Picture::field('address')->where('ID', $ID)->where('type', 0)->select();
                 foreach ($return_data[$count]['image'] as $key => $vaule) {
                     //vaule ="{\"address\":\"20201222\\/07316443315b68108d9f7d1299f88777.png\"}
