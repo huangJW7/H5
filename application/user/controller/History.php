@@ -68,7 +68,7 @@ class History extends Controller{
         //echo $query->getLastSql();
 
         //选出符合条件的IDs数组，并且pass =1
-        $IDs = $query->column('ID');
+        $IDs = $query->order('history', 'desc')->column('ID');
 
 
         $count = 0;
