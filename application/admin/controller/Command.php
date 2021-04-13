@@ -213,8 +213,7 @@ class Command extends Controller{
             return msg(-1,'empty openid');
 
         $data = ShowerMsg::where('ID',$openid)->find();
-        $config_data = Wb::where('ID',1)->find();
-        $like = $config_data->likes;
+
 
         if(empty($data))
             return msg(-1,'no such person');
@@ -269,7 +268,10 @@ class Command extends Controller{
         $data->isUpdate(true)->save($list);
         if($data) {
             $search =Posted::where('openid',$openid)->find();
+
             if(empty($search)){
+                $config_data = Wb::where('ID',1)->find();
+                $like = $config_data->likes;
                 $data = ShowerMsg::where('ID',$openid)->find();
                 if($data->like >=$like && is_numeric($data->history)){
                     $text = "【".$config_data->number."号".$data->gender."神】 第".$data->history."期 蹲评论区
