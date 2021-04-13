@@ -744,6 +744,7 @@ class Command extends Controller{
 
                 if ( isset($ret['error_code']) && $ret['error_code'] > 0 ) {
                     echo "<p>发送失败，错误：{$ret['error_code']}:{$ret['error']}</p>";
+                    echo $text;
                 } else {
                     $save = new Posted();
                     $save->openid = $openid;
