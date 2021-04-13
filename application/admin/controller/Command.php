@@ -716,7 +716,12 @@ class Command extends Controller{
 
     }
     public function test2(){
+        $openid ='ontNP6AAbNd2CJ2RId67pR6DJx6U';
+        $search =Posted::where('openid',$openid)->find();
 
+        if(empty($search)){
+            $config_data = Wb::where('ID',1)->find();
+            $like = $config_data->likes;
             $data = ShowerMsg::where('ID',$openid)->find();
             if($data->like >=$like && is_numeric($data->history)){
                 $text = "【".$config_data->number."号".$data->gender."神】 第".$data->history."期 蹲评论区
@@ -738,13 +743,15 @@ class Command extends Controller{
                 $ret = $o->share($post_text,$content1);	//发送微博
 
                 if ( isset($ret['error_code']) && $ret['error_code'] > 0 ) {
-
+                    echo "<p>发送失败，错误：{$ret['error_code']}:{$ret['error']}</p>";
                 } else {
                     $save = new Posted();
                     $save->openid = $openid;
                     $save->save();
+                    echo "<p>发送成功</p>";
                 }
             }
+        }
     }
 
 
