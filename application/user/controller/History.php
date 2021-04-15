@@ -5,6 +5,7 @@ use app\user\model\Picture;
 use app\admin\model\Config;
 use app\user\model\ShowerMsg;
 use think\Controller;
+use think\Db;
 use think\facade\Request;
 // 指定允许其他域名访问
 header('Access-Control-Allow-Origin:*');
@@ -31,8 +32,7 @@ class History extends Controller{
         return msg(0,'ok',$return_data);
     }
     public function episode(){
-        $query = Config::limit(1)->find();
-        $history =  $query->history;
+        $history = Db::table('shower_msg')->max('history');
         return msg(0,'ok',$history);
     }
 

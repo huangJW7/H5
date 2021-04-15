@@ -51,7 +51,7 @@ class Command extends Controller{
                 do
                 begin
                     call Set_shower_msg();
-                    update config set isset =0 where ID=1;
+                    update config set isset =0 where ID=1;                    
                 end;$$");
 
 
