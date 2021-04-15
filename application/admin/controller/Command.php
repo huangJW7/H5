@@ -32,19 +32,6 @@ class Command extends Controller{
         if($jwt_data === NULL)
             return msg(-10);
 
-        $data = Config::where('ID',1)->find();
-        $history = $data->history;
-        $isset = $data->isset;
-        $number =0;
-        if($isset == 1){
-            $number = $data->tomorrow;
-        }
-        if($isset ==0 ){
-            $number = $data->default;
-        }
-
-        $man = floor($number/2);
-        $women = $number - $man;
         $hour = Request::param('hour');
         $minute = Request::param('minute');
         if(!is_numeric($hour)|| !is_numeric($minute)){
@@ -55,41 +42,19 @@ class Command extends Controller{
         $time =$time.$minute.':00';
 
         $event1 = Db::execute(
-            "ALTER EVENT update_config
-            ON SCHEDULE
-                EVERY 1 DAY
-                    STARTS '$time'
-            ON completion preserve ENABLE
-            DO
-            update config set history=history+1;");
+            "DELIMITER $$
+                alter event update_config_isset on schedule
+                every 1 DAY
+                starts '$time'
+                on completion preserve
+                enable
+                do
+                begin
+                    call Set_shower_msg();
+                    update config set isset =0 where ID=1;
+                end;$$");
 
-        $history = $history+1;
-        $event2 = Db::execute(
-            "ALTER EVENT update_man_shower
-            ON SCHEDULE
-                EVERY 1 DAY
-                    STARTS '$time'
-            ON completion preserve ENABLE
-            DO
-            update shower_msg set history=$history where ID in (select t.ID from (select ID from shower_msg where type=0 and pass=1 and gender='男' and history is null limit $man) as t);");
 
-        $event3 =Db::execute (
-            "ALTER EVENT update_woman_shower
-            ON SCHEDULE
-                EVERY 1 DAY
-                    STARTS '$time'
-            ON completion preserve ENABLE
-            DO
-            update shower_msg set history=$history where ID in (select t.ID from (select ID from shower_msg where type=0 and pass=1 and gender='女' and history is null limit $women) as t);");
-
-        $event4 =Db::execute(
-            "ALTER EVENT update_config_isset
-            ON SCHEDULE
-                EVERY 1 DAY
-                    STARTS '$time'
-            ON completion preserve ENABLE
-            DO
-            update config set isset =0 where ID=1;");
         return msg (0,"set $time ok");
 
     }
@@ -201,11 +166,11 @@ class Command extends Controller{
 /*待完成*/
 
     public function change(){
-        if (!Cookie::has('jwt_admin'))
+        /*if (!Cookie::has('jwt_admin'))
             return msg(-10);
         $jwt_data = jwt_decode_admin(Cookie::get('jwt_admin'));
         if ($jwt_data === NULL)
-            return msg(-10);
+            return msg(-10);*/
 
 
         $openid = Request::param('openid');
@@ -583,6 +548,88 @@ class Command extends Controller{
 
 
 
+
+    }
+
+    public function outactexcel(){
+//        if(!Cookie::has('jwt_admin'))
+//            return msg(-10);
+//        $jwt_data = jwt_decode_admin(Cookie::get('jwt_admin'));
+//        if($jwt_data === NULL)
+//            return msg(-10);
+        //导出
+        $path = dirname(__FILE__); //找到当前脚本所在路径
+//        vendor("PHPExcel.PHPExcel.PHPExcel");
+//        vendor("PHPExcel.PHPExcel.Writer.IWriter");
+//        vendor("PHPExcel.PHPExcel.Writer.Abstract");
+//        vendor("PHPExcel.PHPExcel.Writer.Excel5");
+//        vendor("PHPExcel.PHPExcel.Writer.Excel2007");
+//        vendor("PHPExcel.PHPExcel.IOFactory");
+        $objPHPExcel = new \PHPExcel();
+
+        $objWriter = new \PHPExcel_Writer_Excel2007($objPHPExcel);
+
+
+        // 实例化完了之后就先把数据库里面的数据查出来
+        $sql = Db::table('matcher')->select();
+
+        // 设置表头信息
+        $objPHPExcel->setActiveSheetIndex(0)
+            ->setCellValue('A1', '名称')
+            ->setCellValue('B1', '年龄')
+            ->setCellValue('C1', '地址')
+            ->setCellValue('D1', '邮箱')
+            ->setCellValue('E1', '学校')
+            ->setCellValue('F1', '身高')
+            ->setCellValue('G1', '星座')
+            ->setCellValue('H1', '性别')
+            ->setCellValue('I1', '自我介绍')
+            ->setCellValue('J1', '联系方式')
+            ->setCellValue('K1', '心中的ta')
+            ->setCellValue('L1', '点赞量')
+            ->setCellValue('M1', '学历');
+
+        /*--------------开始从数据库提取信息插入Excel表中------------------*/
+
+        $i=2;  //定义一个i变量，目的是在循环输出数据是控制行数
+        $count = count($sql);//计算有多少条数据
+        print($count);
+        for ($i = 2; $i <= $count+1; $i++) {
+            $objPHPExcel->getActiveSheet()->setCellValue('A' . $i, $sql[$i-2]['name']);
+            $objPHPExcel->getActiveSheet()->setCellValue('B' . $i, $sql[$i-2]['age']);
+            $objPHPExcel->getActiveSheet()->setCellValue('C' . $i, $sql[$i-2]['location']);
+            $objPHPExcel->getActiveSheet()->setCellValue('D' . $i, $sql[$i-2]['email']);
+            $objPHPExcel->getActiveSheet()->setCellValue('E' . $i, $sql[$i-2]['school']);
+            $objPHPExcel->getActiveSheet()->setCellValue('F' . $i, $sql[$i-2]['height']);
+            $objPHPExcel->getActiveSheet()->setCellValue('G' . $i, $sql[$i-2]['star']);
+            $objPHPExcel->getActiveSheet()->setCellValue('H' . $i, $sql[$i-2]['gender']);
+            $objPHPExcel->getActiveSheet()->setCellValue('I' . $i, $sql[$i-2]['introduction']);
+            $objPHPExcel->getActiveSheet()->setCellValue('J' . $i, $sql[$i-2]['connect']);
+            $objPHPExcel->getActiveSheet()->setCellValue('K' . $i, $sql[$i-2]['goal']);
+            $objPHPExcel->getActiveSheet()->setCellValue('L' . $i, $sql[$i-2]['like']);
+            $objPHPExcel->getActiveSheet()->setCellValue('M' . $i, $sql[$i-2]['background']);
+        }
+
+        /*--------------下面是设置其他信息------------------*/
+
+        $objPHPExcel->getActiveSheet()->setTitle('互选用户信息表');      //设置sheet的名称
+        $objPHPExcel->setActiveSheetIndex(0);                   //设置sheet的起始位置
+        //通过PHPExcel_IOFactory的写函数将上面数据写出来
+
+        $PHPWriter = \PHPExcel_IOFactory::createWriter( $objPHPExcel,"Excel2007");
+
+        /*header('Content-Disposition: attachment;filename="shower_msg.xlsx"');
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');*/
+        ob_end_clean();
+        header("Content-Type: application/force-download");
+        header("Content-Type: application/octet-stream");
+        header("Content-Type: application/download");
+        header('Content-Disposition:inline;filename="shower_msg.xlsx"');
+        header('Content-Type: application/vnd.ms-excel');
+
+
+
+        $PHPWriter->save("php://output"); //表示在$path路径下面生成demo.xlsx文件
 
     }
 
