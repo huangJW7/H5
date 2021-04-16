@@ -41,8 +41,9 @@ class Command extends Controller{
         $time =$time.$hour.':';
         $time =$time.$minute.':00';
 
+
         $event1 = Db::execute(
-            "DELIMITER $$
+            "
                 alter event update_config_isset on schedule
                 every 1 DAY
                 starts '$time'
@@ -52,7 +53,7 @@ class Command extends Controller{
                 begin
                     call Set_shower_msg();
                     update config set isset =0 where ID=1;                    
-                end;$$");
+                end");
 
 
         return msg (0,"set $time ok");
@@ -792,6 +793,9 @@ class Command extends Controller{
                 }
             }
         }
+    }
+    public function test3(){
+        ShowerMsg::where('pass',1)->where('name','欢~');
     }
 
 
