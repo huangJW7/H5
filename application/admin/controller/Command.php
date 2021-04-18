@@ -54,7 +54,7 @@ class Command extends Controller{
                     call Set_shower_msg();
                     update config set isset =0 where ID=1;                    
                 end");
-
+        
 
         return msg (0,"set $time ok");
 
