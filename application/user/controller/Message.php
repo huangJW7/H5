@@ -31,11 +31,13 @@ class Message extends Controller{
         $history = Db::table('shower_msg')->max('history');
 
 
-        //从config读取history期数，返回数据
-        $IDs =  ShowerMsg::where('history',$history)->where('pass',1)->where('type',0)->column('ID');
+
+        //$IDs =  ShowerMsg::where('history',$history)->where('pass',1)->where('type',0)->column('ID');
+        $womenIDs = ShowerMsg::where('history',$history)->where('pass',1)->where('type',0)->where('gender','女')->column('ID');
+        $menIDs =  ShowerMsg::where('history',$history)->where('pass',1)->where('type',0)->where('gender','男')->column('ID');
         $count = 0;
         $return_data=[];
-        foreach ($IDs as $ID) {
+        foreach ($womenIDs as $ID) {
             $data = Payment::where('actor', $ID)->where('openid',$openid)->where('ispay', 1)->find();
             if ($data != null) {
                 $res = ShowerMsg::where('ID', $ID);
@@ -60,7 +62,35 @@ class Message extends Controller{
                     $return_data[$count]['image'][$key] = PREFIX . $vaule['address'];
                 }
             }
-            $count++;
+            $count=$count+2;
+        }
+        $count =1;
+        foreach ($menIDs as $ID) {
+            $data = Payment::where('actor', $ID)->where('openid',$openid)->where('ispay', 1)->find();
+            if ($data != null) {
+                $res = ShowerMsg::where('ID', $ID);
+                $return_data[$count] = ShowerMsg::getPrivateAndOpenData($res,'history')->find();
+                $return_data[$count]['ispay']=1;
+                $return_data[$count]['number']= $count+1;
+                $return_data[$count]['image'] = Picture::field('address')->where('ID', $ID)->where('type', 0)->select();
+                foreach ($return_data[$count]['image'] as $key => $vaule) {
+                    //vaule ="{\"address\":\"202012，22\\/07316443315b68108d9f7d1299f88777.png\"}
+                    $vaule = json_decode($vaule, true);
+                    $return_data[$count]['image'][$key] = PREFIX . $vaule['address'];
+                }
+            } else {
+                $res = ShowerMsg::where('ID', $ID);
+                $return_data[$count] = ShowerMsg::getPrivateAndOpenData($res,'history')->find();
+                $return_data[$count]['ispay']=0;
+                $return_data[$count]['number']= $count+1;
+                $return_data[$count]['image'] = Picture::field('address')->where('ID', $ID)->where('type', 0)->select();
+                foreach ($return_data[$count]['image'] as $key => $vaule) {
+                    //vaule ="{\"address\":\"20201222\\/07316443315b68108d9f7d1299f88777.png\"}
+                    $vaule = json_decode($vaule, true);
+                    $return_data[$count]['image'][$key] = PREFIX . $vaule['address'];
+                }
+            }
+            $count=$count+2;
         }
         return msg(0,'no enough person, show last post',$return_data);
     }
