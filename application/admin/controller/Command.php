@@ -791,6 +791,8 @@ class Command extends Controller{
                     echo "<p>发送成功</p>";
                 }
             }
+        }else{
+            echo "已经发送过";
         }
     }
     public function test3(){
