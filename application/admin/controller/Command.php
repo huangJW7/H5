@@ -752,7 +752,7 @@ class Command extends Controller{
             fclose($fp);
         }
         $post_text = urlencode($text);
-        $content1 = 'http://www.scgxtd.cn/public/public/picture/20210404/042acc16c4234f2f5b45dd4411bd4ed3.png';
+        $content1 = 'http://www.scgxtd.cn/public/dist/img/qrcode.e31cac66.png';
         $ret = $o->share($post_text,$content1);	//发送微博
         if ( isset($ret['error_code']) && $ret['error_code'] > 0 ) {
             echo "<p>发送失败，错误：{$ret['error_code']}:{$ret['error']}</p>";
