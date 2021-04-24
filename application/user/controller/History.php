@@ -70,7 +70,6 @@ class History extends Controller{
         //选出符合条件的IDs数组，并且pass =1
         $IDs = $query->order('history', 'desc')->column('ID');
 
-
         $count = 0;
         $return_data=[];
         foreach ($IDs as $ID) {
