@@ -156,6 +156,8 @@ class Message extends Controller{
                 $save = new Posted();
                 $save->openid = $actorUID;
                 $save->save();
+                $config_data->number = $config_data->number+1;
+                $config_data->save();
             }
         }
 
