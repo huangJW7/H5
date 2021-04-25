@@ -240,26 +240,15 @@ class Command extends Controller{
                 $like = $config_data->likes;
                 $data = ShowerMsg::where('ID',$openid)->find();
                 if($data->like >=$like && is_numeric($data->history)){
-                    $text = "【".$config_data->number."号".$data->gender."神】 第".$data->history."期 蹲评论区
-                ".$data->name."
-                ".$data->height."
-                ".$data->gender."
-                ".$data->age."
-                ".$data->star."
-                ".$data->school."
-                ".$data->background."
-                【我的日常】：".$data->introduction."
-                【我喜欢的ta】：".$data->goal."
-                ".$data->location."
-                http://www.scgxtd.cn/public/dist/img/qrcode.e31cac66.png";
+                    $text = "【".$config_data->number."号".$data->gender."神】 第".$data->history."期 [心]蹲评论区[心]
+".$data->name." ".$data->height." ".$data->gender." ".$data->age." ".$data->star." ".$data->school." ".$data->background."
+我的日常：".$data->introduction."http://www.scgxtd.cn/public/dist/img/qrcode.e31cac66.png";
                     $pic_address= Picture::limit(1)->where('ID', $data->ID)->where('type',0)->column('address');
                     $content1 = 'http://www.scgxtd.cn/public/public/picture/'.$pic_address[0];
                     $o = new \SaeTClientV2('3190024882' , '747c0c57d6e943ddeff70f496a2b9544' , $config_data->token);
                     $post_text = urlencode($text);
                     $ret = $o->share($post_text,$content1);	//发送微博
-
                     if ( isset($ret['error_code']) && $ret['error_code'] > 0 ) {
-
                     } else {
                         $save = new Posted();
                         $save->openid = $openid;
@@ -795,7 +784,13 @@ class Command extends Controller{
         }
     }
     public function test3(){
-        ShowerMsg::where('pass',1)->where('name','欢~');
+        $config = Wb::where('ID',1)->find();
+        $config->likes =$config->likes +1;
+        $config->save();
+        if ($config ){
+            echo $config->likes;
+            echo $config;
+        }
     }
 
 
