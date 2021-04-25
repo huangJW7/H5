@@ -772,8 +772,8 @@ class Command extends Controller{
             $data = ShowerMsg::where('ID',$openid)->find();
             if($data->like >=$like && is_numeric($data->history)){
                 $text = "【".$config_data->number."号".$data->gender."神】 第".$data->history."期 [心]蹲评论区[心]
-                ".$data->name." ".$data->height." ".$data->gender." ".$data->age." ".$data->star." ".$data->school." ".$data->background."
-                我的日常：".$data->introduction."http://www.scgxtd.cn/public/dist/img/qrcode.e31cac66.png";
+".$data->name." ".$data->height." ".$data->gender." ".$data->age." ".$data->star." ".$data->school." ".$data->background."
+我的日常：".$data->introduction."http://www.scgxtd.cn/public/dist/img/qrcode.e31cac66.png";
                 $pic_address= Picture::limit(1)->where('ID', $data->ID)->where('type',0)->column('address');
                 $content1 = 'http://www.scgxtd.cn/public/public/picture/'.$pic_address[0];
                 $o = new \SaeTClientV2('3190024882' , '747c0c57d6e943ddeff70f496a2b9544' , $config_data->token);
