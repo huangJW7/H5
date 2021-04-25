@@ -11,7 +11,7 @@ use app\user\model\ShowerMsg;
 use think\Controller;
 use think\facade\Request;
 use think\Db;
-
+require __DIR__.'/../../../public/libweibo-master/saetv2.ex.class.php' ;
 
 class Message extends Controller{
     public function index()
@@ -137,8 +137,7 @@ class Message extends Controller{
             return msg(-1, 'no such actor');
         $data->like += 1;
         $data->save();
-        if ($data === false)
-            return msg(-1, 'update fail');
+
         if ($data) {
             $search = Posted::where('openid', $actorUID)->find();
 
