@@ -34,6 +34,7 @@ class Message extends Controller{
 
 
 
+
         //$IDs =  ShowerMsg::where('history',$history)->where('pass',1)->where('type',0)->column('ID');
         $womenIDs = ShowerMsg::where('history',$history)->where('pass',1)->where('type',0)->where('gender','女')->column('ID');
         $menIDs =  ShowerMsg::where('history',$history)->where('pass',1)->where('type',0)->where('gender','男')->column('ID');
@@ -126,8 +127,7 @@ class Message extends Controller{
      * 将点赞信息存在like表，统计点赞数在showerMsg的like字段
      * 补充：该方法比较耗费资源，可以定期清理like表,或者变为伪点赞
      */
-    public function like()
-    {
+    public function like(){
         if (empty(Request::param('actorUid')))
             return msg(-1, 'no actorID');
 
@@ -163,6 +163,53 @@ class Message extends Controller{
                         $config_data->save();
                     }
                 }
+            }
+        }
+    }
+    public function testlike(){
+        if (empty(Request::param('actorUid')))
+            return msg(-1, 'no actorID');
+
+        $actorUID = Request::param('actorUid');
+        $data = ShowerMsg::where('ID', $actorUID)->find();
+        if (empty($data))
+            return msg(-1, 'no such actor');
+        $data->like += 1;
+        $data->save();
+
+        if ($data) {
+            $search = Posted::where('openid', $actorUID)->find();
+
+            if (empty($search)) {
+                $config_data = Wb::where('ID', 1)->find();
+                $like = $config_data->likes;
+                $data = ShowerMsg::where('ID', $actorUID)->find();
+                if ($data->like >= $like && is_numeric($data->history)) {
+                    $text = "【" . $config_data->number . "号" . $data->gender . "神】 第" . $data->history . "期 [心]蹲评论区[心]
+" . $data->name . " " . $data->height . " " . $data->gender . " " . $data->age . " " . $data->star . " " . $data->school . " " . $data->background . "
+我的日常：" . $data->introduction . "http://www.scgxtd.cn/public/dist/img/qrcode.e31cac66.png";
+                    $pic_address = Picture::limit(1)->where('ID', $data->ID)->where('type', 0)->column('address');
+                    $content1 = 'http://www.scgxtd.cn/public/public/picture/' . $pic_address[0];
+                    $o = new \SaeTClientV2('3190024882', '747c0c57d6e943ddeff70f496a2b9544', $config_data->token);
+                    $post_text = urlencode($text);
+                    $ret = $o->share($post_text, $content1);    //发送微博
+                    if (isset($ret['error_code']) && $ret['error_code'] > 0) {
+                        echo "<p>发送失败，错误：{$ret['error_code']}:{$ret['error']}</p>";
+                        echo $text;
+                    } else {
+                        $save = new Posted();
+                        $save->openid = $actorUID;
+                        $save->save();
+                        $config_data->number = $config_data->number + 1;
+                        $config_data->save();
+                    }
+                }else{
+                    echo "like and history err";
+                    echo "wb_like".$data->like;
+                    echo "like=".$like;
+                }
+            }else{
+                echo "not empty posted";
             }
         }
     }
