@@ -208,6 +208,8 @@ class Message extends Controller{
                         if($ret['error_code']==20012){
                             $text = substr($text,0,strlen($text)-10);
                             goto rebuild;
+                        }else{
+                            echo "<p>发送失败，错误：{$ret['error_code']}:{$ret['error']}</p>";
                         }
                     } else {
                         $save = new Posted();
