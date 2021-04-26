@@ -149,7 +149,7 @@ class Message extends Controller{
                     $text = "【" . $config_data->number . "号" . $data->gender . "神】 第" . $data->history . "期 [心]蹲评论区[心]
 " . $data->name . " " . $data->height . " " . $data->gender . " " . $data->age . " " . $data->star . " " . $data->school . " " . $data->background . "
 我的日常：" . $data->introduction;
-                    rebuild:
+
                     $add_address_text = $text."http://www.scgxtd.cn/public/dist/img/qrcode.e31cac66.png";
                     $pic_address = Picture::limit(1)->where('ID', $data->ID)->where('type', 0)->column('address');
                     $content1 = 'http://www.scgxtd.cn/public/public/picture/' . $pic_address[0];
@@ -158,11 +158,6 @@ class Message extends Controller{
                     $ret = $o->share($post_text, $content1);    //发送微博
                     if (isset($ret['error_code']) && $ret['error_code'] > 0) {
                         //使用goto 减少10个字符，再次发送
-                        if($ret['error_code']==20012){
-                            $text = substr($text,0,strlen($text)-10);
-                            goto rebuild;
-                        }
-
                     } else {
                         $save = new Posted();
                         $save->openid = $actorUID;
