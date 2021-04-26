@@ -215,6 +215,7 @@ class Message extends Controller{
                         $save->save();
                         $config_data->number = $config_data->number + 1;
                         $config_data->save();
+                        echo "lenth is".strlen($text);
                     }
                 }else{
                     echo "like and history err";
