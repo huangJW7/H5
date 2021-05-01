@@ -242,13 +242,33 @@ class Command extends Controller{
                 if($data->like >=$like && is_numeric($data->history)){
                     $text = "【".$config_data->number."号".$data->gender."神】 第".$data->history."期 [心]蹲评论区[心]
 ".$data->name." ".$data->height." ".$data->gender." ".$data->age." ".$data->star." ".$data->school." ".$data->background."
-我的日常：".$data->introduction."http://www.scgxtd.cn/public/dist/img/qrcode.e31cac66.png";
+我的日常：".$data->introduction;
+
+                    $add_address_text =$text."http://www.scgxtd.cn/public/dist/img/qrcode.e31cac66.png";
                     $pic_address= Picture::limit(1)->where('ID', $data->ID)->where('type',0)->column('address');
                     $content1 = 'http://www.scgxtd.cn/public/public/picture/'.$pic_address[0];
                     $o = new \SaeTClientV2('3190024882' , '747c0c57d6e943ddeff70f496a2b9544' , $config_data->token);
-                    $post_text = urlencode($text);
+                    $post_text = urlencode($add_address_text);
                     $ret = $o->share($post_text,$content1);	//发送微博
                     if ( isset($ret['error_code']) && $ret['error_code'] > 0 ) {
+                        if($ret['error_code']==20012){
+                            $text = substr($text,0,160);
+                            //再次发送
+                            $add_address_text=$text."http://www.scgxtd.cn/public/dist/img/qrcode.e31cac66.png";
+                            $post_text = urlencode($add_address_text);
+                            $ret = $o->share($post_text,$content1);	//发送微博
+                            if ( isset($ret['error_code']) && $ret['error_code'] > 0 ) {
+                            }
+                            else{
+                                $save = new Posted();
+                                $save->openid = $openid;
+                                $save->save();
+                                $config_data->number = $config_data->number+1;
+                                $config_data->save();
+
+                            }
+                        }
+
                     } else {
                         $save = new Posted();
                         $save->openid = $openid;
@@ -788,13 +808,15 @@ class Command extends Controller{
         }
     }
     public function test3(){
-        $config = Wb::where('ID',1)->find();
-        $config->likes =$config->likes +1;
-        $config->save();
-        if ($config ){
-            echo $config->likes;
-            echo $config;
-        }
+        $text ="【5482号男神】 第1426期 [心]蹲评论区[心] 阿酱 180 男 22 双鱼座 电子科技大学 硕 我的日常：211/985本硕（保送）【计划研二修读海外二硕】，在读，雅思7.0，新闻与传播，长居四川成都，目前在某知名手机品牌全球总部做运营intern，受家里世代创业经商思想影响所以自己也在自媒体创业（自研百万级IP）经济独立，爱好广泛，播音与主持配音（非科班）、摄影、剪辑、书法.etc ；穿衣打扮：平时嘻哈工装风，工作轻商务；性格比较：温柔健谈，也有朋友说有点斯文**；癖好：不抽烟不喝酒不赌博不蹦迪，比较安静、温和的男生（跟聊得来的人会比较话痨）；长相：人送外号“学校主持一哥”，所以自行脑补";
+        $text2 ="【5482号男神】 第1426期 [心]蹲评论区[心] 阿酱 180 男 22 双鱼座 电子科技大学 硕 我的日常：211/985本硕（保送）";
+        echo strlen($text2);
+        echo $text2;
+        $text2 = substr($text2,0,strlen($text2)+20);
+        echo strlen($text2);
+        echo $text2;
+
+
     }
 
 

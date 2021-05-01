@@ -157,6 +157,22 @@ class Message extends Controller{
                     $post_text = urlencode($add_address_text);
                     $ret = $o->share($post_text, $content1);    //发送微博
                     if (isset($ret['error_code']) && $ret['error_code'] > 0) {
+                        if($ret['error_code']==20012){
+                            $text = substr($text,0,160);
+                            $add_address_text=$text."http://www.scgxtd.cn/public/dist/img/qrcode.e31cac66.png";
+                            $post_text = urlencode($add_address_text);
+                            $ret = $o->share($post_text,$content1);	//发送微博
+                            if ( isset($ret['error_code']) && $ret['error_code'] > 0 ) {
+                            }
+                            else{
+                                $save = new Posted();
+                                $save->openid = $actorUID;
+                                $save->save();
+                                $config_data->number = $config_data->number+1;
+                                $config_data->save();
+
+                            }
+                        }
                         //使用goto 减少10个字符，再次发送
                     } else {
                         $save = new Posted();
@@ -202,7 +218,7 @@ class Message extends Controller{
                         //使用goto 减少10个字符，再次发送
                         if($ret['error_code']==20012){
                             $text = substr($text,0,strlen($text)-10);
-                            goto rebuild;
+
                         }else{
                             echo "<p>发送失败，错误：{$ret['error_code']}:{$ret['error']}</p>";
                         }
