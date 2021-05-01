@@ -252,12 +252,18 @@ class Command extends Controller{
                     $ret = $o->share($post_text,$content1);	//发送微博
                     if ( isset($ret['error_code']) && $ret['error_code'] > 0 ) {
                         if($ret['error_code']==20012){
-                            $text = substr($text,0,160);
+                            $text = substr($text,0,200);
                             //再次发送
+                            rebuild:
                             $add_address_text=$text."http://www.scgxtd.cn/public/dist/img/qrcode.e31cac66.png";
                             $post_text = urlencode($add_address_text);
                             $ret = $o->share($post_text,$content1);	//发送微博
                             if ( isset($ret['error_code']) && $ret['error_code'] > 0 ) {
+                                if($ret['error_code']==20012){
+                                    $text = substr($text,0,strlen($text)-10);
+                                    goto rebuild;
+                                }
+
                             }
                             else{
                                 $save = new Posted();
