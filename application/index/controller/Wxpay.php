@@ -40,7 +40,8 @@ class Wxpay extends Controller{
         }
 
         //清空之前无效订单
-
+        $start = new Payment();
+        $start->startTrans();
         $delete = Payment::where('openid',$openid)->where('actor',$actorID)->where('ispay',0)->delete();
         $data = new Payment();
         $ID = time();
@@ -49,6 +50,7 @@ class Wxpay extends Controller{
         $data->actor =$actorID;
         $data->amount =$fee;
         $data->save();
+        $start->commit();
         $arr =[
             'appid' =>APP_ID,
             'mch_id'=>MCH_ID,
