@@ -78,13 +78,13 @@ class Act extends Controller{
         $data->camera = $id;
         $data->title = $title;
         $data->text = $text;
+
         if(isset($file)){
             $info = $file->validate(['size'=>20*1024*1024,'ext'=>'jpg,png,jpeg,bmp'])->rule('date')->move('public/monitor');
-        }
-
-        if($info){
-            $data->picture = 'www.scgxtd.cn/public/monitor'.$info->getSaveName();
-            $data->save();
+            if($info) {
+                $data->picture = 'www.scgxtd.cn/public/monitor' . $info->getSaveName();
+                $data->save();
+            }
         }else{
             $data->save();
         }
