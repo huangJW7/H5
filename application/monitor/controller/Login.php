@@ -1,5 +1,5 @@
 <?php
-namespace app\monitor\model;
+namespace app\monitor\controller;
 use think\Controller;
 use think\facade\Request;
 
