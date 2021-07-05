@@ -11,9 +11,7 @@
 
 // [ 应用入口文件 ]
 namespace think;
-header("Access-Control-Allow-Origin:*");
-header("Access-Control-Allow-Methods:GET, POST, OPTIONS, DELETE");
-header("Access-Control-Allow-Headers:x-requested-with, Referer,content-type,token,DNT,X-Mx-ReqToken,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type, Accept-Language, Origin, Accept-Encoding");
+
 // 加载基础文件
 require __DIR__ . '/../thinkphp/base.php';
 
@@ -21,6 +19,9 @@ require __DIR__ . '/../thinkphp/base.php';
 
 // 执行应用并响应
 Container::get('app')->run()->send();
+header("Access-Control-Allow-Origin:*");
+header("Access-Control-Allow-Methods:GET, POST, OPTIONS, DELETE");
+header("Access-Control-Allow-Headers:x-requested-with, Referer,content-type,token,DNT,X-Mx-ReqToken,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type, Accept-Language, Origin, Accept-Encoding");
 /*
 header("Access-Control-Allow-Origin:*");
 header("Access-Control-Allow-Methods:GET, POST, OPTIONS, DELETE");
