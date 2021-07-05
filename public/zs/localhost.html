@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>localhost</title>
+    <script src=
+                    "https://code.jquery.com/jquery-3.5.1.js">
+    </script>
+    <style>
+      body {
+        font-family: Arial, Helvetica, sans-serif;
+        background-image: url("img/white.jpeg");
+      }
+
+      .navbar {
+        overflow: hidden;
+        background-color: #333;
+      }
+
+      .dropdown {
+        float: left;
+        overflow: hidden;
+      }
+
+      .dropdown .dropbtn {
+        font-size: 16px;
+        border: none;
+        outline: none;
+        color: white;
+        padding: 14px 16px;
+        background-color: inherit;
+        font-family: inherit;
+        margin: 0;
+      }
+
+      .navbar a:hover, .dropdown:hover .dropbtn {
+        background-color: red;
+      }
+
+      .dropdown-content {
+        display: none;
+        position: absolute;
+        background-color: #f9f9f9;
+        min-width: 160px;
+        box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+        z-index: 1;
+      }
+
+      .dropdown-content a {
+        float: none;
+        color: black;
+        padding: 12px 16px;
+        text-decoration: none;
+        display: block;
+        text-align: left;
+      }
+
+      .dropdown-content a:hover {
+        background-color: #ddd;
+      }
+
+      .dropdown:hover .dropdown-content {
+        display: block;
+      }
+
+      .logo {
+        font-style: italic;
+        font-size: 10px;
+        color: indianred;
+        position: absolute;
+        right: 50px;
+      }
+      .monitor {
+        position: absolute;
+        top: 200px;
+        left: 500px;
+        z-index: 9;
+        text-align: center;
+        box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+      }
+
+      .monitor:hover {
+        cursor:pointer;
+      }
+
+      #m1 {
+        top: 100px;
+        left: 100px;
+      }
+
+      .storage {
+        position: absolute;
+        box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+        top: 60px;
+        left: 10px;
+        height: 800px;
+        width: 1000px;
+        z-index: -10;
+        background-image: url("img/storage.jpeg");
+        background-size: cover;
+      }
+
+      #info {
+        position: relative;
+        top: 60px;
+        left: 1000px;
+        width: 300px;
+        height: 500px;
+        z-index: 20;
+        border: 10px yellow;
+        margin: 10px;
+        box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+        text-align: center;
+        padding: 20px;
+        overflow: hidden;
+      }
+
+      .result {
+        padding: 10px;
+        color: red;
+        height: 100px;
+      }
+    </style>
+
+  </head>
+  <body>
+    <div class="navbar">
+      <div class="dropdown">
+        <button class="dropbtn">Menu
+          <i class="fa fa-caret-down"></i>
+        </button>
+        <div class="dropdown-content">
+          <a href="#">Link 1</a>
+          <a href="#">Link 2</a>
+          <a href="#">Link 3</a>
+          <a href="#">Link 4</a>
+          <a href="#">Link 5</a>
+        </div>
+      </div>
+      <div class="logo">
+          <h1>Storage Monitor System</h1>
+      </div>
+    </div>
+    <div id="info">
+      <div id="infoText">
+        <h1>Warning Info</h1>
+        <div>
+          ID:<input type="text" id="id">
+        </div>
+        <br>
+        <br>
+        <div>TITLE:<input type="text" id="title"></div>
+        <br>
+        <br>
+        <div>TEXT:<input type="text" id="text"></div>
+        <br>
+        <br>
+        <div>PICTURE:<input type="text" id="picture"></div>
+        <br>
+        <br>
+        <button onclick="sendWarning()">SUBMIT</button>
+        <br>
+      </div>
+    </div>
+
+    <script language="javascript">
+      function sendWarning() {
+        let id = document.querySelector('#id');
+        let title = document.querySelector('#title');
+        let text = document.querySelector('#text');
+        let picture = document.querySelector('#picture');
+
+        let xhr = new XMLHttpRequest();
+        let url = "http://www.scgxtd.cn/public/monitor/act/notify";
+
+        xhr.open("POST", url, true);
+        xhr.setRequestHeader("Content-Type", "application/json");
+
+        xhr.onreadystatechange = function () {
+          if (xhr.readyState === 4 && xhr.status === 200) {
+            // Print received data from server
+            result.innerHTML = this.responseText;
+          }
+        };
+
+        var data = JSON.stringify({"id": id.value, "title": title.value, "text":text.value, "picture":picture.value});
+        xhr.send(data);
+      }
+    </script>
+
+    <div class="storage">
+      <div class="monitor" id="m1">
+        <img src="img/monitoring.jpeg" alt="" width="70px">
+      </div>
+      <div class="monitor" id="m2">
+        <img src="img/monitoring.jpeg" alt="" width="70px">
+      </div>
+    </div>
+
+  </body>
+</html>
