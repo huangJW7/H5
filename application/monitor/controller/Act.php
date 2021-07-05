@@ -22,7 +22,7 @@ class Act extends Controller{
         $username = Request::param('username');
         $password = Request::param('password');
         if($username =='root' &&$password=='123456'){
-            return msg();
+            return msg(0,'ok');
         }else{
             return msg(-1,'password or username wrong');
         }
@@ -73,7 +73,7 @@ class Act extends Controller{
         $id = Request::param('id');
         $title = Request::param('title');
         $text = Request::param('text');
-        $file = request()->file('file');
+        $file = request()->file('picture');
 
         $data = new Monitor;
         $data->camera = $id;
@@ -89,32 +89,53 @@ class Act extends Controller{
         }else{
             $data->save();
         }
-        /*$config = Monitor_config::where('ID',1)->find();
+        $config = Monitor_config::where('ID',1)->find();
         if ($config->wx == 1){
-            $this->sendWXAlert();
+            $this->sendWXAlert($title);
         }
         if ($config->note == 1){
-            $this->sendNoteAlert();
-        }*/
+            $this->sendNoteAlert($title);
+        }
         
         return msg(0,'ok');
 
 
 
     }
-    public function sendWXAlert(){
-        $url ="http://wx.xtuis.cn/iVztTG0Vovk9NRrnuQvu1sJrx.send?text=黄金大涨&desp=www.baidu.com";
-        $url = urlencode($url);
-        $res = file_get_contents($url);
-        return 0;
+    public function sendWXAlert($text,$desp=""){
+        $url="http://wx.xtuis.cn/iVztTG0Vovk9NRrnuQvu1sJrx.send";
+        $params=array('text'=>$text,'desp'=>'www.baidu.com');
+        $result=$this->do_get($url,$params);
 
     }
-    public function sendNoteAlert(){
+    function do_get($url, $params) {
 
-        $url = "http://mail.xtuis.cn/iVztTG0Vovk9NRrnuQvu1sJrx.send?text=黄金大涨&desp=www.baidu.com";
-        $url = urlencode($url);
-        $res = file_get_contents($url);
-        return 0;
+        $url = "{$url}?" . http_build_query ( $params );
+
+        $ch = curl_init ();
+
+        curl_setopt ( $ch, CURLOPT_URL, $url );
+
+        curl_setopt ( $ch, CURLOPT_RETURNTRANSFER, 1 );
+
+        curl_setopt ( $ch, CURLOPT_CUSTOMREQUEST, 'GET' );
+
+        curl_setopt ( $ch, CURLOPT_TIMEOUT, 60 );
+
+        curl_setopt ( $ch, CURLOPT_POSTFIELDS, $params );
+
+        $result = curl_exec ( $ch );
+
+        curl_close ( $ch );
+
+        return $result;
+
+    }
+    public function sendNoteAlert($text){
+
+        $url="http://mail.xtuis.cn/iVztTG0Vovk9NRrnuQvu1sJrx.send";
+        $params=array('text'=>$text,'desp'=>'www.baidu.com');
+        $result=$this->do_get($url,$params);
 
     }
 
