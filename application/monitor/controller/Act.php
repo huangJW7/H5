@@ -11,6 +11,7 @@ header('Access-Control-Allow-Origin:*');
 header('Access-Control-Allow-Methods:*');
 // 响应头设置
 header('Access-Control-Allow-Headers:x-requested-with,content-type');
+header('Access-Control-Request-Method:GET,POST');
 class Act extends Controller{
     public function login()
     {
@@ -88,8 +89,31 @@ class Act extends Controller{
         }else{
             $data->save();
         }
+        $config = Monitor_config::where('ID',1)->find();
+        if ($config->wx == 1){
+            $this->sendWXAlert();
+        }
+        if ($config->note == 1){
+            $this->sendNoteAlert();
+        }
+        
         return msg(0,'ok');
 
+
+
+    }
+    public function sendWXAlert(){
+        $url ="http://wx.xtuis.cn/iVztTG0Vovk9NRrnuQvu1sJrx.send?text=黄金大涨&desp=www.baidu.com";
+        header("Location:$url");
+        exit();
+
+
+    }
+    public function sendNoteAlert(){
+
+        $url = "http://mail.xtuis.cn/iVztTG0Vovk9NRrnuQvu1sJrx.send?text=黄金大涨&desp=www.baidu.com";
+        header("Location:$url");
+        exit();
 
 
     }
