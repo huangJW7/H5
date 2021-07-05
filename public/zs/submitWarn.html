@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>localhost</title>
+    <title>submitWarning</title>
     <script src=
                     "https://code.jquery.com/jquery-3.5.1.js">
     </script>
@@ -69,6 +69,7 @@
         position: absolute;
         right: 50px;
       }
+
       .monitor {
         position: absolute;
         top: 200px;
@@ -109,15 +110,31 @@
         border: 10px yellow;
         margin: 10px;
         box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-        text-align: center;
         padding: 20px;
         overflow: hidden;
+        text-align: center;
       }
 
-      .result {
-        padding: 10px;
-        color: red;
-        height: 100px;
+      input {
+        color: #949494;
+        margin: 0;
+        background-color: whitesmoke;
+        border: 1px solid #373b3d;
+        padding: 6px 0px;
+        border-radius: 3px;
+        font-size: 20px;
+        font-style: italic;
+      }
+
+      label {
+        color: #949494;
+        margin: 0;
+        background-color: whitesmoke;
+        border: 1px solid #373b3d;
+        padding: 6px 0px;
+        border-radius: 3px;
+        font-size: 20px;
+        font-style: normal;
       }
     </style>
 
@@ -129,11 +146,9 @@
           <i class="fa fa-caret-down"></i>
         </button>
         <div class="dropdown-content">
-          <a href="#">Link 1</a>
-          <a href="#">Link 2</a>
-          <a href="#">Link 3</a>
-          <a href="#">Link 4</a>
-          <a href="#">Link 5</a>
+          <a href="submitWarn.html">Submit Warning</a>
+          <a href="getWarn.html">Get Warning</a>
+          <a href="login.html">Log Out</a>
         </div>
       </div>
       <div class="logo">
@@ -142,25 +157,27 @@
     </div>
     <div id="info">
       <div id="infoText">
-        <h1 style="text-align: center">Warning Info</h1>
+        <h1 style="text-align: center">Submit Warning</h1>
         <form enctype="multipart/form-data" method="post" name="fileinfo">
           <div>
-            ID:<input type="text" id="id">
+            <label>&nbspID:&nbsp</label>&nbsp&nbsp&nbsp<input type="text" id="id">
           </div>
           <br>
           <br>
           <div>
-            TITLE:<input type="text" id="title">
+            <label>&nbspTITLE:&nbsp</label>&nbsp&nbsp&nbsp<input type="text" id="title">
           </div>
           <br>
           <br>
           <div>
-            TEXT:<input type="text" id="text">
+            <label>&nbspTEXT:&nbsp</label>&nbsp&nbsp&nbsp<input type="text" id="text">
           </div>
           <br>
           <br>
           <div>
-            PICTURE:<input type="file" id="picture">
+            <label>PICTURE</label>
+            <br><br>
+            <input type="file" id="picture">
           </div>
         </form>
           <br>
@@ -193,6 +210,8 @@
         oReq.open("POST", url, true);
         oReq.send(oData);
 
+        console.log("Send data. id: " + id.value + ", title: " + title.value + ", text: " + text.value + ", picture: " + picture);
+        console.log(oData);
         alert("Submit successful!");
       }
     </script>
