@@ -104,7 +104,7 @@ class Act extends Controller{
     }
     public function sendWXAlert($text,$desp=""){
         $url="http://wx.xtuis.cn/iVztTG0Vovk9NRrnuQvu1sJrx.send";
-        $params=array('text'=>$text,'desp'=>'www.baidu.com');
+        $params=array('text'=>$text,'desp'=>'http://www.scgxtd.cn/public/zs/login.html');
         $result=$this->do_get($url,$params);
 
     }
@@ -134,7 +134,7 @@ class Act extends Controller{
     public function sendNoteAlert($text){
 
         $url="http://mail.xtuis.cn/iVztTG0Vovk9NRrnuQvu1sJrx.send";
-        $params=array('text'=>$text,'desp'=>'www.baidu.com');
+        $params=array('text'=>$text,'desp'=>'http://www.scgxtd.cn/public/zs/login.html');
         $result=$this->do_get($url,$params);
 
     }
