@@ -150,9 +150,9 @@
             xhr.open("GET", url, true);
             xhr.setRequestHeader("Content-Type", "application/json");
 
-            var data = JSON.stringify({"id": id});
+            var data = JSON.stringify({"id": id.toString()});
             xhr.send(data);
-            console.log("SendID: " + id);
+            console.log(data);
             getWarning();
         }
         function informWx(type) {
@@ -212,7 +212,7 @@
                         "<th>内容</th>" +
                         "<th>图片</th>" +
                         "<th>时间</th>" +
-                        "<th>是否完成处理</th>" +
+                        "<th>是否处理</th>" +
                         "</tr>";
                     for (let i in res.data) {
                         if (res.data[i].deal == 1) {
@@ -226,7 +226,7 @@
                                 + "<td>" + res.data[i].title + "</td>" + "<td>" + res.data[i].text + "</td>" + "<td>" +
                                 "<a href = " + res.data[i].picture + " target=\"_blank\">" + res.data[i].picture +
                                 "<\a>" + "</td>" + "<td>" + res.data[i].create_time + "</td>" + "<td>" +
-                                "<input type='button' style='width: 100%' value='已完成处理' onclick='sendDeal(" +
+                                "<input type='button' style='width: 100%' value='处理' onclick='sendDeal(" +
                                 res.data[i].ID + ")'>" + "</td>" + "</tr>";
                         }
                     }
