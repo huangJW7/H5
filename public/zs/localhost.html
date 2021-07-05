@@ -142,23 +142,31 @@
     </div>
     <div id="info">
       <div id="infoText">
-        <h1>Warning Info</h1>
-        <div>
-          ID:<input type="text" id="id">
-        </div>
-        <br>
-        <br>
-        <div>TITLE:<input type="text" id="title"></div>
-        <br>
-        <br>
-        <div>TEXT:<input type="text" id="text"></div>
-        <br>
-        <br>
-        <div>PICTURE:<input type="text" id="picture"></div>
-        <br>
-        <br>
-        <button onclick="sendWarning()">SUBMIT</button>
-        <br>
+        <h1 style="text-align: center">Warning Info</h1>
+        <form enctype="multipart/form-data" method="post" name="fileinfo">
+          <div>
+            ID:<input type="text" id="id">
+          </div>
+          <br>
+          <br>
+          <div>
+            TITLE:<input type="text" id="title">
+          </div>
+          <br>
+          <br>
+          <div>
+            TEXT:<input type="text" id="text">
+          </div>
+          <br>
+          <br>
+          <div>
+            PICTURE:<input type="file" id="picture">
+          </div>
+        </form>
+          <br>
+          <br>
+        <input type="submit" value="Submit" onclick="sendWarning()"/>
+          <br>
       </div>
     </div>
 
@@ -167,23 +175,25 @@
         let id = document.querySelector('#id');
         let title = document.querySelector('#title');
         let text = document.querySelector('#text');
-        let picture = document.querySelector('#picture');
+        let picture = document.getElementById("picture").files[0];
 
-        let xhr = new XMLHttpRequest();
+        //var data = JSON.stringify({"id": id.value, "title": title.value, "text":text.value});
+
+        var form = document.forms.namedItem("fileinfo");
+        var oData = new FormData(form);
+
+        oData.append("id", id.value);
+        oData.append("title", title.value);
+        oData.append("text", text.value);
+        oData.append("picture", picture);
+
+        let oReq = new XMLHttpRequest();
         let url = "http://www.scgxtd.cn/public/monitor/act/notify";
 
-        xhr.open("POST", url, true);
-        xhr.setRequestHeader("Content-Type", "application/json");
+        oReq.open("POST", url, true);
+        oReq.send(oData);
 
-        xhr.onreadystatechange = function () {
-          if (xhr.readyState === 4 && xhr.status === 200) {
-            // Print received data from server
-            result.innerHTML = this.responseText;
-          }
-        };
-
-        var data = JSON.stringify({"id": id.value, "title": title.value, "text":text.value, "picture":picture.value});
-        xhr.send(data);
+        alert("Submit successful!");
       }
     </script>
 

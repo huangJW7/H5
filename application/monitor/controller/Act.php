@@ -89,13 +89,13 @@ class Act extends Controller{
         }else{
             $data->save();
         }
-        $config = Monitor_config::where('ID',1)->find();
+        /*$config = Monitor_config::where('ID',1)->find();
         if ($config->wx == 1){
             $this->sendWXAlert();
         }
         if ($config->note == 1){
             $this->sendNoteAlert();
-        }
+        }*/
         
         return msg(0,'ok');
 
@@ -104,17 +104,17 @@ class Act extends Controller{
     }
     public function sendWXAlert(){
         $url ="http://wx.xtuis.cn/iVztTG0Vovk9NRrnuQvu1sJrx.send?text=黄金大涨&desp=www.baidu.com";
-        header("Location:$url");
-        exit();
-
+        $url = urlencode($url);
+        $res = file_get_contents($url);
+        return 0;
 
     }
     public function sendNoteAlert(){
 
         $url = "http://mail.xtuis.cn/iVztTG0Vovk9NRrnuQvu1sJrx.send?text=黄金大涨&desp=www.baidu.com";
-        header("Location:$url");
-        exit();
-
+        $url = urlencode($url);
+        $res = file_get_contents($url);
+        return 0;
 
     }
 
