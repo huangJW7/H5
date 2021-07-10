@@ -8,6 +8,7 @@ use app\index\model\ShowerMsg;
 use app\user\model\Option;
 use Cassandra\Time;
 use think\Controller;
+use think\Exception;
 use think\facade\Request;
 // 指定允许其他域名访问
 header('Access-Control-Allow-Origin:*');
@@ -27,50 +28,56 @@ class Wxpay extends Controller{
     /*
      * 构建订单
      */
-    public function build($openid,$actorID,$msg){
+    public function build($openid,$actorID,$msg)
+    {
 
-        $search = ShowerMsg::where('ID',$actorID)->field('gender')->find();
-        $query = Amount::where('ID',1)->find();
+        $search = ShowerMsg::where('ID', $actorID)->field('gender')->find();
+        $query = Amount::where('ID', 1)->find();
         $fee = $query->fee;
-        if($search->gender == '男'){
+        if ($search->gender == '男') {
             $fee = $query->man;
         }
-        if($search->gender == '女'){
+        if ($search->gender == '女') {
             $fee = $query->woman;
         }
 
         //清空之前无效订单
-        $start = new Payment();
-        $start->startTrans();
-        $delete = Payment::where('openid',$openid)->where('actor',$actorID)->where('ispay',0)->delete();
+
+        //$delete = Payment::where('openid',$openid)->where('actor',$actorID)->where('ispay',0)->delete();
         $data = new Payment();
         $ID = time();
         $data->ID = $ID;
-        $data->openid =$openid;
-        $data->actor =$actorID;
-        $data->amount =$fee;
-        $data->save();
-        $start->commit();
-        $arr =[
-            'appid' =>APP_ID,
-            'mch_id'=>MCH_ID,
-            'nonce_str'=>md5(time().'random'),
-            'body'=>'成都高校脱单科技有限公司-相亲交友会员费',
-            'out_trade_no'=>$ID,//内部订单号,待修改
-            'total_fee'=>$fee,//可以设为常量，添加到common.php
-            'spbill_create_ip'=>$_SERVER['REMOTE_ADDR'],
-            'notify_url'=>NOTIFY_URL,//返回信息的url
-            'trade_type'=>'JSAPI',
-            'openid'=>$openid//用户openid 如ontNP6MT8n-UiTxgiVTnmc94W29o
-        ];
-        $arr = $this->setSign($arr);
+        $data->openid = $openid;
+        $data->actor = $actorID;
+        $data->amount = $fee;
+        try {
+            if ($data->save()) {
+                $arr = [
+                    'appid' => APP_ID,
+                    'mch_id' => MCH_ID,
+                    'nonce_str' => md5(time() . 'random'),
+                    'body' => '成都高校脱单科技有限公司-相亲交友会员费',
+                    'out_trade_no' => $ID,//内部订单号,待修改
+                    'total_fee' => $fee,//可以设为常量，添加到common.php
+                    'spbill_create_ip' => $_SERVER['REMOTE_ADDR'],
+                    'notify_url' => NOTIFY_URL,//返回信息的url
+                    'trade_type' => 'JSAPI',
+                    'openid' => $openid//用户openid 如ontNP6MT8n-UiTxgiVTnmc94W29o
+                ];
+                $arr = $this->setSign($arr);
 
-        $xml =$this->xml_encode($arr);
+                $xml = $this->xml_encode($arr);
 
-        $res_data =$this->PostXml(POST_URL,$xml);
-        $data =$this->XmlToArr($res_data);
+                $res_data = $this->PostXml(POST_URL, $xml);
+                $data = $this->XmlToArr($res_data);
 
-        return $this->getPrepayId($data);
+                return $this->getPrepayId($data);
+
+            }
+
+        }catch (Exception $e){
+            return null;
+        }
     }
 
     /*
